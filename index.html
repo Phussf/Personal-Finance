@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Personal Finance | Login</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family:
+        "Segoe UI",
+        Tahoma,
+        Arial,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef2ff,
+            #f8fafc
+        );
+}
+
+.login-card {
+    width: min(
+        420px,
+        calc(100% - 30px)
+    );
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 40px 30px;
+
+    text-align: center;
+
+    box-shadow:
+        0 15px 40px
+        rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================
+   LOGO
+========================= */
+
+.logo {
+    margin-bottom: 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo img {
+    width: 80px;
+    height: 80px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    display: block;
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+h1 {
+    font-size: 25px;
+
+    margin-bottom: 8px;
+
+    color: #111827;
+}
+
+.subtitle {
+    color: #6b7280;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================
+   GOOGLE LOGIN
+========================= */
+
+#googleButton {
+    width: 100%;
+}
+
+.google-login {
+    width: 100%;
+
+    padding: 13px 18px;
+
+    border:
+        1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    background: white;
+
+    color: #374151;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.google-login:hover {
+    background: #f9fafb;
+}
+
+.google-login:disabled {
+    opacity: 0.6;
+
+    cursor: wait;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message {
+    margin-top: 20px;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    display: none;
+}
+
+.message.show {
+    display: block;
+}
+
+.error {
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+.success {
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+
+/* =========================
+   SECURITY
+========================= */
+
+.security {
+    margin-top: 25px;
+
+    font-size: 12px;
+
+    color: #9ca3af;
+
+    line-height: 1.6;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="login-card">
+
+
+    <!-- LOGO -->
+
+    <div class="logo">
+
+        <img
+            src="assets/images/messageImage_1790424403882.jpg"
+            alt="Personal Finance"
+        >
+
+    </div>
+
+
+    <!-- TITLE -->
+
+    <h1>
+        Personal Finance
+    </h1>
+
+
+    <p class="subtitle">
+        ระบบรายงานผลประกอบการส่วนตัว
+    </p>
+
+
+    <!-- GOOGLE LOGIN -->
+
+    <div id="googleButton">
+
+        <button
+            id="loginButton"
+            class="google-login"
+        >
+            🔵 เข้าสู่ระบบด้วย Google
+        </button>
+
+    </div>
+
+
+    <!-- MESSAGE -->
+
+    <div
+        id="message"
+        class="message"
+    ></div>
+
+
+    <!-- SECURITY -->
+
+    <div class="security">
+
+        🔐 ระบบรักษาความปลอดภัย
+
+        <br>
+
+        อนุญาตเฉพาะบัญชีที่ได้รับสิทธิ์เท่านั้น
+
+    </div>
+
+
+</div>
+
+
+<script type="module">
+
+import {
+    loginWithGoogle
+} from "./js/auth.js";
+
+
+import {
+    checkPermission
+} from "./js/permission.js";
+
+
+const loginButton =
+    document.getElementById(
+        "loginButton"
+    );
+
+
+const message =
+    document.getElementById(
+        "message"
+    );
+
+
+loginButton.addEventListener(
+    "click",
+    async () => {
+
+        loginButton.disabled =
+            true;
+
+        loginButton.textContent =
+            "กำลังเข้าสู่ระบบ...";
+
+
+        try {
+
+            const user =
+                await loginWithGoogle();
+
+
+            showMessage(
+                "กำลังตรวจสอบสิทธิ์...",
+                "success"
+            );
+
+
+            const permission =
+                await checkPermission();
+
+
+            console.log(
+                "สิทธิ์:",
+                permission
+            );
+
+
+            showMessage(
+                "เข้าสู่ระบบสำเร็จ",
+                "success"
+            );
+
+
+            setTimeout(() => {
+
+                window.location.href =
+                    "dashboard.html";
+
+            }, 500);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            showMessage(
+                error.message,
+                "error"
+            );
+
+
+            loginButton.disabled =
+                false;
+
+
+            loginButton.textContent =
+                "🔵 เข้าสู่ระบบด้วย Google";
+
+        }
+
+    }
+);
+
+
+function showMessage(
+    text,
+    type
+) {
+
+    message.textContent =
+        text;
+
+    message.className =
+        "message show " + type;
+
+}
+
+</script>
+</body>
+</html>

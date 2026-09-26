@@ -1,0 +1,2120 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Owner Management Dashboard</title>
+
+
+    <!-- Firebase Compat -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        :root {
+
+            font-family:
+                system-ui,
+                -apple-system,
+                "Segoe UI",
+                Tahoma,
+                sans-serif;
+
+            color: #172033;
+
+            background: #f4f0ff;
+
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f7f2ff 0%,
+                    #eee6ff 45%,
+                    #f8f5ff 100%
+                );
+
+        }
+
+
+        /* =================================================
+           TOPBAR
+        ================================================= */
+
+        .topbar {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 20;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 20px;
+
+            padding: 18px 28px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6d3fd8,
+                    #8b5cf6
+                );
+
+            color: white;
+
+            box-shadow:
+                0 6px 20px
+                rgba(83, 45, 150, .20);
+
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 3px;
+
+        }
+
+
+        .brand-title {
+
+            font-size: 21px;
+
+            font-weight: 800;
+
+        }
+
+
+        .brand-subtitle {
+
+            font-size: 13px;
+
+            opacity: .82;
+
+        }
+
+
+        .owner-badge {
+
+            padding: 7px 14px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(255,255,255,.18);
+
+            border:
+                1px solid
+                rgba(255,255,255,.28);
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            white-space: nowrap;
+
+        }
+
+
+        /* =================================================
+           PAGE
+        ================================================= */
+
+        .page {
+
+            width:
+                min(1500px, 100%);
+
+            margin: auto;
+
+            padding:
+                26px 20px 50px;
+
+        }
+
+
+        .welcome {
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .welcome h1 {
+
+            margin:
+                0 0 5px;
+
+            font-size:
+                clamp(23px, 3vw, 32px);
+
+        }
+
+
+        .welcome p {
+
+            margin: 0;
+
+            color: #686579;
+
+        }
+
+
+        /* =================================================
+           LOADING / ERROR
+        ================================================= */
+
+        .loading {
+
+            display: none;
+
+            padding: 25px;
+
+            text-align: center;
+
+            color: #6840c6;
+
+            font-weight: 700;
+
+        }
+
+
+        .error-box {
+
+            display: none;
+
+            padding: 18px;
+
+            margin-bottom: 20px;
+
+            border-radius: 15px;
+
+            background: #fff0f0;
+
+            border: 1px solid #ffc8c8;
+
+            color: #a92323;
+
+            font-weight: 700;
+
+        }
+
+
+        /* =================================================
+           SUMMARY
+        ================================================= */
+
+        .summary-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(6, minmax(0, 1fr));
+
+            gap: 14px;
+
+            margin-bottom: 24px;
+
+        }
+
+
+        .summary-card {
+
+            min-height: 125px;
+
+            padding: 18px;
+
+            border-radius: 18px;
+
+            background: rgba(255,255,255,.82);
+
+            border:
+                1px solid
+                rgba(123, 88, 191, .12);
+
+            box-shadow:
+                0 7px 25px
+                rgba(75, 42, 125, .08);
+
+        }
+
+
+        .summary-label {
+
+            color: #716b7f;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .summary-value {
+
+            font-size: 22px;
+
+            font-weight: 850;
+
+            color: #3d236f;
+
+            word-break: break-word;
+
+        }
+
+
+        .summary-card small {
+
+            display: block;
+
+            margin-top: 8px;
+
+            color: #928da0;
+
+            font-size: 12px;
+
+        }
+
+
+        /* =================================================
+           SECTION
+        ================================================= */
+
+        .section {
+
+            background:
+                rgba(255,255,255,.88);
+
+            border-radius: 20px;
+
+            border:
+                1px solid
+                rgba(123, 88, 191, .12);
+
+            box-shadow:
+                0 8px 30px
+                rgba(75, 42, 125, .08);
+
+            overflow: hidden;
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .section-head {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+
+            padding: 20px;
+
+            border-bottom:
+                1px solid #eee9f7;
+
+        }
+
+
+        .section-title {
+
+            margin: 0;
+
+            font-size: 20px;
+
+            color: #38205f;
+
+        }
+
+
+        .section-description {
+
+            margin:
+                5px 0 0;
+
+            color: #817b8e;
+
+            font-size: 13px;
+
+        }
+
+
+        /* =================================================
+           FILTERS
+        ================================================= */
+
+        .toolbar {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+
+            padding: 16px 20px;
+
+            background: #fbf9ff;
+
+            border-bottom:
+                1px solid #eee9f7;
+
+        }
+
+
+        .filters {
+
+            display: flex;
+
+            gap: 8px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+        .filter-btn {
+
+            border: 0;
+
+            padding:
+                9px 15px;
+
+            border-radius: 999px;
+
+            background: #eee8fa;
+
+            color: #5e4a7d;
+
+            cursor: pointer;
+
+            font-weight: 750;
+
+        }
+
+
+        .filter-btn:hover {
+
+            background: #e1d5f7;
+
+        }
+
+
+        .filter-btn.active {
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7041d9,
+                    #8b5cf6
+                );
+
+        }
+
+
+        .search {
+
+            width:
+                min(330px, 100%);
+
+            padding:
+                10px 14px;
+
+            border:
+                1px solid #ddd5eb;
+
+            border-radius: 12px;
+
+            outline: none;
+
+            background: white;
+
+            font-size: 14px;
+
+        }
+
+
+        .search:focus {
+
+            border-color:
+                #8b5cf6;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(139,92,246,.12);
+
+        }
+
+
+        /* =================================================
+           TABLE
+        ================================================= */
+
+        .table-wrap {
+
+            width: 100%;
+
+            overflow-x: auto;
+
+        }
+
+
+        table {
+
+            width: 100%;
+
+            min-width: 1120px;
+
+            border-collapse:
+                collapse;
+
+        }
+
+
+        th {
+
+            padding:
+                13px 12px;
+
+            background: #f7f3fd;
+
+            color: #685d78;
+
+            font-size: 12px;
+
+            text-align: left;
+
+            white-space: nowrap;
+
+        }
+
+
+        td {
+
+            padding:
+                13px 12px;
+
+            border-top:
+                1px solid #f0edf5;
+
+            font-size: 13px;
+
+            white-space: nowrap;
+
+        }
+
+
+        tbody tr:hover {
+
+            background:
+                #faf7ff;
+
+        }
+
+
+        .account {
+
+            font-weight: 850;
+
+            color: #6335bd;
+
+        }
+
+
+        .portfolio-badge {
+
+            display: inline-block;
+
+            padding:
+                5px 9px;
+
+            border-radius: 999px;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+        }
+
+
+        .portfolio-15 {
+
+            background: #eee7ff;
+
+            color: #6540b8;
+
+        }
+
+
+        .portfolio-30 {
+
+            background: #e8f2ff;
+
+            color: #28639b;
+
+        }
+
+
+        .money {
+
+            font-variant-numeric:
+                tabular-nums;
+
+            text-align: right;
+
+        }
+
+
+        .status {
+
+            display: inline-block;
+
+            padding:
+                5px 9px;
+
+            border-radius: 999px;
+
+            background: #edf8f0;
+
+            color: #278144;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+        }
+
+
+        .status.empty {
+
+            background: #f1f1f1;
+
+            color: #777;
+
+        }
+
+
+        .detail-btn {
+
+            border: 0;
+
+            padding:
+                7px 11px;
+
+            border-radius: 9px;
+
+            background: #eee7ff;
+
+            color: #6135b6;
+
+            font-weight: 750;
+
+            cursor: pointer;
+
+        }
+
+
+        .detail-btn:hover {
+
+            background: #dfd1fa;
+
+        }
+
+
+        .empty-row {
+
+            padding: 35px;
+
+            text-align: center;
+
+            color: #8b8495;
+
+        }
+
+
+        /* =================================================
+           SPECIAL
+        ================================================= */
+
+        .special-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 15px;
+
+            padding: 20px;
+
+        }
+
+
+        .special-card {
+
+            padding: 18px;
+
+            border-radius: 15px;
+
+            background: #faf8ff;
+
+            border:
+                1px solid #eee7f8;
+
+        }
+
+
+        .special-title {
+
+            font-size: 13px;
+
+            color: #756b83;
+
+            font-weight: 700;
+
+        }
+
+
+        .special-value {
+
+            margin-top: 8px;
+
+            font-size: 25px;
+
+            font-weight: 850;
+
+            color: #4b2a7e;
+
+        }
+
+
+        /* =================================================
+           RESPONSIVE
+        ================================================= */
+
+        @media (max-width: 1200px) {
+
+            .summary-grid {
+
+                grid-template-columns:
+                    repeat(3, 1fr);
+
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .topbar {
+
+                padding:
+                    15px 16px;
+
+            }
+
+
+            .page {
+
+                padding:
+                    20px 12px 40px;
+
+            }
+
+
+            .summary-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+
+            .summary-card {
+
+                min-height: 110px;
+
+            }
+
+
+            .summary-value {
+
+                font-size: 18px;
+
+            }
+
+
+            .special-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 430px) {
+
+            .summary-grid {
+
+                grid-template-columns:
+                    1fr 1fr;
+
+                gap: 9px;
+
+            }
+
+
+            .summary-card {
+
+                padding: 13px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =================================================
+         TOPBAR
+    ================================================= -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-title">
+                Personal Finance
+            </div>
+
+            <div class="brand-subtitle">
+                Owner Management Dashboard
+            </div>
+
+        </div>
+
+
+        <div class="owner-badge">
+            OWNER
+        </div>
+
+    </header>
+
+
+
+    <main class="page">
+
+
+        <!-- =================================================
+             WELCOME
+        ================================================= -->
+
+        <section class="welcome">
+
+            <h1 id="welcomeTitle">
+                Owner Management Dashboard
+            </h1>
+
+            <p id="welcomeText">
+                กำลังโหลดข้อมูล...
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ERROR
+        ================================================= -->
+
+        <div
+            id="errorBox"
+            class="error-box"
+        ></div>
+
+
+
+        <!-- =================================================
+             LOADING
+        ================================================= -->
+
+        <div
+            id="loading"
+            class="loading"
+        >
+            กำลังโหลดข้อมูลจากระบบ...
+        </div>
+
+
+
+        <!-- =================================================
+             SUMMARY
+        ================================================= -->
+
+        <section class="summary-grid">
+
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    ลูกค้าที่มีข้อมูล
+                </div>
+
+                <div
+                    id="totalCustomers"
+                    class="summary-value"
+                >
+                    0
+                </div>
+
+                <small>
+                    จาก C001 - C010
+                </small>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    เงินต้นรวม
+                </div>
+
+                <div
+                    id="totalPrincipal"
+                    class="summary-value"
+                >
+                    ฿0
+                </div>
+
+                <small>
+                    จากรายการล่าสุดของแต่ละพอร์ต
+                </small>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    กำไรรวม
+                </div>
+
+                <div
+                    id="totalProfit"
+                    class="summary-value"
+                >
+                    ฿0
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    ค่าคอมรวม
+                </div>
+
+                <div
+                    id="totalCommission"
+                    class="summary-value"
+                >
+                    ฿0
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    โอนกำไรรวม
+                </div>
+
+                <div
+                    id="totalTransfer"
+                    class="summary-value"
+                >
+                    ฿0
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    ทบทุนรวม
+                </div>
+
+                <div
+                    id="totalCompound"
+                    class="summary-value"
+                >
+                    ฿0
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             CUSTOMER TABLE
+        ================================================= -->
+
+        <section class="section">
+
+
+            <div class="section-head">
+
+                <div>
+
+                    <h2 class="section-title">
+                        ข้อมูลลูกค้า
+                    </h2>
+
+                    <p class="section-description">
+                        แสดงข้อมูลล่าสุดของแต่ละ Portfolio
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="toolbar">
+
+
+                <div class="filters">
+
+                    <button
+                        class="filter-btn active"
+                        data-filter="all"
+                    >
+                        ทั้งหมด
+                    </button>
+
+
+                    <button
+                        class="filter-btn"
+                        data-filter="15"
+                    >
+                        Portfolio 15
+                    </button>
+
+
+                    <button
+                        class="filter-btn"
+                        data-filter="30"
+                    >
+                        Portfolio 30
+                    </button>
+
+                </div>
+
+
+                <input
+                    id="searchInput"
+                    class="search"
+                    type="search"
+                    placeholder="ค้นหา Account หรือชื่อลูกค้า..."
+                >
+
+            </div>
+
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Account
+                            </th>
+
+                            <th>
+                                ลูกค้า
+                            </th>
+
+                            <th>
+                                Portfolio
+                            </th>
+
+                            <th>
+                                เงินต้น
+                            </th>
+
+                            <th>
+                                กำไรล่าสุด
+                            </th>
+
+                            <th>
+                                ค่าคอม
+                            </th>
+
+                            <th>
+                                โอนกำไร
+                            </th>
+
+                            <th>
+                                ทบทุน
+                            </th>
+
+                            <th>
+                                คงเหลือ
+                            </th>
+
+                            <th>
+                                สถานะ
+                            </th>
+
+                            <th>
+                                รายละเอียด
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="customerTableBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SPECIAL
+        ================================================= -->
+
+        <section class="section">
+
+
+            <div class="section-head">
+
+                <div>
+
+                    <h2 class="section-title">
+                        รายการพิเศษ
+                    </h2>
+
+                    <p class="section-description">
+                        ตรวจสอบรายการพิเศษจากข้อมูลลูกค้า
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="special-grid">
+
+
+                <div class="special-card">
+
+                    <div class="special-title">
+                        รายการยกเลิกค่าคอมมิชชั่น
+                    </div>
+
+                    <div
+                        id="waivedCommissionCount"
+                        class="special-value"
+                    >
+                        0
+                    </div>
+
+                </div>
+
+
+                <div class="special-card">
+
+                    <div class="special-title">
+                        รายรับพิเศษ Airdrop
+                    </div>
+
+                    <div
+                        id="airdropCount"
+                        class="special-value"
+                    >
+                        0
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+<script>
+
+
+// ======================================================
+// CONFIG
+// ======================================================
+
+
+// ใช้ URL Apps Script Web App ตัวเดียวกับระบบเดิม
+// ต้องลงท้ายด้วย /exec
+
+const API_URL =
+    "https://script.google.com/macros/s/AKfycbzNSbHC53WeBzTKHa6CMWLK_p8xMBLOiXpAAa1Ln7_RXujRweossN1biXuyH6sSi9HCgQ/exec";
+
+
+// Firebase config
+// ใช้ค่าชุดเดียวกับหน้า Login / investment-history
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyAN2pqFo58Wbur_GQsFX0080FOZ3C3gWaA",
+
+    authDomain:
+        "personal-finance171.firebaseapp.com",
+
+    projectId:
+        "personal-finance171"
+
+};
+
+
+// ======================================================
+// FIREBASE
+// ======================================================
+
+firebase.initializeApp(
+    firebaseConfig
+);
+
+
+const auth =
+    firebase.auth();
+
+
+// ======================================================
+// GLOBAL DATA
+// ======================================================
+
+let customers = [];
+
+let dashboardRows = [];
+
+let currentFilter = "all";
+
+
+// ======================================================
+// FORMAT MONEY
+// ======================================================
+
+function formatMoney(value) {
+
+    const number =
+        Number(value) || 0;
+
+
+    return number.toLocaleString(
+        "th-TH",
+        {
+
+            minimumFractionDigits: 2,
+
+            maximumFractionDigits: 2
+
+        }
+    );
+
+}
+
+
+// ======================================================
+// ESCAPE HTML
+// ======================================================
+
+function escapeHtml(value) {
+
+    return String(
+        value ?? ""
+    )
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+// ======================================================
+// SHOW ERROR
+// ======================================================
+
+function showError(message) {
+
+    const box =
+        document.getElementById(
+            "errorBox"
+        );
+
+
+    box.textContent =
+        message;
+
+
+    box.style.display =
+        "block";
+
+}
+
+
+// ======================================================
+// HIDE ERROR
+// ======================================================
+
+function hideError() {
+
+    const box =
+        document.getElementById(
+            "errorBox"
+        );
+
+
+    box.style.display =
+        "none";
+
+}
+
+
+// ======================================================
+// LOADING
+// ======================================================
+
+function setLoading(show) {
+
+    const loading =
+        document.getElementById(
+            "loading"
+        );
+
+
+    loading.style.display =
+        show
+            ? "block"
+            : "none";
+
+}
+
+
+// ======================================================
+// UPDATE SUMMARY
+// ======================================================
+
+function updateSummary(summary) {
+
+    if (!summary) return;
+
+
+    document.getElementById(
+        "totalCustomers"
+    ).textContent =
+        Number(
+            summary.totalCustomers || 0
+        );
+
+
+    document.getElementById(
+        "totalPrincipal"
+    ).textContent =
+        "฿" +
+        formatMoney(
+            summary.totalPrincipal
+        );
+
+
+    document.getElementById(
+        "totalProfit"
+    ).textContent =
+        "฿" +
+        formatMoney(
+            summary.totalProfit
+        );
+
+
+    document.getElementById(
+        "totalCommission"
+    ).textContent =
+        "฿" +
+        formatMoney(
+            summary.totalCommission
+        );
+
+
+    document.getElementById(
+        "totalTransfer"
+    ).textContent =
+        "฿" +
+        formatMoney(
+            summary.totalTransfer
+        );
+
+
+    document.getElementById(
+        "totalCompound"
+    ).textContent =
+        "฿" +
+        formatMoney(
+            summary.totalCompound
+        );
+
+}
+
+
+// ======================================================
+// UPDATE SPECIAL
+// ======================================================
+
+function updateSpecial(special) {
+
+    if (!special) return;
+
+
+    document.getElementById(
+        "waivedCommissionCount"
+    ).textContent =
+        Number(
+            special.waivedCommissionCount || 0
+        );
+
+
+    document.getElementById(
+        "airdropCount"
+    ).textContent =
+        Number(
+            special.airdropCount || 0
+        );
+
+}
+
+
+// ======================================================
+// RENDER TABLE
+// ======================================================
+
+function renderTable(rows) {
+
+    const tbody =
+        document.getElementById(
+            "customerTableBody"
+        );
+
+
+    tbody.innerHTML = "";
+
+
+    if (
+        !rows ||
+        rows.length === 0
+    ) {
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="11"
+                    class="empty-row"
+                >
+                    ไม่พบข้อมูลตามเงื่อนไข
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    rows.forEach(function(row) {
+
+        const portfolio =
+            Number(
+                row.portfolio
+            );
+
+
+        const portfolioClass =
+            portfolio === 15
+                ? "portfolio-15"
+                : "portfolio-30";
+
+
+        const status =
+            String(
+                row.status || ""
+            ).trim();
+
+
+        const statusHtml =
+            status
+
+                ? `
+                    <span class="status">
+                        ${escapeHtml(status)}
+                    </span>
+                  `
+
+                : `
+                    <span class="status empty">
+                        -
+                    </span>
+                  `;
+
+
+        const tr =
+            document.createElement("tr");
+
+
+        tr.innerHTML = `
+
+            <td>
+
+                <span class="account">
+                    ${escapeHtml(row.account)}
+                </span>
+
+            </td>
+
+
+            <td>
+                ${escapeHtml(row.name || "-")}
+            </td>
+
+
+            <td>
+
+                <span
+                    class="portfolio-badge ${portfolioClass}"
+                >
+                    Portfolio ${portfolio}
+                </span>
+
+            </td>
+
+
+            <td class="money">
+                ฿${formatMoney(row.principal)}
+            </td>
+
+
+            <td class="money">
+                ฿${formatMoney(row.profit)}
+            </td>
+
+
+            <td class="money">
+                ฿${formatMoney(row.commission)}
+            </td>
+
+
+            <td class="money">
+                ฿${formatMoney(row.transfer)}
+            </td>
+
+
+            <td class="money">
+                ฿${formatMoney(row.compound)}
+            </td>
+
+
+            <td class="money">
+                ฿${formatMoney(row.balance)}
+            </td>
+
+
+            <td>
+                ${statusHtml}
+            </td>
+
+
+            <td>
+
+                <button
+                    class="detail-btn"
+                    onclick="openCustomer('${escapeHtml(row.account)}')"
+                >
+                    ดูรายละเอียด
+                </button>
+
+            </td>
+
+        `;
+
+
+        tbody.appendChild(tr);
+
+    });
+
+}
+
+
+// ======================================================
+// APPLY FILTERS
+// ======================================================
+
+function applyFilters() {
+
+    const searchInput =
+        document.getElementById(
+            "searchInput"
+        );
+
+
+    const keyword =
+        String(
+            searchInput.value || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    let filtered =
+        dashboardRows.slice();
+
+
+    // --------------------------------------------------
+    // Portfolio filter
+    // --------------------------------------------------
+
+    if (
+        currentFilter !== "all"
+    ) {
+
+        filtered =
+            filtered.filter(
+                function(row) {
+
+                    return String(
+                        row.portfolio
+                    ) ===
+                    String(
+                        currentFilter
+                    );
+
+                }
+            );
+
+    }
+
+
+    // --------------------------------------------------
+    // Search
+    // --------------------------------------------------
+
+    if (keyword) {
+
+        filtered =
+            filtered.filter(
+                function(row) {
+
+                    const account =
+                        String(
+                            row.account || ""
+                        )
+                        .toLowerCase();
+
+
+                    const name =
+                        String(
+                            row.name || ""
+                        )
+                        .toLowerCase();
+
+
+                    return (
+                        account.includes(keyword) ||
+                        name.includes(keyword)
+                    );
+
+                }
+            );
+
+    }
+
+
+    renderTable(filtered);
+
+}
+
+
+// ======================================================
+// FILTER BUTTON
+// ======================================================
+
+document
+    .querySelectorAll(".filter-btn")
+    .forEach(function(button) {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                document
+                    .querySelectorAll(
+                        ".filter-btn"
+                    )
+                    .forEach(
+                        function(btn) {
+
+                            btn.classList.remove(
+                                "active"
+                            );
+
+                        }
+                    );
+
+
+                button.classList.add(
+                    "active"
+                );
+
+
+                currentFilter =
+                    button.dataset.filter;
+
+
+                applyFilters();
+
+            }
+        );
+
+    });
+
+
+// ======================================================
+// SEARCH
+// ======================================================
+
+document
+    .getElementById(
+        "searchInput"
+    )
+    .addEventListener(
+        "input",
+        applyFilters
+    );
+
+
+// ======================================================
+// OPEN CUSTOMER
+// ======================================================
+
+function openCustomer(account) {
+
+    const url =
+        "investment-history.html?account=" +
+        encodeURIComponent(
+            account
+        );
+
+
+    window.location.href =
+        url;
+
+}
+
+
+// ======================================================
+// LOAD OWNER DASHBOARD
+// ======================================================
+
+async function loadOwnerDashboard() {
+
+    setLoading(true);
+
+    hideError();
+
+
+    try {
+
+        // ------------------------------------------------
+        // ตรวจว่ามี URL หรือยัง
+        // ------------------------------------------------
+
+        if (
+            !API_URL ||
+            API_URL.includes(
+                "ใส่_URL_APPS_SCRIPT"
+            )
+        ) {
+
+            throw new Error(
+                "ยังไม่ได้ใส่ API_URL ของ Apps Script"
+            );
+
+        }
+
+
+        // ------------------------------------------------
+        // Firebase User
+        // ------------------------------------------------
+
+        const currentUser =
+            auth.currentUser;
+
+
+        if (!currentUser) {
+
+            throw new Error(
+                "ยังไม่ได้เข้าสู่ระบบ"
+            );
+
+        }
+
+
+        // ------------------------------------------------
+        // Firebase ID Token
+        // ------------------------------------------------
+
+        const token =
+            await currentUser.getIdToken(
+                true
+            );
+
+
+        // ------------------------------------------------
+        // API URL
+        // ------------------------------------------------
+
+        const url =
+            API_URL +
+            "?action=getOwnerDashboard&token=" +
+            encodeURIComponent(
+                token
+            );
+
+
+        // ------------------------------------------------
+        // Request
+        // ------------------------------------------------
+
+        const response =
+            await fetch(
+                url,
+                {
+
+                    method: "GET",
+
+                    cache: "no-store"
+
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "OWNER DASHBOARD:",
+            result
+        );
+
+
+        // ------------------------------------------------
+        // Authorization
+        // ------------------------------------------------
+
+        if (!result.authorized) {
+
+            if (
+                result.error ===
+                "OWNER_ONLY"
+            ) {
+
+                throw new Error(
+                    "บัญชีนี้ไม่มีสิทธิ์เข้าหน้า Owner Dashboard"
+                );
+
+            }
+
+
+            if (
+                result.error ===
+                "NO_TOKEN"
+            ) {
+
+                throw new Error(
+                    "ไม่พบ Firebase Token"
+                );
+
+            }
+
+
+            if (
+                result.error ===
+                "USER_NOT_FOUND"
+            ) {
+
+                throw new Error(
+                    "ไม่พบ UID นี้ใน Users"
+                );
+
+            }
+
+
+            if (
+                result.error ===
+                "USER_INACTIVE"
+            ) {
+
+                throw new Error(
+                    "บัญชีนี้ถูกปิดการใช้งาน"
+                );
+
+            }
+
+
+            throw new Error(
+                result.error ||
+                "ไม่สามารถโหลดข้อมูลได้"
+            );
+
+        }
+
+
+        // ------------------------------------------------
+        // Role check frontend
+        // ------------------------------------------------
+
+        if (
+            String(
+                result.role || ""
+            )
+            .trim()
+            .toUpperCase() !==
+            "OWNER"
+        ) {
+
+            throw new Error(
+                "บัญชีนี้ไม่ใช่ OWNER"
+            );
+
+        }
+
+
+        // ------------------------------------------------
+        // Save data
+        // ------------------------------------------------
+
+        customers =
+            result.customers || [];
+
+
+        dashboardRows =
+            result.rows || [];
+
+
+        // ------------------------------------------------
+        // Summary
+        // ------------------------------------------------
+
+        updateSummary(
+            result.summary
+        );
+
+
+        updateSpecial(
+            result.special
+        );
+
+
+        // ------------------------------------------------
+        // Welcome
+        // ------------------------------------------------
+
+        const ownerName =
+            currentUser.displayName ||
+            result.name ||
+            "OWNER";
+
+
+        document.getElementById(
+            "welcomeTitle"
+        ).textContent =
+            "สวัสดี " +
+            ownerName;
+
+
+        document.getElementById(
+            "welcomeText"
+        ).textContent =
+            "ข้อมูลการจัดการลูกค้า C001 - C010";
+
+
+        // ------------------------------------------------
+        // Table
+        // ------------------------------------------------
+
+        applyFilters();
+
+
+    } catch (error) {
+
+        console.error(
+            "OWNER DASHBOARD ERROR:",
+            error
+        );
+
+
+        showError(
+            error.message ||
+            "เกิดข้อผิดพลาดในการโหลดข้อมูล"
+        );
+
+
+    } finally {
+
+        setLoading(false);
+
+    }
+
+}
+
+
+// ======================================================
+// AUTH STATE
+// ======================================================
+
+auth.onAuthStateChanged(
+    async function(user) {
+
+        if (!user) {
+
+            setLoading(false);
+
+
+            showError(
+                "กรุณาเข้าสู่ระบบก่อนใช้งาน Owner Dashboard"
+            );
+
+
+            return;
+
+        }
+
+
+        await loadOwnerDashboard();
+
+    }
+);
+
+
+</script>
+
+
+</body>
+
+</html>
