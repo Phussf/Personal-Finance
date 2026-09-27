@@ -2300,29 +2300,30 @@ function renderCustomer(customer) {
 }
 
 function sortByDate(data) {
+    return [...data].sort((a, b) => {
+        const dateA = parseDateValue(a["วันที่"]);
+        const dateB = parseDateValue(b["วันที่"]);
 
-    return [...data].sort(
-        function (a, b) {
-
-            const dateA =
-                parseDateValue(
-                    a["วันที่"]
-                );
-
-
-            const dateB =
-                parseDateValue(
-                    b["วันที่"]
-                );
-
-
+        // วันที่ต่างกัน → วันที่ล่าสุดขึ้นก่อน
+        if (dateA !== dateB) {
             return dateB - dateA;
-
         }
-    );
 
+        // วันที่เดียวกัน → ปิดพอร์ตขึ้นก่อน
+        const statusA = String(a["รายการ"] || "").trim();
+        const statusB = String(b["รายการ"] || "").trim();
+
+        if (statusA === "ปิดพอร์ต" && statusB !== "ปิดพอร์ต") {
+            return -1;
+        }
+
+        if (statusB === "ปิดพอร์ต" && statusA !== "ปิดพอร์ต") {
+            return 1;
+        }
+
+        return 0;
+    });
 }
-
 function parseDateValue(value) {
     if (!value) return 0;
 
