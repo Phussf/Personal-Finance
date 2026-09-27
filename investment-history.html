@@ -1,32 +1,44 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
-<meta charset="UTF-8">
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
 
-<title>ประวัติการลงทุน | Personal Finance</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+    <meta charset="UTF-8">
 
-<link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
->
-<link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>ประวัติการลงทุน | Personal Finance</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
 <style>
+
+/* ==================================================
+   GLOBAL
+================================================== */
 
 * {
     box-sizing: border-box;
 }
 
 :root {
-
     font-family:
         "Noto Sans Thai",
         "Inter",
@@ -38,7 +50,6 @@
 
     color: #d9dee8;
 
-    /* ลดความเข้มของธีมเดิมลงเล็กน้อย */
     --bg: #111827;
 
     --card:
@@ -72,250 +83,411 @@
         #9b7bea;
 }
 
-
 html {
     scroll-behavior: smooth;
 }
 
-
 body {
-
     margin: 0;
-
     min-height: 100vh;
 
     color: var(--text);
 
     background:
-
         radial-gradient(
             circle at 10% 0%,
             rgba(59,130,246,.09),
             transparent 30%
         ),
-
         radial-gradient(
             circle at 90% 10%,
             rgba(168,85,247,.08),
             transparent 28%
         ),
-
         var(--bg);
 }
-
 
 button,
 select {
     font-family: inherit;
 }
 
-
 .hidden {
     display: none !important;
 }
 
 
-/* =========================
-       TOPBAR
-    ========================= */
+/* ==================================================
+   TOPBAR
+================================================== */
 
-    .topbar {
-        font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
-        position: sticky;
-        top: 0;
-        z-index: 100;
+.topbar {
+    font-family:
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        Tahoma,
+        Arial,
+        sans-serif;
 
-        width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 
-        background: rgba(17, 24, 39, .78);
+    width: 100%;
 
-        border-bottom:
-            1px solid rgba(255, 255, 255, .08);
+    background:
+        rgba(17, 24, 39, .78);
 
-        backdrop-filter: blur(18px);
-        -webkit-backdrop-filter: blur(18px);
-    }
+    border-bottom:
+        1px solid rgba(255, 255, 255, .08);
 
-    .topbar-inner {
-        width: min(1180px, calc(100% - 28px));
+    backdrop-filter:
+        blur(18px);
 
-        margin: auto;
+    -webkit-backdrop-filter:
+        blur(18px);
+}
 
-        min-height: 72px;
+.topbar-inner {
+    width:
+        min(1180px, calc(100% - 28px));
 
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    min-height:
+        72px;
 
-        gap: 18px;
-    }
+    margin:
+        0 auto;
 
-    .brand {
-        display: flex;
-        align-items: center;
+    display:
+        flex;
 
-        gap: 12px;
+    align-items:
+        center;
 
-        min-width: 0;
-    }
+    justify-content:
+        space-between;
+
+    gap:
+        18px;
+}
+
+
+/* ==================================================
+   BRAND
+================================================== */
+
+.brand {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    min-width:
+        0;
+
+    flex:
+        1 1 auto;
+}
 
 .brand-icon {
-    width: 42px;
-    height: 42px;
+    width:
+        42px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height:
+        42px;
 
-    flex-shrink: 0;
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-shrink:
+        0;
 }
 
 .brand-icon img {
-    width: 42px;
-    height: 42px;
+    width:
+        42px;
 
-    object-fit: cover;
+    height:
+        42px;
 
-    border-radius: 50%;
+    object-fit:
+        cover;
 
-    display: block;
+    border-radius:
+        50%;
+
+    display:
+        block;
 }
 
-    .brand-text {
-        min-width: 0;
-    }
+.brand-text {
+    min-width:
+        0;
 
-    .brand-title {
-        font-size: 15px;
-        font-weight: 800;
-        letter-spacing: .2px;
-    }
+    overflow:
+        hidden;
+}
 
-    .brand-subtitle {
-        margin-top: 2px;
+.brand-title {
+    font-size:
+        15px;
 
-        color: var(--muted);
+    font-weight:
+        800;
 
-        font-size: 11px;
-    }
+    letter-spacing:
+        .2px;
 
-    .nav {
-        display: flex;
-        align-items: center;
-        gap: 8px;
+    white-space:
+        nowrap;
 
-        flex-wrap: wrap;
-        justify-content: flex-end;
-    }
+    overflow:
+        hidden;
 
-    .nav-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+    text-overflow:
+        ellipsis;
+}
 
-        min-height: 40px;
+.brand-subtitle {
+    margin-top:
+        2px;
 
-        padding: 0 15px;
+    color:
+        var(--muted);
 
-        border-radius: 11px;
+    font-size:
+        11px;
 
-        border:
-            1px solid rgba(255, 255, 255, .08);
+    white-space:
+        nowrap;
 
-        background:
-            rgba(255, 255, 255, .045);
+    overflow:
+        hidden;
 
-        color: #dfe7f3;
+    text-overflow:
+        ellipsis;
+}
 
-        text-decoration: none;
 
-        font-size: 13px;
-        font-weight: 700;
+/* ==================================================
+   NAV
+================================================== */
 
-        cursor: pointer;
+.nav {
+    display:
+        flex;
 
-        transition:
-            .2s ease;
-    }
+    align-items:
+        center;
 
-    .nav-btn:hover {
-        background:
-            rgba(255, 255, 255, .09);
+    justify-content:
+        flex-end;
 
-        transform: translateY(-1px);
-    }
+    gap:
+        8px;
 
-    .nav-btn.active {
-        border-color: transparent;
+    flex:
+        0 1 auto;
 
-        color: white;
+    min-width:
+        0;
+}
 
-        background:
-            linear-gradient(
-                135deg,
-                #3975c9,
-                #7050b5
-            );
+.nav-btn {
+    display:
+        inline-flex;
 
-        box-shadow:
-            0 8px 22px rgba(73, 102, 184, .22);
-    }
-    .user-profile {
-        display: flex;
-        align-items: center;
-        gap: 9px;
-        margin-left: 4px;
-        padding: 4px 8px 4px 5px;
+    align-items:
+        center;
 
-        border: 1px solid rgba(255, 255, 255, .08);
-        border-radius: 12px;
+    justify-content:
+        center;
 
-        background: rgba(255, 255, 255, .045);
+    min-height:
+        40px;
 
-        min-width: 0;
-    }
+    padding:
+        0 15px;
 
-    .user-profile img {
-        width: 32px;
-        height: 32px;
+    border-radius:
+        11px;
 
-        border-radius: 50%;
+    border:
+        1px solid rgba(255, 255, 255, .08);
 
-        object-fit: cover;
+    background:
+        rgba(255, 255, 255, .045);
 
-        display: block;
+    color:
+        #dfe7f3;
 
-        border: 1px solid rgba(255, 255, 255, .15);
-    }
+    text-decoration:
+        none;
 
-    .user-profile-name {
-        color: #eef2f7;
-        font-size: 12px;
-        font-weight: 700;
-        white-space: nowrap;
-        display: inline-block;
-    }
+    font-size:
+        13px;
 
-    .logout-btn {
-        color: #ffb4b4;
+    font-weight:
+        700;
 
-        border-color:
-            rgba(248, 113, 113, .18);
-    }
+    cursor:
+        pointer;
 
-    .logout-btn:hover {
-        background:
-            rgba(248, 113, 113, .10);
-    }
+    transition:
+        .2s ease;
 
+    white-space:
+        nowrap;
+}
+
+.nav-btn:hover {
+    background:
+        rgba(255, 255, 255, .09);
+
+    transform:
+        translateY(-1px);
+}
+
+.nav-btn.active {
+    border-color:
+        transparent;
+
+    color:
+        white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #3975c9,
+            #7050b5
+        );
+
+    box-shadow:
+        0 8px 22px rgba(73, 102, 184, .22);
+}
+
+
+/* ==================================================
+   GOOGLE USER PROFILE
+================================================== */
+
+.user-profile {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    margin-left:
+        4px;
+
+    padding:
+        4px 8px 4px 5px;
+
+    border:
+        1px solid rgba(255, 255, 255, .08);
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(255, 255, 255, .045);
+
+    min-width:
+        0;
+
+    max-width:
+        260px;
+
+    flex:
+        0 1 260px;
+
+    overflow:
+        hidden;
+}
+
+.user-profile img {
+    width:
+        32px;
+
+    height:
+        32px;
+
+    border-radius:
+        50%;
+
+    object-fit:
+        cover;
+
+    display:
+        block;
+
+    flex:
+        0 0 32px;
+
+    border:
+        1px solid rgba(255, 255, 255, .15);
+}
+
+.user-profile-name {
+    color:
+        #eef2f7;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+    white-space:
+        nowrap;
+
+    display:
+        block;
+
+    min-width:
+        0;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+}
+
+.logout-btn {
+    color:
+        #ffb4b4;
+
+    border-color:
+        rgba(248, 113, 113, .18);
+}
+
+.logout-btn:hover {
+    background:
+        rgba(248, 113, 113, .10);
+}
+
+
+/* ==================================================
+   PAGE
+================================================== */
 
 .page {
-
-    /*
-     * ขยายจาก 1450px เป็น 1700px
-     * เพื่อให้ตารางใช้พื้นที่หน้าจอได้มากขึ้น
-     */
-
     width:
         min(1700px, calc(100% - 36px));
 
@@ -327,52 +499,61 @@ select {
 }
 
 
+/* ==================================================
+   PAGE HEADING
+================================================== */
+
 .page-heading {
+    display:
+        flex;
 
-    display: flex;
+    align-items:
+        flex-end;
 
-    align-items: flex-end;
+    justify-content:
+        space-between;
 
-    justify-content: space-between;
+    gap:
+        20px;
 
-    gap: 20px;
-
-    margin-bottom: 22px;
+    margin-bottom:
+        22px;
 }
 
-
 .page-heading h1 {
-
-    margin: 0;
+    margin:
+        0;
 
     font-size:
         clamp(25px, 4vw, 34px);
 
-    font-weight: 800;
+    font-weight:
+        800;
 
     letter-spacing:
         -.5px;
 }
 
-
 .page-heading p {
-
     margin:
         6px 0 0;
 
-    color: var(--muted);
+    color:
+        var(--muted);
 
-    font-size: 13px;
+    font-size:
+        13px;
 }
 
-
 .page-badge {
+    display:
+        inline-flex;
 
-    display: inline-flex;
+    align-items:
+        center;
 
-    align-items: center;
-
-    gap: 7px;
+    gap:
+        7px;
 
     padding:
         8px 12px;
@@ -380,61 +561,76 @@ select {
     border:
         1px solid var(--border);
 
-    border-radius: 10px;
+    border-radius:
+        10px;
 
     background:
         rgba(255,255,255,.025);
 
-    color: #b8c1cf;
+    color:
+        #b8c1cf;
 
-    font-size: 11px;
+    font-size:
+        11px;
 }
 
 
+/* ==================================================
+   ERROR / LOADING
+================================================== */
 
 .error {
+    display:
+        none;
 
-    display: none;
+    margin-bottom:
+        20px;
 
-    margin-bottom: 20px;
-
-    padding: 14px 17px;
+    padding:
+        14px 17px;
 
     border:
         1px solid rgba(239,68,68,.22);
 
-    border-radius: 13px;
+    border-radius:
+        13px;
 
     background:
         rgba(239,68,68,.06);
 
-    color: #f2a4a4;
+    color:
+        #f2a4a4;
 
-    font-size: 13px;
+    font-size:
+        13px;
 }
-
 
 .loading {
+    text-align:
+        center;
 
-    text-align: center;
+    padding:
+        70px 20px;
 
-    padding: 70px 20px;
+    color:
+        var(--muted);
 
-    color: var(--muted);
-
-    font-size: 14px;
+    font-size:
+        14px;
 }
 
-
 .loading::before {
+    content:
+        "";
 
-    content: "";
+    display:
+        block;
 
-    display: block;
+    width:
+        35px;
 
-    width: 35px;
-
-    height: 35px;
+    height:
+        35px;
 
     margin:
         0 auto 14px;
@@ -445,48 +641,27 @@ select {
     border-top-color:
         var(--blue);
 
-    border-radius: 50%;
+    border-radius:
+        50%;
 
     animation:
         spin .8s linear infinite;
 }
 
-
 @keyframes spin {
-
     to {
-
         transform:
             rotate(360deg);
     }
 }
 
-.brand-icon {
-    width: 42px;
-    height: 42px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    flex-shrink: 0;
-}
-
-.brand-icon img {
-    width: 42px;
-    height: 42px;
-
-    object-fit: cover;
-
-    border-radius: 50%;
-
-    display: block;
-}
+/* ==================================================
+   CARD
+================================================== */
 
 .card {
-
     background:
-
         linear-gradient(
             145deg,
             rgba(30,39,60,.91),
@@ -496,43 +671,51 @@ select {
     border:
         1px solid var(--border);
 
-    border-radius: 17px;
+    border-radius:
+        17px;
 
-    padding: 20px;
+    padding:
+        20px;
 
-    margin-bottom: 20px;
+    margin-bottom:
+        20px;
 
     box-shadow:
         0 12px 30px rgba(0,0,0,.12);
 }
 
-
 .card-title {
+    display:
+        flex;
 
-    display: flex;
+    align-items:
+        center;
 
-    align-items: center;
-
-    gap: 9px;
+    gap:
+        9px;
 
     margin:
         0 0 16px;
 
-    font-size: 18px;
+    font-size:
+        18px;
 
-    font-weight: 800;
+    font-weight:
+        800;
 }
 
-
 .card-title::before {
+    content:
+        "";
 
-    content: "";
+    width:
+        4px;
 
-    width: 4px;
+    height:
+        20px;
 
-    height: 20px;
-
-    border-radius: 5px;
+    border-radius:
+        5px;
 
     background:
         linear-gradient(
@@ -543,9 +726,13 @@ select {
 }
 
 
-.customer-grid {
+/* ==================================================
+   CUSTOMER
+================================================== */
 
-    display: grid;
+.customer-grid {
+    display:
+        grid;
 
     grid-template-columns:
         repeat(
@@ -553,12 +740,11 @@ select {
             minmax(210px, 1fr)
         );
 
-    gap: 11px;
+    gap:
+        11px;
 }
 
-
 .info {
-
     padding:
         12px 14px;
 
@@ -568,15 +754,14 @@ select {
     background:
         rgba(255,255,255,.025);
 
-    border-radius: 11px;
+    border-radius:
+        11px;
 
     transition:
         .2s ease;
 }
 
-
 .info:hover {
-
     border-color:
         rgba(96,165,250,.18);
 
@@ -584,88 +769,99 @@ select {
         rgba(96,165,250,.035);
 }
 
-
 .info-label {
+    font-size:
+        11px;
 
-    font-size: 11px;
+    color:
+        var(--muted);
 
-    color: var(--muted);
-
-    margin-bottom: 5px;
+    margin-bottom:
+        5px;
 }
 
-
 .info-value {
+    font-size:
+        14px;
 
-    font-size: 14px;
+    font-weight:
+        700;
 
-    font-weight: 700;
-
-    color: #e7ebf2;
+    color:
+        #e7ebf2;
 
     word-break:
         break-word;
 }
 
 
+/* ==================================================
+   PORTFOLIO BUTTONS
+================================================== */
+
 .portfolio-buttons {
+    display:
+        flex;
 
-    display: flex;
+    align-items:
+        center;
 
-    align-items: center;
+    gap:
+        8px;
 
-    gap: 8px;
+    flex-wrap:
+        wrap;
 
-    flex-wrap: wrap;
-
-    margin-bottom: 18px;
+    margin-bottom:
+        18px;
 }
 
-
 .portfolio-btn {
-
     border:
         1px solid rgba(255,255,255,.09);
 
     background:
         rgba(255,255,255,.025);
 
-    color: #c3cad5;
+    color:
+        #c3cad5;
 
-    border-radius: 10px;
+    border-radius:
+        10px;
 
     padding:
         8px 17px;
 
-    cursor: pointer;
+    cursor:
+        pointer;
 
-    font-size: 13px;
+    font-size:
+        13px;
 
-    font-weight: 700;
+    font-weight:
+        700;
 
     transition:
         .2s ease;
 }
 
-
 .portfolio-btn:hover {
-
     border-color:
         rgba(96,165,250,.25);
 
     background:
         rgba(96,165,250,.06);
 
-    color: #d8e4f2;
+    color:
+        #d8e4f2;
 }
 
-
 .portfolio-btn.active {
-
     border-color:
         transparent;
 
-    color: white;
+    color:
+        white;
 
     background:
         linear-gradient(
@@ -679,24 +875,30 @@ select {
 }
 
 
-.summary {
+/* ==================================================
+   SUMMARY
+================================================== */
 
-    display: grid;
+.summary {
+    display:
+        grid;
 
     grid-template-columns:
         repeat(5, 1fr);
 
-    gap: 11px;
+    gap:
+        11px;
 
-    margin-bottom: 18px;
+    margin-bottom:
+        18px;
 }
 
-
 .summary-box {
+    position:
+        relative;
 
-    position: relative;
-
-    overflow: hidden;
+    overflow:
+        hidden;
 
     padding:
         15px;
@@ -707,125 +909,139 @@ select {
     background:
         rgba(255,255,255,.025);
 
-    border-radius: 13px;
+    border-radius:
+        13px;
 }
 
-
 .summary-box::after {
+    content:
+        "";
 
-    content: "";
+    position:
+        absolute;
 
-    position: absolute;
+    width:
+        65px;
 
-    width: 65px;
+    height:
+        65px;
 
-    height: 65px;
+    right:
+        -25px;
 
-    right: -25px;
+    bottom:
+        -25px;
 
-    bottom: -25px;
-
-    border-radius: 50%;
+    border-radius:
+        50%;
 
     background:
         rgba(96,165,250,.045);
 }
 
-
 .summary-label {
+    font-size:
+        11px;
 
-    font-size: 11px;
+    color:
+        var(--muted);
 
-    color: var(--muted);
-
-    margin-bottom: 7px;
+    margin-bottom:
+        7px;
 }
 
-
 .summary-value {
+    position:
+        relative;
 
-    position: relative;
+    z-index:
+        1;
 
-    z-index: 1;
+    font-size:
+        18px;
 
-    font-size: 18px;
+    font-weight:
+        800;
 
-    font-weight: 800;
-
-    color: #edf1f6;
+    color:
+        #edf1f6;
 
     word-break:
         break-word;
 }
 
-
 #summaryProfit {
-
     color:
         #7ed99a;
 }
 
-
 #summaryCommission {
-
     color:
         #e6c56b;
 }
 
-
 #summaryBalance {
-
     color:
         #91bce9;
 }
 
+
+/* ==================================================
+   TABLE CONTROLS
+================================================== */
+
 .table-controls {
+    display:
+        flex;
 
-    display: flex;
+    align-items:
+        center;
 
-    align-items: center;
+    justify-content:
+        flex-end;
 
-    justify-content: flex-end;
+    gap:
+        12px;
 
-    gap: 12px;
-
-    margin-bottom: 10px;
+    margin-bottom:
+        10px;
 }
-
 
 .table-controls label {
+    font-size:
+        11px;
 
-    font-size: 11px;
-
-    color: var(--muted);
+    color:
+        var(--muted);
 }
 
-
 .table-limit {
-
     border:
         1px solid rgba(255,255,255,.10);
 
     background:
         #20293c;
 
-    color: #cbd3df;
+    color:
+        #cbd3df;
 
-    border-radius: 8px;
+    border-radius:
+        8px;
 
     padding:
         6px 10px;
 
-    font-size: 12px;
+    font-size:
+        12px;
 
-    cursor: pointer;
+    cursor:
+        pointer;
 
-    outline: none;
+    outline:
+        none;
 }
 
-
 .table-limit:focus {
-
     border-color:
         rgba(96,165,250,.4);
 }
@@ -836,42 +1052,44 @@ select {
 ================================================== */
 
 .table-wrap {
+    width:
+        100%;
 
-    width: 100%;
-
-    overflow-x: auto;
+    overflow-x:
+        auto;
 
     border:
         1px solid rgba(255,255,255,.09);
 
-    border-radius: 13px;
+    border-radius:
+        13px;
 
     background:
         rgba(12,18,31,.28);
 }
 
-
-
 table {
+    width:
+        100%;
 
-    width: 100%;
-
-    min-width: 1250px;
+    min-width:
+        1250px;
 
     border-collapse:
         separate;
 
-    border-spacing: 0;
+    border-spacing:
+        0;
 
-    font-size: 12px;
+    font-size:
+        12px;
 
-    table-layout: auto;
+    table-layout:
+        auto;
 }
-
 
 th,
 td {
-
     padding:
         9px 9px;
 
@@ -885,9 +1103,7 @@ td {
         right;
 }
 
-
 th {
-
     background:
         #252e42;
 
@@ -900,41 +1116,35 @@ th {
     position:
         sticky;
 
-    top: 0;
+    top:
+        0;
 
-    z-index: 2;
+    z-index:
+        2;
 
-    font-size: 11.5px;
+    font-size:
+        11.5px;
 }
-
 
 th:first-child,
 td:first-child {
-
     text-align:
         center;
 }
 
-
 th:nth-child(3),
 td:nth-child(3),
-
 th:nth-child(10),
 td:nth-child(10) {
-
     text-align:
         left;
 }
 
 
-/*
- * รายการพิเศษ
- * เพิ่มพื้นที่ให้มากขึ้น
- */
+/* รายการพิเศษ */
 
 th:nth-child(11),
 td:nth-child(11) {
-
     text-align:
         left;
 
@@ -955,13 +1165,10 @@ td:nth-child(11) {
 }
 
 
-/*
- * Airdrop
- */
+/* Airdrop */
 
 th:nth-child(12),
 td:nth-child(12) {
-
     text-align:
         right;
 
@@ -982,13 +1189,10 @@ td:nth-child(12) {
 }
 
 
-/*
- * พอร์ต
- */
+/* พอร์ต */
 
 th:nth-child(13),
 td:nth-child(13) {
-
     min-width:
         65px;
 
@@ -996,30 +1200,22 @@ td:nth-child(13) {
         center;
 }
 
-
 tbody tr {
-
     transition:
         background .15s ease;
 }
 
-
 tbody tr:hover {
-
     background:
         rgba(96,165,250,.035);
 }
 
-
 tbody tr:last-child td {
-
     border-bottom:
         0;
 }
 
-
 td {
-
     color:
         #c5ccd7;
 
@@ -1027,38 +1223,29 @@ td {
         12px;
 }
 
-
 .status {
-
     font-weight:
         700;
 }
 
-
 .status-success {
-
     color:
         #67d889;
 }
 
-
 .status-pending {
-
     color:
         #e7bc52;
 }
 
-
 .status-cancel {
-
     color:
         #ed7777;
 }
 
-
 .empty {
-
-    display: none;
+    display:
+        none;
 
     text-align:
         center;
@@ -1074,21 +1261,21 @@ td {
 }
 
 
-.table-wrap::-webkit-scrollbar {
+/* ==================================================
+   TABLE SCROLLBAR
+================================================== */
 
-    height: 7px;
+.table-wrap::-webkit-scrollbar {
+    height:
+        7px;
 }
 
-
 .table-wrap::-webkit-scrollbar-track {
-
     background:
         #171f30;
 }
 
-
 .table-wrap::-webkit-scrollbar-thumb {
-
     background:
         #3b4659;
 
@@ -1096,22 +1283,25 @@ td {
         10px;
 }
 
-
 .table-wrap::-webkit-scrollbar-thumb:hover {
-
     background:
         #4c586d;
 }
 
 
-footer {
+/* ==================================================
+   FOOTER
+================================================== */
 
-    display: flex;
+footer {
+    display:
+        flex;
 
     justify-content:
         space-between;
 
-    gap: 20px;
+    gap:
+        20px;
 
     margin-top:
         28px;
@@ -1129,112 +1319,174 @@ footer {
         10px;
 }
 
+
+/* ==================================================
+   LARGE SCREEN
+================================================== */
+
 @media (min-width: 1500px) {
 
     table {
-
         font-size:
             12.5px;
     }
 
     th,
     td {
-
         padding:
             9px 10px;
     }
-
 }
+
+
+/* ==================================================
+   TABLET
+================================================== */
 
 @media (max-width: 1100px) {
 
     .summary {
-
         grid-template-columns:
             repeat(3, 1fr);
     }
 
-}
-
-@media (max-width: 900px) {
-
     .topbar-inner {
-        padding: 10px 16px;
-        gap: 12px;
+        width:
+            min(100% - 24px, 1180px);
     }
 
-    .brand-subtitle {
-        display: none;
+    .user-profile {
+        max-width:
+            220px;
     }
-
-    .user-profile-name {
-        max-width: 220px;
-    }
-
 }
+
+
+/* ==================================================
+   MOBILE
+================================================== */
 
 @media (max-width: 700px) {
 
     .topbar-inner {
-        min-height: auto;
-        padding: 9px 12px;
+        width:
+            calc(100% - 20px);
 
-        align-items: flex-start;
+        min-height:
+            auto;
+
+        padding:
+            10px 0;
+
+        display:
+            grid;
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            10px;
+    }
+
+    .brand {
+        width:
+            100%;
+    }
+
+    .brand-subtitle {
+        display:
+            none;
     }
 
     .nav {
-        gap: 6px;
-        flex-wrap: wrap;
+        width:
+            100%;
+
+        display:
+            grid;
+
+        grid-template-columns:
+            minmax(0, 1.35fr)
+            minmax(0, 1fr)
+            minmax(0, 1.15fr)
+            minmax(0, 1fr);
+
+        gap:
+            6px;
+
+        align-items:
+            stretch;
     }
 
     .user-profile {
-        height: 34px;
+        width:
+            100%;
+
+        max-width:
+            none;
+
+        min-width:
+            0;
+
+        height:
+            36px;
+
+        margin-left:
+            0;
+
+        padding:
+            3px 7px 3px 4px;
     }
 
     .user-profile img {
-        width: 28px;
-        height: 28px;
+        width:
+            28px;
+
+        height:
+            28px;
+
+        flex-basis:
+            28px;
     }
 
     .user-profile-name {
-        max-width: 180px;
-        font-size: 11px;
+        min-width:
+            0;
+
+        max-width:
+            none;
+
+        font-size:
+            11px;
     }
 
     .nav-btn {
-        height: 34px;
-        padding: 0 10px;
-        font-size: 11px;
-    }
+        width:
+            100%;
 
-}
+        min-width:
+            0;
 
+        min-height:
+            36px;
 
-@media (max-width: 800px) {
-
-    .topbar {
+        height:
+            36px;
 
         padding:
-            12px 16px;
+            0 8px;
+
+        font-size:
+            11px;
+
+        overflow:
+            hidden;
+
+        text-overflow:
+            ellipsis;
     }
-
-
-    .brand-subtitle {
-
-        display:
-            none;
-    }
-
-
-    .live-status {
-
-        display:
-            none;
-    }
-
 
     .page {
-
         width:
             calc(100% - 24px);
 
@@ -1242,9 +1494,7 @@ footer {
             22px 0 40px;
     }
 
-
     .page-heading {
-
         align-items:
             flex-start;
 
@@ -1252,63 +1502,125 @@ footer {
             column;
     }
 
-
     .summary {
-
         grid-template-columns:
             repeat(2, 1fr);
     }
 
-
     footer {
-
         flex-direction:
             column;
     }
-
 }
 
 
+/* ==================================================
+   SMALL MOBILE
+================================================== */
+
 @media (max-width: 560px) {
 
-    .brand-title {
+    .topbar-inner {
+        width:
+            calc(100% - 16px);
 
+        padding:
+            8px 0;
+
+        gap:
+            8px;
+    }
+
+    .brand {
+        gap:
+            9px;
+    }
+
+    .brand-icon {
+        width:
+            38px;
+
+        height:
+            38px;
+
+        flex-basis:
+            38px;
+    }
+
+    .brand-icon img {
+        width:
+            38px;
+
+        height:
+            38px;
+    }
+
+    .brand-title {
         font-size:
             14px;
     }
 
+    .nav {
+        grid-template-columns:
+            minmax(0, 1.3fr)
+            minmax(0, 1fr)
+            minmax(0, 1.1fr)
+            minmax(0, 1fr);
 
-    .brand-icon {
-        width: 38px;
-        height: 38px;
-        flex-basis: 38px;
+        gap:
+            5px;
     }
 
-    .brand-icon img {
-        width: 38px;
-        height: 38px;
-    }
-
-
-    .back-btn {
+    .user-profile {
+        height:
+            34px;
 
         padding:
-            8px 11px;
+            2px 5px 2px 3px;
 
-        font-size:
-            11px;
+        border-radius:
+            10px;
     }
 
+    .user-profile img {
+        width:
+            26px;
+
+        height:
+            26px;
+
+        flex-basis:
+            26px;
+    }
+
+    .user-profile-name {
+        font-size:
+            10.5px;
+    }
+
+    .nav-btn {
+        min-height:
+            34px;
+
+        height:
+            34px;
+
+        padding:
+            0 5px;
+
+        font-size:
+            10.5px;
+
+        border-radius:
+            9px;
+    }
 
     .page-heading h1 {
-
         font-size:
             25px;
     }
 
-
     .card {
-
         padding:
             15px;
 
@@ -1316,16 +1628,12 @@ footer {
             14px;
     }
 
-
     .summary {
-
         grid-template-columns:
             1fr;
     }
 
-
     .portfolio-btn {
-
         flex:
             1;
 
@@ -1333,16 +1641,12 @@ footer {
             90px;
     }
 
-
     .table-controls {
-
         justify-content:
             flex-start;
     }
 
-
     table {
-
         min-width:
             1180px;
 
@@ -1350,36 +1654,76 @@ footer {
             11.5px;
     }
 
-
     th,
     td {
-
         padding:
             8px 7px;
     }
 
-
     th:nth-child(11),
     td:nth-child(11) {
-
         width:
             150px;
 
         max-width:
             150px;
     }
-
 
     th:nth-child(12),
     td:nth-child(12) {
-
         width:
             115px;
 
         max-width:
             115px;
     }
+}
 
+
+/* ==================================================
+   EXTRA SMALL MOBILE
+================================================== */
+
+@media (max-width: 380px) {
+
+    .topbar-inner {
+        width:
+            calc(100% - 12px);
+    }
+
+    .brand-title {
+        font-size:
+            13px;
+    }
+
+    .nav {
+        gap:
+            4px;
+    }
+
+    .nav-btn {
+        font-size:
+            10px;
+
+        padding:
+            0 3px;
+    }
+
+    .user-profile-name {
+        font-size:
+            10px;
+    }
+
+    .user-profile img {
+        width:
+            24px;
+
+        height:
+            24px;
+
+        flex-basis:
+            24px;
+    }
 }
 
 </style>
@@ -1390,30 +1734,41 @@ footer {
 
 
 <header class="topbar">
+
     <div class="topbar-inner">
 
         <div class="brand">
+
             <div class="brand-icon">
+
                 <img
                     src="assets/images/messageImage_1790424403882.jpg"
                     alt="Personal Finance"
                 >
+
             </div>
 
             <div class="brand-text">
+
                 <div class="brand-title">
                     Personal Finance
                 </div>
+
                 <div class="brand-subtitle">
                     Private Financial Dashboard
                 </div>
+
             </div>
+
         </div>
+
 
         <nav class="nav">
 
             <!-- Google User -->
+
             <div class="user-profile">
+
                 <img
                     id="userPhoto"
                     src=""
@@ -1426,7 +1781,9 @@ footer {
                 >
                     กำลังโหลด...
                 </span>
+
             </div>
+
 
             <a
                 href="dashboard.html"
@@ -1435,12 +1792,14 @@ footer {
                 Dashboard
             </a>
 
+
             <a
                 href="investment-history.html"
                 class="nav-btn active"
             >
                 ประวัติการลงทุน
             </a>
+
 
             <button
                 type="button"
@@ -1453,10 +1812,12 @@ footer {
         </nav>
 
     </div>
+
 </header>
 
 
 <main class="page">
+
 
 <div class="page-heading">
 
@@ -1476,7 +1837,6 @@ footer {
     <div class="page-badge">
 
         🔐
-
         ข้อมูลส่วนตัวของผู้ใช้งาน
 
     </div>
@@ -1666,6 +2026,7 @@ footer {
 
     </div>
 
+
     <div
         class="summary"
         id="summary"
@@ -1733,6 +2094,7 @@ footer {
             </div>
 
         </div>
+
 
         <div class="summary-box">
 
@@ -1913,51 +2275,51 @@ const loadingBox =
         "loadingBox"
     );
 
-
 const errorBox =
     document.getElementById(
         "errorBox"
     );
-
 
 const customerCard =
     document.getElementById(
         "customerCard"
     );
 
-
 const historyCard =
     document.getElementById(
         "historyCard"
     );
-
 
 const historyBody =
     document.getElementById(
         "historyBody"
     );
 
-
 const emptyBox =
     document.getElementById(
         "emptyBox"
     );
-
 
 const tableLimit =
     document.getElementById(
         "tableLimit"
     );
 
-
 const userName =
-    document.getElementById("userName");
+    document.getElementById(
+        "userName"
+    );
 
 const userPhoto =
-    document.getElementById("userPhoto");
+    document.getElementById(
+        "userPhoto"
+    );
 
 const logoutBtn =
-    document.getElementById("logoutBtn");
+    document.getElementById(
+        "logoutBtn"
+    );
+
 
 function renderUserProfile(user) {
 
@@ -1971,15 +2333,24 @@ function renderUserProfile(user) {
         "ผู้ใช้งาน";
 
     if (user.photoURL) {
-        userPhoto.src = user.photoURL;
+
+        userPhoto.src =
+            user.photoURL;
+
         userPhoto.alt =
             user.displayName ||
             "Profile";
-        userPhoto.style.display = "block";
+
+        userPhoto.style.display =
+            "block";
+
     } else {
-        userPhoto.style.display = "none";
+
+        userPhoto.style.display =
+            "none";
     }
 }
+
 
 logoutBtn.addEventListener(
     "click",
@@ -1987,7 +2358,9 @@ logoutBtn.addEventListener(
 
         try {
 
-            logoutBtn.disabled = true;
+            logoutBtn.disabled =
+                true;
+
             logoutBtn.textContent =
                 "กำลังออก...";
 
@@ -2004,14 +2377,15 @@ logoutBtn.addEventListener(
                 error
             );
 
-            logoutBtn.disabled = false;
+            logoutBtn.disabled =
+                false;
+
             logoutBtn.textContent =
                 "ออกจากระบบ";
-
         }
-
     }
 );
+
 
 watchAuth(
     function (user) {
@@ -2026,17 +2400,19 @@ watchAuth(
         }
 
         renderUserProfile(user);
-
     }
 );
+
 
 let portfolio15 = [];
 
 let portfolio30 = [];
 
-let currentPortfolio = "15";
+let currentPortfolio =
+    "15";
 
-let currentLimit = "12";
+let currentLimit =
+    "12";
 
 
 function escapeHTML(value) {
@@ -2045,11 +2421,8 @@ function escapeHTML(value) {
         value === null ||
         value === undefined
     ) {
-
         return "";
-
     }
-
 
     return String(value)
 
@@ -2077,8 +2450,8 @@ function escapeHTML(value) {
             /'/g,
             "&#039;"
         );
-
 }
+
 
 function toNumber(value) {
 
@@ -2087,21 +2460,15 @@ function toNumber(value) {
         value === undefined ||
         value === ""
     ) {
-
         return null;
-
     }
-
 
     if (
         typeof value === "number" &&
         Number.isFinite(value)
     ) {
-
         return value;
-
     }
-
 
     const cleaned =
         String(value)
@@ -2110,36 +2477,27 @@ function toNumber(value) {
             .replace(/บาท/g, "")
             .trim();
 
-
     if (!cleaned) {
-
         return null;
-
     }
-
 
     const number =
         Number(cleaned);
 
-
     return Number.isFinite(number)
         ? number
         : null;
-
 }
+
 
 function money(value) {
 
     const number =
         toNumber(value);
 
-
     if (number === null) {
-
         return "-";
-
     }
-
 
     return number.toLocaleString(
         "th-TH",
@@ -2148,36 +2506,28 @@ function money(value) {
             maximumFractionDigits: 2
         }
     );
-
 }
+
 
 function percent(value) {
 
     const number =
         toNumber(value);
 
-
     if (number === null) {
-
         return "-";
-
     }
-
 
     let result =
         number;
-
 
     if (
         Math.abs(number) < 1 &&
         number !== 0
     ) {
-
         result =
             number * 100;
-
     }
-
 
     return result.toLocaleString(
         "th-TH",
@@ -2186,8 +2536,8 @@ function percent(value) {
             maximumFractionDigits: 2
         }
     ) + "%";
-
 }
+
 
 function text(value) {
 
@@ -2196,15 +2546,12 @@ function text(value) {
         value === undefined ||
         value === ""
     ) {
-
         return "-";
-
     }
 
-
     return escapeHTML(value);
-
 }
+
 
 function statusClass(value) {
 
@@ -2212,42 +2559,32 @@ function statusClass(value) {
         String(value || "")
             .toLowerCase();
 
-
     if (
         status.includes("สำเร็จ") ||
         status.includes("ชำระแล้ว") ||
         status.includes("paid")
     ) {
-
         return "status status-success";
-
     }
-
 
     if (
         status.includes("รอ") ||
         status.includes("ยังไม่ได้") ||
         status.includes("pending")
     ) {
-
         return "status status-pending";
-
     }
-
 
     if (
         status.includes("ยกเลิก") ||
         status.includes("cancel")
     ) {
-
         return "status status-cancel";
-
     }
 
-
     return "status";
-
 }
+
 
 function renderCustomer(customer) {
 
@@ -2256,163 +2593,295 @@ function renderCustomer(customer) {
     ).textContent =
         customer.customers_id || "-";
 
-
     document.getElementById(
         "customerName"
     ).textContent =
         customer.name || "-";
-
 
     document.getElementById(
         "customerEmail"
     ).textContent =
         customer.email || "-";
 
-
     document.getElementById(
         "customerPhone"
     ).textContent =
         customer.phone || "-";
-
 
     document.getElementById(
         "customerBank"
     ).textContent =
         customer.bank || "-";
 
-
     document.getElementById(
         "customerAccount"
     ).textContent =
         customer.account || "-";
-
 
     document.getElementById(
         "customerReturnMethod"
     ).textContent =
         customer.returnMethod || "-";
 
-
     customerCard
         .classList
         .remove("hidden");
-
 }
+
 
 function sortByDate(data) {
-    return [...data].sort((a, b) => {
-        const dateA = parseDateValue(a["วันที่"]);
-        const dateB = parseDateValue(b["วันที่"]);
 
-        // วันที่ต่างกัน → วันที่ล่าสุดขึ้นก่อน
-        if (dateA !== dateB) {
-            return dateB - dateA;
+    return [...data].sort(
+        (a, b) => {
+
+            const dateA =
+                parseDateValue(
+                    a["วันที่"]
+                );
+
+            const dateB =
+                parseDateValue(
+                    b["วันที่"]
+                );
+
+
+            // วันที่ต่างกัน
+            // วันที่ล่าสุดขึ้นก่อน
+
+            if (dateA !== dateB) {
+
+                return dateB - dateA;
+            }
+
+
+            // วันที่เดียวกัน
+            // ปิดพอร์ตขึ้นก่อน
+
+            const statusA =
+                String(
+                    a["รายการ"] || ""
+                ).trim();
+
+            const statusB =
+                String(
+                    b["รายการ"] || ""
+                ).trim();
+
+
+            if (
+                statusA === "ปิดพอร์ต" &&
+                statusB !== "ปิดพอร์ต"
+            ) {
+                return -1;
+            }
+
+
+            if (
+                statusB === "ปิดพอร์ต" &&
+                statusA !== "ปิดพอร์ต"
+            ) {
+                return 1;
+            }
+
+
+            return 0;
         }
-
-        // วันที่เดียวกัน → ปิดพอร์ตขึ้นก่อน
-        const statusA = String(a["รายการ"] || "").trim();
-        const statusB = String(b["รายการ"] || "").trim();
-
-        if (statusA === "ปิดพอร์ต" && statusB !== "ปิดพอร์ต") {
-            return -1;
-        }
-
-        if (statusB === "ปิดพอร์ต" && statusA !== "ปิดพอร์ต") {
-            return 1;
-        }
-
-        return 0;
-    });
+    );
 }
+
+
 function parseDateValue(value) {
-    if (!value) return 0;
 
-    const textValue = String(value).trim();
+    if (!value) {
+        return 0;
+    }
 
-    const match = textValue.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+    const textValue =
+        String(value).trim();
+
+
+    const match =
+        textValue.match(
+            /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/
+        );
+
 
     if (match) {
-        const day = Number(match[1]);
-        const month = Number(match[2]);
-        let year = Number(match[3]);
+
+        const day =
+            Number(match[1]);
+
+        const month =
+            Number(match[2]);
+
+        let year =
+            Number(match[3]);
+
 
         // วันที่ในชีทเป็น พ.ศ.
-        // เช่น 30/09/69 = 30/09/2569 = 30/09/2026
+        // เช่น 30/09/69 = 30/09/2569
+
         if (year < 100) {
             year += 2500;
         }
 
-        // แปลง พ.ศ. เป็น ค.ศ. สำหรับใช้เรียงวันที่
+
+        // แปลง พ.ศ. เป็น ค.ศ.
+
         if (year >= 2400) {
             year -= 543;
         }
 
-        return new Date(year, month - 1, day).getTime();
+
+        return new Date(
+            year,
+            month - 1,
+            day
+        ).getTime();
     }
 
-    const date = new Date(value);
 
-    return Number.isNaN(date.getTime())
+    const date =
+        new Date(value);
+
+
+    return Number.isNaN(
+        date.getTime()
+    )
         ? 0
         : date.getTime();
 }
 
+
 function displayDate(value) {
-    if (value === null || value === undefined || value === "") {
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === ""
+    ) {
         return "-";
     }
 
-    const textValue = String(value).trim();
+    const textValue =
+        String(value).trim();
 
-    let match = textValue.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2})$/);
+
+    let match =
+        textValue.match(
+            /^(\d{1,2})\/(\d{1,2})\/(\d{2})$/
+        );
+
 
     if (match) {
-        const day = match[1].padStart(2, "0");
-        const month = match[2].padStart(2, "0");
-        const year = match[3].padStart(2, "0");
+
+        const day =
+            match[1].padStart(2, "0");
+
+        const month =
+            match[2].padStart(2, "0");
+
+        const year =
+            match[3].padStart(2, "0");
 
         return `${day}/${month}/${year}`;
     }
 
-    match = textValue.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+
+    match =
+        textValue.match(
+            /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+        );
+
 
     if (match) {
-        const day = match[1].padStart(2, "0");
-        const month = match[2].padStart(2, "0");
-        let year = Number(match[3]);
+
+        const day =
+            match[1].padStart(2, "0");
+
+        const month =
+            match[2].padStart(2, "0");
+
+        let year =
+            Number(match[3]);
+
 
         // พ.ศ. 2569 -> แสดง 69
+
         if (year >= 2400) {
-            return `${day}/${month}/${String(year - 2500).padStart(2, "0")}`;
+
+            return `${day}/${month}/${String(
+                year - 2500
+            ).padStart(2, "0")}`;
         }
+
 
         // ค.ศ. 2026 -> พ.ศ. 2569 -> แสดง 69
-        if (year >= 1900 && year < 2400) {
-            return `${day}/${month}/${String(year + 543).slice(-2)}`;
+
+        if (
+            year >= 1900 &&
+            year < 2400
+        ) {
+
+            return `${day}/${month}/${String(
+                year + 543
+            ).slice(-2)}`;
         }
 
-        return `${day}/${month}/${String(year).slice(-2)}`;
+
+        return `${day}/${month}/${String(
+            year
+        ).slice(-2)}`;
     }
 
-    const date = new Date(value);
 
-    if (!Number.isNaN(date.getTime())) {
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = String(date.getMonth() + 1).padStart(2, "0");
+    const date =
+        new Date(value);
 
-        let year = date.getFullYear();
+
+    if (
+        !Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        const day =
+            String(
+                date.getDate()
+            ).padStart(2, "0");
+
+        const month =
+            String(
+                date.getMonth() + 1
+            ).padStart(2, "0");
+
+        let year =
+            date.getFullYear();
+
 
         // ถ้าเป็น ค.ศ.
-        if (year >= 1900 && year < 2400) {
+
+        if (
+            year >= 1900 &&
+            year < 2400
+        ) {
             year += 543;
         }
 
+
         // แสดงเฉพาะ 2 หลักท้ายของ พ.ศ.
-        return `${day}/${month}/${String(year).slice(-2)}`;
+
+        return `${day}/${month}/${String(
+            year
+        ).slice(-2)}`;
     }
 
-    return escapeHTML(textValue);
+
+    return escapeHTML(
+        textValue
+    );
 }
+
 
 function getCurrentData() {
 
@@ -2427,10 +2896,8 @@ function getCurrentData() {
                     ...row,
                     portfolio: 15
                 };
-
             }
         );
-
     }
 
 
@@ -2445,10 +2912,8 @@ function getCurrentData() {
                     ...row,
                     portfolio: 30
                 };
-
             }
         );
-
     }
 
 
@@ -2461,7 +2926,6 @@ function getCurrentData() {
                     ...row,
                     portfolio: 15
                 };
-
             }
         ),
 
@@ -2472,13 +2936,12 @@ function getCurrentData() {
                     ...row,
                     portfolio: 30
                 };
-
             }
         )
 
     ];
-
 }
+
 
 function getLatestBalance(data) {
 
@@ -2489,8 +2952,8 @@ function getLatestBalance(data) {
         return getLatestPortfolioBalance(
             portfolio15
         );
-
     }
+
 
     if (
         currentPortfolio === "30"
@@ -2499,8 +2962,8 @@ function getLatestBalance(data) {
         return getLatestPortfolioBalance(
             portfolio30
         );
-
     }
+
 
     const latest15 =
         getLatestPortfolioBalance(
@@ -2514,19 +2977,22 @@ function getLatestBalance(data) {
         );
 
 
-    let total = 0;
+    let total =
+        0;
 
-    let found = false;
+    let found =
+        false;
 
 
     if (
         latest15 !== null
     ) {
 
-        total += latest15;
+        total +=
+            latest15;
 
-        found = true;
-
+        found =
+            true;
     }
 
 
@@ -2534,18 +3000,19 @@ function getLatestBalance(data) {
         latest30 !== null
     ) {
 
-        total += latest30;
+        total +=
+            latest30;
 
-        found = true;
-
+        found =
+            true;
     }
 
 
     return found
         ? total
         : null;
-
 }
+
 
 function getLatestPortfolioBalance(data) {
 
@@ -2555,8 +3022,8 @@ function getLatestPortfolioBalance(data) {
     ) {
 
         return null;
-
     }
+
 
     for (
         let i = data.length - 1;
@@ -2575,23 +3042,24 @@ function getLatestPortfolioBalance(data) {
         ) {
 
             return balance;
-
         }
-
     }
 
 
     return null;
-
 }
+
 
 function renderSummary(data) {
 
-    let totalAmount = 0;
+    let totalAmount =
+        0;
 
-    let totalProfit = 0;
+    let totalProfit =
+        0;
 
-    let totalCommission = 0;
+    let totalCommission =
+        0;
 
 
     data.forEach(
@@ -2621,7 +3089,6 @@ function renderSummary(data) {
 
                 totalAmount +=
                     amount;
-
             }
 
 
@@ -2631,7 +3098,6 @@ function renderSummary(data) {
 
                 totalProfit +=
                     profit;
-
             }
 
 
@@ -2641,9 +3107,7 @@ function renderSummary(data) {
 
                 totalCommission +=
                     commission;
-
             }
-
         }
     );
 
@@ -2684,8 +3148,8 @@ function renderSummary(data) {
         latestBalance !== null
             ? money(latestBalance)
             : "-";
-
 }
+
 
 function renderTable() {
 
@@ -2704,21 +3168,22 @@ function renderTable() {
         emptyBox.style.display =
             "block";
 
-
         renderSummary([]);
 
         return;
-
     }
+
 
     emptyBox.style.display =
         "none";
+
 
     const sorted =
         sortByDate(data);
 
 
     let displayData;
+
 
     if (
         currentLimit === "all"
@@ -2727,15 +3192,13 @@ function renderTable() {
         displayData =
             sorted;
 
-    }
-    else {
+    } else {
 
         displayData =
             sorted.slice(
                 0,
                 Number(currentLimit)
             );
-
     }
 
 
@@ -2759,7 +3222,9 @@ function renderTable() {
 
             tr.innerHTML = `
 
-                <td>${displayDate(row["วันที่"])}</td>
+                <td>
+                    ${displayDate(row["วันที่"])}
+                </td>
 
                 <td>
                     ${money(row["จำนวนเงิน"])}
@@ -2823,14 +3288,17 @@ function renderTable() {
             historyBody.appendChild(
                 tr
             );
-
         }
     );
 
-    renderSummary(data);
 
+    renderSummary(data);
 }
 
+
+/* ==================================================
+   PORTFOLIO BUTTON EVENTS
+================================================== */
 
 document
     .querySelectorAll(
@@ -2854,7 +3322,6 @@ document
                                     .remove(
                                         "active"
                                     );
-
                             }
                         );
 
@@ -2869,13 +3336,15 @@ document
 
 
                     renderTable();
-
                 }
             );
-
         }
     );
 
+
+/* ==================================================
+   TABLE LIMIT
+================================================== */
 
 tableLimit.addEventListener(
     "change",
@@ -2884,11 +3353,14 @@ tableLimit.addEventListener(
         currentLimit =
             tableLimit.value;
 
-
         renderTable();
-
     }
 );
+
+
+/* ==================================================
+   ERROR
+================================================== */
 
 function showError(error) {
 
@@ -2896,6 +3368,7 @@ function showError(error) {
         "Investment History Error:",
         error
     );
+
 
     loadingBox
         .classList
@@ -2909,8 +3382,12 @@ function showError(error) {
 
     errorBox.style.display =
         "block";
-
 }
+
+
+/* ==================================================
+   LOAD PAGE
+================================================== */
 
 async function loadPage() {
 
@@ -2920,15 +3397,15 @@ async function loadPage() {
             .classList
             .remove("hidden");
 
+
         const permission =
             await checkPermission();
 
 
         if (!permission) {
-
             return;
-
         }
+
 
         const data =
             await getInvestmentHistory();
@@ -2939,7 +3416,6 @@ async function loadPage() {
             throw new Error(
                 "ไม่พบข้อมูลจากระบบ"
             );
-
         }
 
 
@@ -2949,7 +3425,6 @@ async function loadPage() {
         );
 
 
-        
         const customer =
             data.customer || {};
 
@@ -2967,13 +3442,13 @@ async function loadPage() {
                 : [];
 
 
-
         portfolio30 =
             Array.isArray(
                 data.portfolio30
             )
                 ? data.portfolio30
                 : [];
+
 
         historyCard
             .classList
@@ -2992,13 +3467,14 @@ async function loadPage() {
     catch (error) {
 
         showError(error);
-
     }
-
 }
+
 
 loadPage();
 
 </script>
+
 </body>
+
 </html>
