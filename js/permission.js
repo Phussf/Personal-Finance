@@ -1,41 +1,29 @@
 import { auth } from "./firebase-config.js";
-
 const API_URL =
     "https://script.google.com/macros/s/AKfycbzNSbHC53WeBzTKHa6CMWLK_p8xMBLOiXpAAa1Ln7_RXujRweossN1biXuyH6sSi9HCgQ/exec";
 
-
 function waitForAuth() {
-
-    return new Promise(function(resolve) {
+    return new Promise(function (resolve) {
 
         if (auth.currentUser) {
-
             resolve(auth.currentUser);
-
             return;
         }
 
-
         const unsubscribe =
-            auth.onAuthStateChanged(
-                function(user) {
+            auth.onAuthStateChanged(function (user) {
 
-                    unsubscribe();
+                unsubscribe();
+                resolve(user);
 
-                    resolve(user);
-
-                }
-            );
-
+            });
     });
-
 }
 
 async function getFirebaseToken() {
 
     const user =
         await waitForAuth();
-
 
     if (!user) {
 
@@ -45,23 +33,17 @@ async function getFirebaseToken() {
         return null;
     }
 
-
-
     const token =
         await user.getIdToken(true);
-
 
     if (!token) {
 
         throw new Error(
             "ไม่สามารถรับ Firebase ID Token ได้"
         );
-
     }
 
-
     return token;
-
 }
 
 export async function checkPermission() {
@@ -69,15 +51,12 @@ export async function checkPermission() {
     const token =
         await getFirebaseToken();
 
-
     if (!token) {
 
         throw new Error(
             "ไม่สามารถยืนยันตัวตนได้"
         );
-
     }
-
 
     const url =
         API_URL
@@ -85,9 +64,7 @@ export async function checkPermission() {
         + "&token="
         + encodeURIComponent(token);
 
-
     let response;
-
 
     try {
 
@@ -107,7 +84,6 @@ export async function checkPermission() {
         throw new Error(
             "ไม่สามารถเชื่อมต่อระบบสิทธิ์ได้"
         );
-
     }
 
 
@@ -116,12 +92,10 @@ export async function checkPermission() {
         throw new Error(
             "ไม่สามารถเชื่อมต่อระบบสิทธิ์ได้"
         );
-
     }
 
 
     let result;
-
 
     try {
 
@@ -138,7 +112,6 @@ export async function checkPermission() {
         throw new Error(
             "ระบบสิทธิ์ส่งข้อมูลไม่ถูกต้อง"
         );
-
     }
 
 
@@ -153,7 +126,6 @@ export async function checkPermission() {
         result.authorized !== true
     ) {
 
- 
         const status =
             String(
                 result.status || ""
@@ -161,6 +133,8 @@ export async function checkPermission() {
             .trim()
             .toUpperCase();
 
+
+    
         if (
             status === "DENIED" ||
             status === "UNAUTHORIZED" ||
@@ -178,9 +152,10 @@ export async function checkPermission() {
                     "บัญชีของคุณไม่มีสิทธิ์ใช้งานระบบ"
 
             };
-
         }
 
+
+    
         if (
             status === "INVALID_TOKEN" ||
             status === "NO_TOKEN"
@@ -197,8 +172,8 @@ export async function checkPermission() {
                     "ไม่สามารถยืนยันตัวตนได้"
 
             };
-
         }
+
 
         return {
 
@@ -212,8 +187,8 @@ export async function checkPermission() {
                 "ไม่สามารถตรวจสอบสิทธิ์การใช้งานได้"
 
         };
-
     }
+
 
     const status =
         String(
@@ -221,6 +196,7 @@ export async function checkPermission() {
         )
         .trim()
         .toLowerCase();
+
 
     if (
         status !== "active" &&
@@ -237,8 +213,8 @@ export async function checkPermission() {
                 "ไม่สามารถยืนยันสถานะสิทธิ์ของบัญชีได้"
 
         };
-
     }
+
 
     return {
 
@@ -263,23 +239,20 @@ export async function checkPermission() {
 
         account_id:
             result.account_id
-
     };
-
 }
+
 
 export async function getInvestmentHistory() {
 
     const token =
         await getFirebaseToken();
 
-
     if (!token) {
 
         throw new Error(
             "ไม่สามารถยืนยันตัวตนได้"
         );
-
     }
 
 
@@ -291,7 +264,6 @@ export async function getInvestmentHistory() {
 
 
     let response;
-
 
     try {
 
@@ -311,23 +283,50 @@ export async function getInvestmentHistory() {
         throw new Error(
             "ไม่สามารถเชื่อมต่อระบบข้อมูลการลงทุนได้"
         );
-
     }
+
+
+    console.log(
+        "Investment History HTTP status:",
+        response.status
+    );
+
+    console.log(
+        "Investment History HTTP ok:",
+        response.ok
+    );
+
+
+ 
+    const responseText =
+        await response.text();
+
+
+    console.log(
+        "Investment History raw response:",
+        responseText
+    );
 
 
     if (!response.ok) {
 
         throw new Error(
-            "ไม่สามารถโหลดประวัติการลงทุนได้"
+            "Apps Script HTTP "
+            + response.status
+            + ": "
+            + responseText
         );
-
     }
 
+
     let result;
+
     try {
 
         result =
-            await response.json();
+            JSON.parse(
+                responseText
+            );
 
     } catch (error) {
 
@@ -337,9 +336,9 @@ export async function getInvestmentHistory() {
         );
 
         throw new Error(
-            "ระบบส่งข้อมูลประวัติการลงทุนไม่ถูกต้อง"
+            "ระบบส่งข้อมูลประวัติการลงทุนไม่ถูกต้อง: "
+            + responseText
         );
-
     }
 
 
@@ -348,6 +347,8 @@ export async function getInvestmentHistory() {
         result
     );
 
+
+ 
     if (
         result.authorized !== true
     ) {
@@ -356,19 +357,18 @@ export async function getInvestmentHistory() {
             result.error ||
             "ไม่สามารถเข้าถึงข้อมูลได้"
         );
-
     }
 
+
+ 
     if (!result.data) {
 
         throw new Error(
             "ไม่พบข้อมูลลูกค้า"
         );
-
     }
 
 
     return result.data;
-
 }
 
