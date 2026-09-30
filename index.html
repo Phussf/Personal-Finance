@@ -1,200 +1,205 @@
 <!DOCTYPE html>
-
 <html lang="th">
 
 <head>
+    <meta charset="UTF-8">
 
-<meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <title>Personal Finance | Login</title>
 
-<title>Personal Finance | Login</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-<style>
+        body {
+            min-height: 100vh;
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-body {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+            font-family:
+                "Segoe UI",
+                Tahoma,
+                Arial,
+                sans-serif;
 
-    font-family:
-        "Segoe UI",
-        Tahoma,
-        Arial,
-        sans-serif;
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef2ff,
+                    #f8fafc
+                );
+        }
 
-    background:
-        linear-gradient(
-            135deg,
-            #eef2ff,
-            #f8fafc
-        );
-}
+        .login-card {
+            width: min(
+                420px,
+                calc(100% - 30px)
+            );
 
-.login-card {
-    width: min(
-        420px,
-        calc(100% - 30px)
-    );
+            background: white;
 
-    background: white;
+            border-radius: 18px;
 
-    border-radius: 18px;
+            padding: 40px 30px;
 
-    padding: 40px 30px;
+            text-align: center;
 
-    text-align: center;
+            box-shadow:
+                0 15px 40px
+                rgba(0, 0, 0, 0.08);
+        }
 
-    box-shadow:
-        0 15px 40px
-        rgba(0, 0, 0, 0.08);
-}
+        /* =========================
+           LOGO
+        ========================= */
 
+        .logo {
+            margin-bottom: 10px;
 
-/* =========================
-   LOGO
-========================= */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-.logo {
-    margin-bottom: 10px;
+        .logo img {
+            width: 80px;
+            height: 80px;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+            object-fit: cover;
 
-.logo img {
-    width: 80px;
-    height: 80px;
+            border-radius: 50%;
 
-    object-fit: cover;
+            display: block;
+        }
 
-    border-radius: 50%;
+        /* =========================
+           TITLE
+        ========================= */
 
-    display: block;
-}
+        h1 {
+            font-size: 25px;
 
+            margin-bottom: 8px;
 
-/* =========================
-   TITLE
-========================= */
+            color: #111827;
+        }
 
-h1 {
-    font-size: 25px;
+        .subtitle {
+            color: #6b7280;
 
-    margin-bottom: 8px;
+            margin-bottom: 30px;
+        }
 
-    color: #111827;
-}
+        /* =========================
+           GOOGLE LOGIN
+        ========================= */
 
-.subtitle {
-    color: #6b7280;
+        #googleButton {
+            width: 100%;
+        }
 
-    margin-bottom: 30px;
-}
+        .google-login {
+            width: 100%;
 
+            padding: 13px 18px;
 
-/* =========================
-   GOOGLE LOGIN
-========================= */
+            border:
+                1px solid #d1d5db;
 
-#googleButton {
-    width: 100%;
-}
+            border-radius: 8px;
 
-.google-login {
-    width: 100%;
+            background: white;
 
-    padding: 13px 18px;
+            color: #374151;
 
-    border:
-        1px solid #d1d5db;
+            font-size: 15px;
 
-    border-radius: 8px;
+            font-weight: 600;
 
-    background: white;
+            cursor: pointer;
 
-    color: #374151;
+            transition: 0.2s;
+        }
 
-    font-size: 15px;
+        .google-login:hover {
+            background: #f9fafb;
+        }
 
-    font-weight: 600;
+        .google-login:disabled {
+            opacity: 0.6;
 
-    cursor: pointer;
+            cursor: wait;
+        }
 
-    transition: 0.2s;
-}
+        /* =========================
+           MESSAGE
+        ========================= */
 
-.google-login:hover {
-    background: #f9fafb;
-}
+        .message {
+            margin-top: 20px;
 
-.google-login:disabled {
-    opacity: 0.6;
+            padding: 12px;
 
-    cursor: wait;
-}
+            border-radius: 8px;
 
+            font-size: 14px;
 
-/* =========================
-   MESSAGE
-========================= */
+            line-height: 1.6;
 
-.message {
-    margin-top: 20px;
+            display: none;
+        }
 
-    padding: 12px;
+        .message.show {
+            display: block;
+        }
 
-    border-radius: 8px;
+        .error {
+            background: #fee2e2;
 
-    font-size: 14px;
+            color: #991b1b;
+        }
 
-    display: none;
-}
+        .success {
+            background: #dcfce7;
 
-.message.show {
-    display: block;
-}
+            color: #166534;
+        }
 
-.error {
-    background: #fee2e2;
+        .warning {
+            background: #fef3c7;
 
-    color: #991b1b;
-}
+            color: #92400e;
+        }
 
-.success {
-    background: #dcfce7;
+        .info {
+            background: #e0f2fe;
 
-    color: #166534;
-}
+            color: #075985;
+        }
 
+        /* =========================
+           SECURITY
+        ========================= */
 
-/* =========================
-   SECURITY
-========================= */
+        .security {
+            margin-top: 25px;
 
-.security {
-    margin-top: 25px;
+            font-size: 12px;
 
-    font-size: 12px;
+            color: #9ca3af;
 
-    color: #9ca3af;
-
-    line-height: 1.6;
-}
-
-</style>
-
+            line-height: 1.6;
+        }
+    </style>
 </head>
 
 
@@ -202,8 +207,9 @@ h1 {
 
 <div class="login-card">
 
-
-    <!-- LOGO -->
+    <!-- =========================
+         LOGO
+    ========================= -->
 
     <div class="logo">
 
@@ -215,7 +221,9 @@ h1 {
     </div>
 
 
-    <!-- TITLE -->
+    <!-- =========================
+         TITLE
+    ========================= -->
 
     <h1>
         Personal Finance
@@ -227,13 +235,16 @@ h1 {
     </p>
 
 
-    <!-- GOOGLE LOGIN -->
+    <!-- =========================
+         GOOGLE LOGIN
+    ========================= -->
 
     <div id="googleButton">
 
         <button
             id="loginButton"
             class="google-login"
+            type="button"
         >
             🔵 เข้าสู่ระบบด้วย Google
         </button>
@@ -241,15 +252,21 @@ h1 {
     </div>
 
 
-    <!-- MESSAGE -->
+    <!-- =========================
+         MESSAGE
+    ========================= -->
 
     <div
         id="message"
         class="message"
+        role="alert"
+        aria-live="polite"
     ></div>
 
 
-    <!-- SECURITY -->
+    <!-- =========================
+         SECURITY
+    ========================= -->
 
     <div class="security">
 
@@ -260,7 +277,6 @@ h1 {
         อนุญาตเฉพาะบัญชีที่ได้รับสิทธิ์เท่านั้น
 
     </div>
-
 
 </div>
 
@@ -289,76 +305,527 @@ const message =
     );
 
 
+/* =========================
+   LOGIN
+========================= */
+
 loginButton.addEventListener(
     "click",
-    async () => {
-
-        loginButton.disabled =
-            true;
-
-        loginButton.textContent =
-            "กำลังเข้าสู่ระบบ...";
+    handleLogin
+);
 
 
-        try {
+/* =========================
+   MAIN LOGIN FUNCTION
+========================= */
 
-            const user =
-                await loginWithGoogle();
+async function handleLogin() {
 
+    setLoading(true);
+
+    clearMessage();
+
+
+    try {
+
+        /*
+         * ====================================
+         * STEP 1
+         * Firebase / Google Login
+         * ====================================
+         */
+
+        const user =
+            await loginWithGoogle();
+
+
+        if (!user) {
+
+            throw new Error(
+                "ไม่สามารถเข้าสู่ระบบด้วย Google ได้"
+            );
+
+        }
+
+
+        /*
+         * ====================================
+         * STEP 2
+         * ตรวจสอบสิทธิ์กับ Apps Script
+         * ====================================
+         */
+
+        showMessage(
+            "กำลังตรวจสอบสิทธิ์...",
+            "info"
+        );
+
+
+        const permission =
+            await checkPermission();
+
+
+        console.log(
+            "ผลการตรวจสอบสิทธิ์:",
+            permission
+        );
+
+
+        /*
+         * ====================================
+         * STEP 3
+         * ตรวจสอบผลการตรวจสิทธิ์
+         * ====================================
+         *
+         * สำคัญ:
+         *
+         * ห้ามใช้เพียง
+         *
+         * permission.success
+         *
+         * เป็นตัวตัดสินสิทธิ์
+         *
+         * ต้องมี authorized === true
+         *
+         */
+
+        if (
+            !permission ||
+            permission.authorized !== true
+        ) {
+
+            /*
+             * ไม่มีข้อมูลสิทธิ์ที่เชื่อถือได้
+             */
+
+            const status =
+                String(
+                    permission?.status || ""
+                )
+                .trim()
+                .toUpperCase();
+
+
+            /*
+             * ผู้ใช้ไม่มีสิทธิ์จริง
+             */
+
+            if (
+                status === "DENIED" ||
+                status === "UNAUTHORIZED" ||
+                status === "NOT_FOUND"
+            ) {
+
+                throw new Error(
+                    "บัญชีของคุณไม่มีสิทธิ์เข้าใช้งานระบบ"
+                );
+
+            }
+
+
+            /*
+             * Token ไม่ถูกต้อง
+             */
+
+            if (
+                status === "INVALID_TOKEN" ||
+                status === "NO_TOKEN"
+            ) {
+
+                throw new Error(
+                    "ไม่สามารถยืนยันตัวตนได้ กรุณาเข้าสู่ระบบใหม่"
+                );
+
+            }
+
+
+            /*
+             * ระบบสิทธิ์ไม่ตอบกลับตามรูปแบบที่คาดไว้
+             *
+             * เพื่อความปลอดภัย
+             * จะไม่อนุญาตให้เข้า Dashboard
+             */
+
+            throw new Error(
+                "ไม่สามารถตรวจสอบสิทธิ์การเข้าใช้งานได้"
+            );
+
+        }
+
+
+        /*
+         * ====================================
+         * STEP 4
+         * อ่านสถานะจากระบบสิทธิ์
+         * ====================================
+         */
+
+        const userStatus =
+            String(
+                permission.status ?? "active"
+            )
+            .trim()
+            .toLowerCase();
+
+
+        /*
+         * ====================================
+         * STEP 5
+         * ตรวจสอบสถานะที่อนุญาต
+         * ====================================
+         *
+         * active
+         * และ
+         * -
+         *
+         * ทั้งสองสถานะสามารถเข้า Dashboard ได้
+         *
+         */
+
+        const isActive =
+            userStatus === "active";
+
+
+        const isUpdating =
+            userStatus === "-";
+
+
+        if (
+            !isActive &&
+            !isUpdating
+        ) {
+
+            /*
+             * หากได้รับ status ที่ไม่รู้จัก
+             *
+             * ไม่ควรเดาว่าเป็น Active
+             *
+             */
+
+            throw new Error(
+                "ไม่สามารถยืนยันสถานะสิทธิ์ของบัญชีได้"
+            );
+
+        }
+
+
+        /*
+         * ====================================
+         * STEP 6
+         * เก็บข้อมูล Session
+         * ====================================
+         *
+         * ใช้สำหรับแสดงผล / UI
+         *
+         * ไม่ใช่ตัวควบคุมสิทธิ์หลัก
+         *
+         */
+
+        sessionStorage.setItem(
+            "userStatus",
+            userStatus
+        );
+
+
+        sessionStorage.setItem(
+            "permissionChecked",
+            "true"
+        );
+
+
+        if (
+            permission.role
+        ) {
+
+            sessionStorage.setItem(
+                "userRole",
+                permission.role
+            );
+
+        }
+
+
+        if (
+            permission.account_id
+        ) {
+
+            sessionStorage.setItem(
+                "accountId",
+                permission.account_id
+            );
+
+        }
+
+
+        if (
+            permission.name
+        ) {
+
+            sessionStorage.setItem(
+                "userName",
+                permission.name
+            );
+
+        }
+
+
+        /*
+         * ====================================
+         * STEP 7
+         * แสดงสถานะให้ผู้ใช้ทราบ
+         * ====================================
+         */
+
+        if (isUpdating) {
 
             showMessage(
-                "กำลังตรวจสอบสิทธิ์...",
-                "success"
+                "เข้าสู่ระบบสำเร็จ • ขณะนี้ระบบกำลังอัปเดตข้อมูล",
+                "warning"
             );
 
-
-            const permission =
-                await checkPermission();
-
-
-            console.log(
-                "สิทธิ์:",
-                permission
-            );
-
+        } else {
 
             showMessage(
                 "เข้าสู่ระบบสำเร็จ",
                 "success"
             );
 
-
-            setTimeout(() => {
-
-                window.location.href =
-                    "dashboard.html";
-
-            }, 500);
-
-
-        } catch (error) {
-
-            console.error(error);
-
-
-            showMessage(
-                error.message,
-                "error"
-            );
-
-
-            loginButton.disabled =
-                false;
-
-
-            loginButton.textContent =
-                "🔵 เข้าสู่ระบบด้วย Google";
-
         }
 
-    }
-);
 
+        /*
+         * ====================================
+         * STEP 8
+         * เข้า Dashboard
+         * ====================================
+         */
+
+        setTimeout(() => {
+
+            window.location.href =
+                "dashboard.html";
+
+        }, 700);
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Login / Permission Error:",
+            error
+        );
+
+
+        /*
+         * หาก Login ผ่าน Firebase แล้ว
+         * แต่ Permission ไม่ผ่าน
+         *
+         * ไม่ควรปล่อย Session ค้างไว้
+         */
+
+        clearPermissionSession();
+
+
+        showMessage(
+            getErrorMessage(error),
+            "error"
+        );
+
+
+        setLoading(false);
+
+    }
+
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+function setLoading(isLoading) {
+
+    loginButton.disabled =
+        isLoading;
+
+
+    if (isLoading) {
+
+        loginButton.textContent =
+            "กำลังเข้าสู่ระบบ...";
+
+    } else {
+
+        loginButton.textContent =
+            "🔵 เข้าสู่ระบบด้วย Google";
+
+    }
+
+}
+
+
+/* =========================
+   ERROR MESSAGE
+========================= */
+
+function getErrorMessage(error) {
+
+    if (!error) {
+
+        return "ไม่สามารถเข้าสู่ระบบได้";
+
+    }
+
+
+    const errorMessage =
+        String(
+            error.message || error
+        );
+
+
+    /*
+     * ไม่มีสิทธิ์
+     */
+
+    if (
+        errorMessage.includes(
+            "ไม่มีสิทธิ์"
+        )
+    ) {
+
+        return errorMessage;
+
+    }
+
+
+    /*
+     * Token / Authentication
+     */
+
+    if (
+        errorMessage.includes(
+            "INVALID_TOKEN"
+        ) ||
+        errorMessage.includes(
+            "NO_TOKEN"
+        ) ||
+        errorMessage.includes(
+            "token"
+        ) ||
+        errorMessage.includes(
+            "Token"
+        ) ||
+        errorMessage.includes(
+            "auth"
+        )
+    ) {
+
+        return (
+            "ไม่สามารถยืนยันตัวตนได้ " +
+            "กรุณาเข้าสู่ระบบใหม่"
+        );
+
+    }
+
+
+    /*
+     * Network / Apps Script
+     */
+
+    if (
+        errorMessage.includes(
+            "Failed to fetch"
+        ) ||
+        errorMessage.includes(
+            "NetworkError"
+        ) ||
+        errorMessage.includes(
+            "fetch"
+        ) ||
+        errorMessage.includes(
+            "Network"
+        )
+    ) {
+
+        return (
+            "ไม่สามารถเชื่อมต่อระบบสิทธิ์ได้ " +
+            "กรุณาลองใหม่อีกครั้ง"
+        );
+
+    }
+
+
+    /*
+     * Permission response ผิดรูปแบบ
+     */
+
+    if (
+        errorMessage.includes(
+            "ตรวจสอบสิทธิ์"
+        ) ||
+        errorMessage.includes(
+            "ยืนยันสถานะสิทธิ์"
+        )
+    ) {
+
+        return errorMessage;
+
+    }
+
+
+    return errorMessage;
+
+}
+
+
+/* =========================
+   CLEAR PERMISSION SESSION
+========================= */
+
+function clearPermissionSession() {
+
+    sessionStorage.removeItem(
+        "userStatus"
+    );
+
+    sessionStorage.removeItem(
+        "permissionChecked"
+    );
+
+    sessionStorage.removeItem(
+        "userRole"
+    );
+
+    sessionStorage.removeItem(
+        "accountId"
+    );
+
+    sessionStorage.removeItem(
+        "userName"
+    );
+
+}
+
+
+/* =========================
+   CLEAR MESSAGE
+========================= */
+
+function clearMessage() {
+
+    message.textContent = "";
+
+    message.className =
+        "message";
+
+}
+
+
+/* =========================
+   SHOW MESSAGE
+========================= */
 
 function showMessage(
     text,
@@ -368,11 +835,15 @@ function showMessage(
     message.textContent =
         text;
 
+
     message.className =
         "message show " + type;
 
 }
 
 </script>
+
 </body>
+
 </html>
+

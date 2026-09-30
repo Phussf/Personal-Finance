@@ -1,17 +1,8 @@
 import { auth } from "./firebase-config.js";
 
-
-// ======================================================
-// APPS SCRIPT WEB APP URL
-// ======================================================
-
 const API_URL =
     "https://script.google.com/macros/s/AKfycbzNSbHC53WeBzTKHa6CMWLK_p8xMBLOiXpAAa1Ln7_RXujRweossN1biXuyH6sSi9HCgQ/exec";
 
-
-// ======================================================
-// WAIT FOR FIREBASE AUTH
-// ======================================================
 
 function waitForAuth() {
 
@@ -22,7 +13,6 @@ function waitForAuth() {
             resolve(auth.currentUser);
 
             return;
-
         }
 
 
@@ -41,11 +31,6 @@ function waitForAuth() {
 
 }
 
-
-// ======================================================
-// GET FIREBASE ID TOKEN
-// ======================================================
-
 async function getFirebaseToken() {
 
     const user =
@@ -58,22 +43,26 @@ async function getFirebaseToken() {
             "index.html";
 
         return null;
-
     }
+
 
 
     const token =
         await user.getIdToken(true);
 
 
+    if (!token) {
+
+        throw new Error(
+            "ไม่สามารถรับ Firebase ID Token ได้"
+        );
+
+    }
+
+
     return token;
 
 }
-
-
-// ======================================================
-// CHECK PERMISSION
-// ======================================================
 
 export async function checkPermission() {
 
@@ -83,7 +72,9 @@ export async function checkPermission() {
 
     if (!token) {
 
-        return null;
+        throw new Error(
+            "ไม่สามารถยืนยันตัวตนได้"
+        );
 
     }
 
@@ -95,8 +86,29 @@ export async function checkPermission() {
         + encodeURIComponent(token);
 
 
-    const response =
-        await fetch(url);
+    let response;
+
+
+    try {
+
+        response =
+            await fetch(url, {
+                method: "GET",
+                cache: "no-store"
+            });
+
+    } catch (error) {
+
+        console.error(
+            "Permission connection error:",
+            error
+        );
+
+        throw new Error(
+            "ไม่สามารถเชื่อมต่อระบบสิทธิ์ได้"
+        );
+
+    }
 
 
     if (!response.ok) {
@@ -108,8 +120,26 @@ export async function checkPermission() {
     }
 
 
-    const result =
-        await response.json();
+    let result;
+
+
+    try {
+
+        result =
+            await response.json();
+
+    } catch (error) {
+
+        console.error(
+            "Permission JSON error:",
+            error
+        );
+
+        throw new Error(
+            "ระบบสิทธิ์ส่งข้อมูลไม่ถูกต้อง"
+        );
+
+    }
 
 
     console.log(
@@ -118,17 +148,106 @@ export async function checkPermission() {
     );
 
 
-    if (!result.authorized) {
 
-        throw new Error(
-            result.error ||
-            "ไม่มีสิทธิ์ใช้งานระบบ"
-        );
+    if (
+        result.authorized !== true
+    ) {
+
+ 
+        const status =
+            String(
+                result.status || ""
+            )
+            .trim()
+            .toUpperCase();
+
+        if (
+            status === "DENIED" ||
+            status === "UNAUTHORIZED" ||
+            status === "NOT_FOUND"
+        ) {
+
+            return {
+
+                authorized: false,
+
+                status: status,
+
+                error:
+                    result.error ||
+                    "บัญชีของคุณไม่มีสิทธิ์ใช้งานระบบ"
+
+            };
+
+        }
+
+        if (
+            status === "INVALID_TOKEN" ||
+            status === "NO_TOKEN"
+        ) {
+
+            return {
+
+                authorized: false,
+
+                status: status,
+
+                error:
+                    result.error ||
+                    "ไม่สามารถยืนยันตัวตนได้"
+
+            };
+
+        }
+
+        return {
+
+            authorized: false,
+
+            status:
+                status || "UNKNOWN",
+
+            error:
+                result.error ||
+                "ไม่สามารถตรวจสอบสิทธิ์การใช้งานได้"
+
+        };
 
     }
 
+    const status =
+        String(
+            result.status ?? "active"
+        )
+        .trim()
+        .toLowerCase();
+
+    if (
+        status !== "active" &&
+        status !== "-"
+    ) {
+
+        return {
+
+            authorized: false,
+
+            status: "UNKNOWN",
+
+            error:
+                "ไม่สามารถยืนยันสถานะสิทธิ์ของบัญชีได้"
+
+        };
+
+    }
 
     return {
+
+        authorized: true,
+
+        status: status,
+
+        updating:
+            status === "-",
 
         uid:
             result.uid,
@@ -149,11 +268,6 @@ export async function checkPermission() {
 
 }
 
-
-// ======================================================
-// GET INVESTMENT HISTORY
-// ======================================================
-
 export async function getInvestmentHistory() {
 
     const token =
@@ -162,7 +276,9 @@ export async function getInvestmentHistory() {
 
     if (!token) {
 
-        return null;
+        throw new Error(
+            "ไม่สามารถยืนยันตัวตนได้"
+        );
 
     }
 
@@ -174,8 +290,29 @@ export async function getInvestmentHistory() {
         + encodeURIComponent(token);
 
 
-    const response =
-        await fetch(url);
+    let response;
+
+
+    try {
+
+        response =
+            await fetch(url, {
+                method: "GET",
+                cache: "no-store"
+            });
+
+    } catch (error) {
+
+        console.error(
+            "Investment History connection error:",
+            error
+        );
+
+        throw new Error(
+            "ไม่สามารถเชื่อมต่อระบบข้อมูลการลงทุนได้"
+        );
+
+    }
 
 
     if (!response.ok) {
@@ -186,9 +323,24 @@ export async function getInvestmentHistory() {
 
     }
 
+    let result;
+    try {
 
-    const result =
-        await response.json();
+        result =
+            await response.json();
+
+    } catch (error) {
+
+        console.error(
+            "Investment History JSON error:",
+            error
+        );
+
+        throw new Error(
+            "ระบบส่งข้อมูลประวัติการลงทุนไม่ถูกต้อง"
+        );
+
+    }
 
 
     console.log(
@@ -196,8 +348,9 @@ export async function getInvestmentHistory() {
         result
     );
 
-
-    if (!result.authorized) {
+    if (
+        result.authorized !== true
+    ) {
 
         throw new Error(
             result.error ||
@@ -205,7 +358,6 @@ export async function getInvestmentHistory() {
         );
 
     }
-
 
     if (!result.data) {
 

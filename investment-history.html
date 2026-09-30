@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="th">
-<head>
 
+<head>
     <meta charset="UTF-8">
 
     <meta
@@ -85,7 +85,6 @@ html {
 body {
     margin: 0;
     min-height: 100vh;
-
     color: var(--text);
 
     background:
@@ -123,7 +122,6 @@ select {
     position: sticky;
     top: 0;
     z-index: 100;
-
     width: 100%;
 
     background:
@@ -357,7 +355,6 @@ select {
         0 8px 22px rgba(73, 102, 184, .22);
 }
 
-
 .user-profile {
     display:
         flex;
@@ -564,6 +561,69 @@ select {
 
     font-size:
         13px;
+}
+
+.updating-notice {
+    display:
+        none;
+
+    margin-bottom:
+        20px;
+
+    padding:
+        32px 20px;
+
+    border:
+        1px solid rgba(251,191,36,.20);
+
+    border-radius:
+        17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(55,45,28,.72),
+            rgba(39,34,27,.72)
+        );
+
+    text-align:
+        center;
+}
+
+.updating-icon {
+    font-size:
+        36px;
+
+    line-height:
+        1;
+
+    margin-bottom:
+        14px;
+}
+
+.updating-title {
+    color:
+        #f5d58a;
+
+    font-size:
+        20px;
+
+    font-weight:
+        800;
+
+    margin-bottom:
+        7px;
+}
+
+.updating-text {
+    color:
+        var(--muted);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.7;
 }
 
 .loading {
@@ -1113,9 +1173,6 @@ td:nth-child(12) {
         1.35;
 }
 
-
-/* พอร์ต */
-
 th:nth-child(13),
 td:nth-child(13) {
     min-width:
@@ -1572,6 +1629,16 @@ footer {
         max-width:
             115px;
     }
+
+    .updating-notice {
+        padding:
+            28px 16px;
+    }
+
+    .updating-title {
+        font-size:
+            18px;
+    }
 }
 
 @media (max-width: 380px) {
@@ -1617,11 +1684,9 @@ footer {
 }
 
 </style>
-
 </head>
 
 <body>
-
 
 <header class="topbar">
 
@@ -1652,10 +1717,7 @@ footer {
 
         </div>
 
-
         <nav class="nav">
-
-            <!-- Google User -->
 
             <div class="user-profile">
 
@@ -1674,7 +1736,6 @@ footer {
 
             </div>
 
-
             <a
                 href="dashboard.html"
                 class="nav-btn"
@@ -1682,14 +1743,12 @@ footer {
                 Dashboard
             </a>
 
-
             <a
                 href="investment-history.html"
                 class="nav-btn active"
             >
                 ประวัติการลงทุน
             </a>
-
 
             <button
                 type="button"
@@ -1705,444 +1764,417 @@ footer {
 
 </header>
 
-
 <main class="page">
 
+    <div class="page-heading">
 
-<div class="page-heading">
+        <div>
 
-    <div>
+            <h1>
+                ประวัติการลงทุน
+            </h1>
 
-        <h1>
+            <p>
+                ตรวจสอบรายการลงทุน ผลตอบแทน และยอดคงเหลือ
+            </p>
+
+        </div>
+
+        <div class="page-badge">
+            🔐
+            ข้อมูลส่วนตัวของผู้ใช้งาน
+        </div>
+
+    </div>
+
+    <div
+        class="error"
+        id="errorBox"
+    ></div>
+
+    <div
+        class="updating-notice"
+        id="updatingNotice"
+    >
+
+        <div class="updating-icon">
+            🔄
+        </div>
+
+        <div class="updating-title">
+            ระบบกำลังอัปเดตข้อมูล
+        </div>
+
+        <div class="updating-text">
+            ขณะนี้กำลังปรับปรุงข้อมูลการลงทุน<br>
+            กรุณากลับมาใหม่อีกครั้งภายหลัง<br>
+            ขออภัยในความไม่สะดวก
+        </div>
+
+    </div>
+
+    <div
+        class="loading"
+        id="loadingBox"
+    >
+        กำลังโหลดข้อมูล...
+    </div>
+
+    <section
+        class="card hidden"
+        id="customerCard"
+    >
+
+        <h2 class="card-title">
+            ข้อมูลลูกค้า
+        </h2>
+
+        <div class="customer-grid">
+
+            <div class="info">
+                <div class="info-label">
+                    รหัสลูกค้า
+                </div>
+
+                <div
+                    class="info-value"
+                    id="customerId"
+                >
+                    -
+                </div>
+            </div>
+
+            <div class="info">
+                <div class="info-label">
+                    ชื่อ
+                </div>
+
+                <div
+                    class="info-value"
+                    id="customerName"
+                >
+                    -
+                </div>
+            </div>
+
+            <div class="info">
+                <div class="info-label">
+                    Email
+                </div>
+
+                <div
+                    class="info-value"
+                    id="customerEmail"
+                >
+                    -
+                </div>
+            </div>
+
+            <div class="info">
+                <div class="info-label">
+                    โทรศัพท์
+                </div>
+
+                <div
+                    class="info-value"
+                    id="customerPhone"
+                >
+                    -
+                </div>
+            </div>
+
+            <div class="info">
+                <div class="info-label">
+                    ธนาคาร
+                </div>
+
+                <div
+                    class="info-value"
+                    id="customerBank"
+                >
+                    -
+                </div>
+            </div>
+
+            <div class="info">
+                <div class="info-label">
+                    เลขบัญชี
+                </div>
+
+                <div
+                    class="info-value"
+                    id="customerAccount"
+                >
+                    -
+                </div>
+            </div>
+
+            <div class="info">
+                <div class="info-label">
+                    วิธีรับผลตอบแทน
+                </div>
+
+                <div
+                    class="info-value"
+                    id="customerReturnMethod"
+                >
+                    -
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section
+        class="card hidden"
+        id="historyCard"
+    >
+
+        <h2 class="card-title">
             ประวัติการลงทุน
-        </h1>
+        </h2>
 
-        <p>
-            ตรวจสอบรายการลงทุน ผลตอบแทน และยอดคงเหลือ
-        </p>
+        <div class="portfolio-buttons">
 
-    </div>
-
-
-    <div class="page-badge">
-
-        🔐
-        ข้อมูลส่วนตัวของผู้ใช้งาน
-
-    </div>
-
-</div>
-
-
-<div
-    class="error"
-    id="errorBox"
-></div>
-
-
-<div
-    class="loading"
-    id="loadingBox"
->
-    กำลังโหลดข้อมูล...
-</div>
-
-
-<section
-    class="card hidden"
-    id="customerCard"
->
-
-    <h2 class="card-title">
-        ข้อมูลลูกค้า
-    </h2>
-
-
-    <div class="customer-grid">
-
-
-        <div class="info">
-
-            <div class="info-label">
-                รหัสลูกค้า
-            </div>
-
-            <div
-                class="info-value"
-                id="customerId"
+            <button
+                type="button"
+                class="portfolio-btn active"
+                data-portfolio="15"
             >
-                -
-            </div>
+                พอร์ต 15
+            </button>
 
-        </div>
-
-
-        <div class="info">
-
-            <div class="info-label">
-                ชื่อ
-            </div>
-
-            <div
-                class="info-value"
-                id="customerName"
+            <button
+                type="button"
+                class="portfolio-btn"
+                data-portfolio="30"
             >
-                -
-            </div>
+                พอร์ต 30
+            </button>
 
-        </div>
-
-
-        <div class="info">
-
-            <div class="info-label">
-                Email
-            </div>
-
-            <div
-                class="info-value"
-                id="customerEmail"
+            <button
+                type="button"
+                class="portfolio-btn"
+                data-portfolio="all"
             >
-                -
-            </div>
-
-        </div>
-
-
-        <div class="info">
-
-            <div class="info-label">
-                โทรศัพท์
-            </div>
-
-            <div
-                class="info-value"
-                id="customerPhone"
-            >
-                -
-            </div>
-
-        </div>
-
-
-        <div class="info">
-
-            <div class="info-label">
-                ธนาคาร
-            </div>
-
-            <div
-                class="info-value"
-                id="customerBank"
-            >
-                -
-            </div>
-
-        </div>
-
-
-        <div class="info">
-
-            <div class="info-label">
-                เลขบัญชี
-            </div>
-
-            <div
-                class="info-value"
-                id="customerAccount"
-            >
-                -
-            </div>
-
-        </div>
-
-
-        <div class="info">
-
-            <div class="info-label">
-                วิธีรับผลตอบแทน
-            </div>
-
-            <div
-                class="info-value"
-                id="customerReturnMethod"
-            >
-                -
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<section
-    class="card hidden"
-    id="historyCard"
->
-
-    <h2 class="card-title">
-        ประวัติการลงทุน
-    </h2>
-
-
-    <!-- PORTFOLIO -->
-
-    <div class="portfolio-buttons">
-
-        <button
-            class="portfolio-btn active"
-            data-portfolio="15"
-        >
-            พอร์ต 15
-        </button>
-
-
-        <button
-            class="portfolio-btn"
-            data-portfolio="30"
-        >
-            พอร์ต 30
-        </button>
-
-
-        <button
-            class="portfolio-btn"
-            data-portfolio="all"
-        >
-            ทั้งหมด
-        </button>
-
-    </div>
-
-
-    <div
-        class="summary"
-        id="summary"
-    >
-
-        <div class="summary-box">
-
-            <div class="summary-label">
-                จำนวนรายการ
-            </div>
-
-            <div
-                class="summary-value"
-                id="summaryCount"
-            >
-                0
-            </div>
-
-        </div>
-
-
-        <div class="summary-box">
-
-            <div class="summary-label">
-                จำนวนเงินรวม
-            </div>
-
-            <div
-                class="summary-value"
-                id="summaryAmount"
-            >
-                0.00
-            </div>
-
-        </div>
-
-
-        <div class="summary-box">
-
-            <div class="summary-label">
-                กำไรรวม
-            </div>
-
-            <div
-                class="summary-value"
-                id="summaryProfit"
-            >
-                0.00
-            </div>
-
-        </div>
-
-
-        <div class="summary-box">
-
-            <div class="summary-label">
-                ค่าคอมมิชชั่นรวม
-            </div>
-
-            <div
-                class="summary-value"
-                id="summaryCommission"
-            >
-                0.00
-            </div>
-
-        </div>
-
-
-        <div class="summary-box">
-
-            <div class="summary-label">
-                คงเหลือล่าสุด
-            </div>
-
-            <div
-                class="summary-value"
-                id="summaryBalance"
-            >
-                0.00
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="table-controls">
-
-        <label for="tableLimit">
-            แสดงรายการ
-        </label>
-
-        <select
-            id="tableLimit"
-            class="table-limit"
-        >
-
-            <option value="12">
-                12
-            </option>
-
-            <option value="24">
-                24
-            </option>
-
-            <option value="36">
-                36
-            </option>
-
-            <option value="48">
-                48
-            </option>
-
-            <option value="all">
                 ทั้งหมด
-            </option>
+            </button>
 
-        </select>
+        </div>
 
-    </div>
+        <div
+            class="summary"
+            id="summary"
+        >
 
+            <div class="summary-box">
 
-    <!-- TABLE -->
+                <div class="summary-label">
+                    จำนวนรายการ
+                </div>
 
-    <div
-        class="table-wrap"
-        id="tableWrap"
-    >
+                <div
+                    class="summary-value"
+                    id="summaryCount"
+                >
+                    0
+                </div>
 
-        <table>
+            </div>
 
-            <thead>
+            <div class="summary-box">
 
-                <tr>
+                <div class="summary-label">
+                    จำนวนเงินรวม
+                </div>
 
-                    <th>
-                        วันที่
-                    </th>
+                <div
+                    class="summary-value"
+                    id="summaryAmount"
+                >
+                    0.00
+                </div>
 
-                    <th>
-                        จำนวนเงิน
-                    </th>
+            </div>
 
-                    <th>
-                        รายการ
-                    </th>
+            <div class="summary-box">
 
-                    <th>
-                        กำไร
-                    </th>
+                <div class="summary-label">
+                    กำไรรวม
+                </div>
 
-                    <th>
-                        % กำไร
-                    </th>
+                <div
+                    class="summary-value"
+                    id="summaryProfit"
+                >
+                    0.00
+                </div>
 
-                    <th>
-                        ค่าคอม
-                    </th>
+            </div>
 
-                    <th>
-                        โอนกำไร
-                    </th>
+            <div class="summary-box">
 
-                    <th>
-                        ทบทุน
-                    </th>
+                <div class="summary-label">
+                    ค่าคอมมิชชั่นรวม
+                </div>
 
-                    <th>
-                        คงเหลือ
-                    </th>
+                <div
+                    class="summary-value"
+                    id="summaryCommission"
+                >
+                    0.00
+                </div>
 
-                    <th>
-                        สถานะ
-                    </th>
+            </div>
 
-                    <th>
-                        รายการพิเศษยกเลิกค่าคอมมิชชั่น
-                    </th>
+            <div class="summary-box">
 
-                    <th>
-                        รายรับพิเศษ Airdrop
-                    </th>
+                <div class="summary-label">
+                    คงเหลือล่าสุด
+                </div>
 
-                    <th>
-                        พอร์ต
-                    </th>
+                <div
+                    class="summary-value"
+                    id="summaryBalance"
+                >
+                    0.00
+                </div>
 
-                </tr>
+            </div>
 
-            </thead>
+        </div>
 
+        <div class="table-controls">
 
-            <tbody
-                id="historyBody"
-            ></tbody>
+            <label for="tableLimit">
+                แสดงรายการ
+            </label>
 
-        </table>
+            <select
+                id="tableLimit"
+                class="table-limit"
+            >
 
-    </div>
+                <option value="12">
+                    12
+                </option>
 
+                <option value="24">
+                    24
+                </option>
 
-    <div
-        class="empty"
-        id="emptyBox"
-    >
-        ไม่พบข้อมูลของพอร์ตนี้
-    </div>
+                <option value="36">
+                    36
+                </option>
 
-</section>
+                <option value="48">
+                    48
+                </option>
 
+                <option value="all">
+                    ทั้งหมด
+                </option>
 
-<footer>
+            </select>
 
-    <div>
-        Personal Finance
-    </div>
+        </div>
 
-    <div>
-        Investment History • Secure Member Area
-    </div>
+        <div
+            class="table-wrap"
+            id="tableWrap"
+        >
 
-</footer>
+            <table>
 
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            วันที่
+                        </th>
+
+                        <th>
+                            จำนวนเงิน
+                        </th>
+
+                        <th>
+                            รายการ
+                        </th>
+
+                        <th>
+                            กำไร
+                        </th>
+
+                        <th>
+                            % กำไร
+                        </th>
+
+                        <th>
+                            ค่าคอม
+                        </th>
+
+                        <th>
+                            โอนกำไร
+                        </th>
+
+                        <th>
+                            ทบทุน
+                        </th>
+
+                        <th>
+                            คงเหลือ
+                        </th>
+
+                        <th>
+                            สถานะ
+                        </th>
+
+                        <th>
+                            รายการพิเศษยกเลิกค่าคอมมิชชั่น
+                        </th>
+
+                        <th>
+                            รายรับพิเศษ Airdrop
+                        </th>
+
+                        <th>
+                            พอร์ต
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="historyBody"></tbody>
+
+            </table>
+
+        </div>
+
+        <div
+            class="empty"
+            id="emptyBox"
+        >
+            ไม่พบข้อมูลของพอร์ตนี้
+        </div>
+
+    </section>
+
+    <footer>
+
+        <div>
+            Personal Finance
+        </div>
+
+        <div>
+            Investment History • Secure Member Area
+        </div>
+
+    </footer>
 
 </main>
-
 
 <script type="module">
 
@@ -2156,57 +2188,46 @@ import {
     logout
 } from "./js/auth.js";
 
-
 const loadingBox =
-    document.getElementById(
-        "loadingBox"
-    );
+    document.getElementById("loadingBox");
 
 const errorBox =
-    document.getElementById(
-        "errorBox"
-    );
+    document.getElementById("errorBox");
+
+const updatingNotice =
+    document.getElementById("updatingNotice");
 
 const customerCard =
-    document.getElementById(
-        "customerCard"
-    );
+    document.getElementById("customerCard");
 
 const historyCard =
-    document.getElementById(
-        "historyCard"
-    );
+    document.getElementById("historyCard");
 
 const historyBody =
-    document.getElementById(
-        "historyBody"
-    );
+    document.getElementById("historyBody");
 
 const emptyBox =
-    document.getElementById(
-        "emptyBox"
-    );
+    document.getElementById("emptyBox");
 
 const tableLimit =
-    document.getElementById(
-        "tableLimit"
-    );
+    document.getElementById("tableLimit");
 
 const userName =
-    document.getElementById(
-        "userName"
-    );
+    document.getElementById("userName");
 
 const userPhoto =
-    document.getElementById(
-        "userPhoto"
-    );
+    document.getElementById("userPhoto");
 
 const logoutBtn =
-    document.getElementById(
-        "logoutBtn"
-    );
+    document.getElementById("logoutBtn");
 
+let portfolio15 = [];
+
+let portfolio30 = [];
+
+let currentPortfolio = "15";
+
+let currentLimit = "12";
 
 function renderUserProfile(user) {
 
@@ -2235,9 +2256,9 @@ function renderUserProfile(user) {
 
         userPhoto.style.display =
             "none";
+
     }
 }
-
 
 logoutBtn.addEventListener(
     "click",
@@ -2269,10 +2290,11 @@ logoutBtn.addEventListener(
 
             logoutBtn.textContent =
                 "ออกจากระบบ";
+
         }
+
     }
 );
-
 
 watchAuth(
     function (user) {
@@ -2287,20 +2309,9 @@ watchAuth(
         }
 
         renderUserProfile(user);
+
     }
 );
-
-
-let portfolio15 = [];
-
-let portfolio30 = [];
-
-let currentPortfolio =
-    "15";
-
-let currentLimit =
-    "12";
-
 
 function escapeHTML(value) {
 
@@ -2312,33 +2323,13 @@ function escapeHTML(value) {
     }
 
     return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
 }
-
 
 function toNumber(value) {
 
@@ -2374,8 +2365,8 @@ function toNumber(value) {
     return Number.isFinite(number)
         ? number
         : null;
-}
 
+}
 
 function money(value) {
 
@@ -2393,6 +2384,7 @@ function money(value) {
             maximumFractionDigits: 2
         }
     );
+
 }
 
 function percent(value) {
@@ -2422,8 +2414,8 @@ function percent(value) {
             maximumFractionDigits: 2
         }
     ) + "%";
-}
 
+}
 
 function text(value) {
 
@@ -2436,8 +2428,8 @@ function text(value) {
     }
 
     return escapeHTML(value);
-}
 
+}
 
 function statusClass(value) {
 
@@ -2469,6 +2461,7 @@ function statusClass(value) {
     }
 
     return "status";
+
 }
 
 function renderCustomer(customer) {
@@ -2511,13 +2504,13 @@ function renderCustomer(customer) {
     customerCard
         .classList
         .remove("hidden");
-}
 
+}
 
 function sortByDate(data) {
 
     return [...data].sort(
-        (a, b) => {
+        function (a, b) {
 
             const dateA =
                 parseDateValue(
@@ -2530,7 +2523,6 @@ function sortByDate(data) {
                 );
 
             if (dateA !== dateB) {
-
                 return dateB - dateA;
             }
 
@@ -2544,14 +2536,12 @@ function sortByDate(data) {
                     b["รายการ"] || ""
                 ).trim();
 
-
             if (
                 statusA === "ปิดพอร์ต" &&
                 statusB !== "ปิดพอร์ต"
             ) {
                 return -1;
             }
-
 
             if (
                 statusB === "ปิดพอร์ต" &&
@@ -2560,12 +2550,12 @@ function sortByDate(data) {
                 return 1;
             }
 
-
             return 0;
+
         }
     );
-}
 
+}
 
 function parseDateValue(value) {
 
@@ -2576,12 +2566,10 @@ function parseDateValue(value) {
     const textValue =
         String(value).trim();
 
-
     const match =
         textValue.match(
             /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/
         );
-
 
     if (match) {
 
@@ -2594,41 +2582,32 @@ function parseDateValue(value) {
         let year =
             Number(match[3]);
 
-
-        // วันที่ในชีทเป็น พ.ศ.
-        // เช่น 30/09/69 = 30/09/2569
-
         if (year < 100) {
             year += 2500;
         }
 
-
-        // แปลง พ.ศ. เป็น ค.ศ.
-
         if (year >= 2400) {
             year -= 543;
         }
-
 
         return new Date(
             year,
             month - 1,
             day
         ).getTime();
-    }
 
+    }
 
     const date =
         new Date(value);
-
 
     return Number.isNaN(
         date.getTime()
     )
         ? 0
         : date.getTime();
-}
 
+}
 
 function displayDate(value) {
 
@@ -2643,12 +2622,10 @@ function displayDate(value) {
     const textValue =
         String(value).trim();
 
-
     let match =
         textValue.match(
             /^(\d{1,2})\/(\d{1,2})\/(\d{2})$/
         );
-
 
     if (match) {
 
@@ -2662,14 +2639,13 @@ function displayDate(value) {
             match[3].padStart(2, "0");
 
         return `${day}/${month}/${year}`;
-    }
 
+    }
 
     match =
         textValue.match(
             /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
         );
-
 
     if (match) {
 
@@ -2682,18 +2658,13 @@ function displayDate(value) {
         let year =
             Number(match[3]);
 
-
-        // พ.ศ. 2569 -> แสดง 69
-
         if (year >= 2400) {
 
             return `${day}/${month}/${String(
                 year - 2500
             ).padStart(2, "0")}`;
+
         }
-
-
-        // ค.ศ. 2026 -> พ.ศ. 2569 -> แสดง 69
 
         if (
             year >= 1900 &&
@@ -2703,18 +2674,17 @@ function displayDate(value) {
             return `${day}/${month}/${String(
                 year + 543
             ).slice(-2)}`;
-        }
 
+        }
 
         return `${day}/${month}/${String(
             year
         ).slice(-2)}`;
-    }
 
+    }
 
     const date =
         new Date(value);
-
 
     if (
         !Number.isNaN(
@@ -2735,9 +2705,6 @@ function displayDate(value) {
         let year =
             date.getFullYear();
 
-
-        // ถ้าเป็น ค.ศ.
-
         if (
             year >= 1900 &&
             year < 2400
@@ -2745,20 +2712,17 @@ function displayDate(value) {
             year += 543;
         }
 
-
-        // แสดงเฉพาะ 2 หลักท้ายของ พ.ศ.
-
         return `${day}/${month}/${String(
             year
         ).slice(-2)}`;
-    }
 
+    }
 
     return escapeHTML(
         textValue
     );
-}
 
+}
 
 function getCurrentData() {
 
@@ -2773,10 +2737,11 @@ function getCurrentData() {
                     ...row,
                     portfolio: 15
                 };
+
             }
         );
-    }
 
+    }
 
     if (
         currentPortfolio === "30"
@@ -2789,10 +2754,11 @@ function getCurrentData() {
                     ...row,
                     portfolio: 30
                 };
+
             }
         );
-    }
 
+    }
 
     return [
 
@@ -2803,6 +2769,7 @@ function getCurrentData() {
                     ...row,
                     portfolio: 15
                 };
+
             }
         ),
 
@@ -2813,14 +2780,15 @@ function getCurrentData() {
                     ...row,
                     portfolio: 30
                 };
+
             }
         )
 
     ];
+
 }
 
-
-function getLatestBalance(data) {
+function getLatestBalance() {
 
     if (
         currentPortfolio === "15"
@@ -2829,8 +2797,8 @@ function getLatestBalance(data) {
         return getLatestPortfolioBalance(
             portfolio15
         );
-    }
 
+    }
 
     if (
         currentPortfolio === "30"
@@ -2839,27 +2807,24 @@ function getLatestBalance(data) {
         return getLatestPortfolioBalance(
             portfolio30
         );
-    }
 
+    }
 
     const latest15 =
         getLatestPortfolioBalance(
             portfolio15
         );
 
-
     const latest30 =
         getLatestPortfolioBalance(
             portfolio30
         );
-
 
     let total =
         0;
 
     let found =
         false;
-
 
     if (
         latest15 !== null
@@ -2870,8 +2835,8 @@ function getLatestBalance(data) {
 
         found =
             true;
-    }
 
+    }
 
     if (
         latest30 !== null
@@ -2882,14 +2847,14 @@ function getLatestBalance(data) {
 
         found =
             true;
-    }
 
+    }
 
     return found
         ? total
         : null;
-}
 
+}
 
 function getLatestPortfolioBalance(data) {
 
@@ -2897,35 +2862,34 @@ function getLatestPortfolioBalance(data) {
         !Array.isArray(data) ||
         data.length === 0
     ) {
-
         return null;
     }
 
+    const sorted =
+        sortByDate(data);
 
     for (
-        let i = data.length - 1;
+        let i = sorted.length - 1;
         i >= 0;
         i--
     ) {
 
         const balance =
             toNumber(
-                data[i]["คงเหลือ"]
+                sorted[i]["คงเหลือ"]
             );
-
 
         if (
             balance !== null
         ) {
-
             return balance;
         }
+
     }
 
-
     return null;
-}
 
+}
 
 function renderSummary(data) {
 
@@ -2938,7 +2902,6 @@ function renderSummary(data) {
     let totalCommission =
         0;
 
-
     data.forEach(
         function (row) {
 
@@ -2947,18 +2910,15 @@ function renderSummary(data) {
                     row["จำนวนเงิน"]
                 );
 
-
             const profit =
                 toNumber(
                     row["กำไร"]
                 );
 
-
             const commission =
                 toNumber(
                     row["ค่าคอม"]
                 );
-
 
             if (
                 amount !== null
@@ -2966,8 +2926,8 @@ function renderSummary(data) {
 
                 totalAmount +=
                     amount;
-            }
 
+            }
 
             if (
                 profit !== null
@@ -2975,8 +2935,8 @@ function renderSummary(data) {
 
                 totalProfit +=
                     profit;
-            }
 
+            }
 
             if (
                 commission !== null
@@ -2984,14 +2944,14 @@ function renderSummary(data) {
 
                 totalCommission +=
                     commission;
+
             }
+
         }
     );
 
-
     const latestBalance =
-        getLatestBalance(data);
-
+        getLatestBalance();
 
     document.getElementById(
         "summaryCount"
@@ -3000,24 +2960,20 @@ function renderSummary(data) {
             "th-TH"
         );
 
-
     document.getElementById(
         "summaryAmount"
     ).textContent =
         money(totalAmount);
-
 
     document.getElementById(
         "summaryProfit"
     ).textContent =
         money(totalProfit);
 
-
     document.getElementById(
         "summaryCommission"
     ).textContent =
         money(totalCommission);
-
 
     document.getElementById(
         "summaryBalance"
@@ -3025,18 +2981,16 @@ function renderSummary(data) {
         latestBalance !== null
             ? money(latestBalance)
             : "-";
-}
 
+}
 
 function renderTable() {
 
     const data =
         getCurrentData();
 
-
     historyBody.innerHTML =
         "";
-
 
     if (
         data.length === 0
@@ -3048,19 +3002,16 @@ function renderTable() {
         renderSummary([]);
 
         return;
-    }
 
+    }
 
     emptyBox.style.display =
         "none";
 
-
     const sorted =
         sortByDate(data);
 
-
     let displayData;
-
 
     if (
         currentLimit === "all"
@@ -3076,8 +3027,8 @@ function renderTable() {
                 0,
                 Number(currentLimit)
             );
-    }
 
+    }
 
     displayData.forEach(
         function (row) {
@@ -3087,7 +3038,6 @@ function renderTable() {
                     "tr"
                 );
 
-
             const portfolio =
                 row.portfolio ||
                 (
@@ -3096,9 +3046,7 @@ function renderTable() {
                         : 15
                 );
 
-
             tr.innerHTML = `
-
                 <td>
                     ${displayDate(row["วันที่"])}
                 </td>
@@ -3158,24 +3106,21 @@ function renderTable() {
                 <td>
                     พอร์ต ${portfolio}
                 </td>
-
             `;
-
 
             historyBody.appendChild(
                 tr
             );
+
         }
     );
 
-
     renderSummary(data);
+
 }
 
 document
-    .querySelectorAll(
-        ".portfolio-btn"
-    )
+    .querySelectorAll(".portfolio-btn")
     .forEach(
         function (button) {
 
@@ -3194,22 +3139,22 @@ document
                                     .remove(
                                         "active"
                                     );
+
                             }
                         );
 
-
                     button.classList
                         .add("active");
-
 
                     currentPortfolio =
                         button.dataset
                             .portfolio;
 
-
                     renderTable();
+
                 }
             );
+
         }
     );
 
@@ -3221,8 +3166,79 @@ tableLimit.addEventListener(
             tableLimit.value;
 
         renderTable();
+
     }
 );
+
+function clearInvestmentData() {
+
+    portfolio15 = [];
+
+    portfolio30 = [];
+
+    historyBody.innerHTML =
+        "";
+
+    emptyBox.style.display =
+        "none";
+
+    customerCard
+        .classList
+        .add("hidden");
+
+    historyCard
+        .classList
+        .add("hidden");
+
+    document.getElementById(
+        "summaryCount"
+    ).textContent =
+        "0";
+
+    document.getElementById(
+        "summaryAmount"
+    ).textContent =
+        "0.00";
+
+    document.getElementById(
+        "summaryProfit"
+    ).textContent =
+        "0.00";
+
+    document.getElementById(
+        "summaryCommission"
+    ).textContent =
+        "0.00";
+
+    document.getElementById(
+        "summaryBalance"
+    ).textContent =
+        "0.00";
+
+}
+
+function hideUpdatingNotice() {
+
+    updatingNotice.style.display =
+        "none";
+
+}
+
+function showUpdatingNotice() {
+
+    clearInvestmentData();
+
+    loadingBox
+        .classList
+        .add("hidden");
+
+    errorBox.style.display =
+        "none";
+
+    updatingNotice.style.display =
+        "block";
+
+}
 
 function showError(error) {
 
@@ -3231,65 +3247,152 @@ function showError(error) {
         error
     );
 
+    clearInvestmentData();
+
+    hideUpdatingNotice();
 
     loadingBox
         .classList
         .add("hidden");
 
-
     errorBox.textContent =
         error?.message ||
         "เกิดข้อผิดพลาดในการโหลดข้อมูล";
 
-
     errorBox.style.display =
         "block";
+
+}
+
+function getStatusValue(data) {
+
+    if (!data) {
+        return "";
+    }
+
+    return String(
+        data.status ??
+        data.data?.status ??
+        ""
+    )
+        .trim()
+        .toLowerCase();
+
+}
+
+function isUpdating(data) {
+
+    return (
+        getStatusValue(data) === "-" ||
+        data?.updating === true ||
+        data?.error === "DATA_UPDATING"
+    );
+
 }
 
 async function loadPage() {
 
     try {
 
+        clearInvestmentData();
+
+        hideUpdatingNotice();
+
+        errorBox.style.display =
+            "none";
+
         loadingBox
             .classList
             .remove("hidden");
 
-
         const permission =
             await checkPermission();
 
+        if (
+            isUpdating(permission)
+        ) {
 
-        if (!permission) {
+            showUpdatingNotice();
+
             return;
+
         }
 
+        if (!permission) {
+
+            throw new Error(
+                "ไม่สามารถตรวจสอบสิทธิ์ได้"
+            );
+
+        }
+
+        if (
+            permission.authorized !== true
+        ) {
+
+            throw new Error(
+                permission.error ||
+                "ไม่สามารถเข้าถึงข้อมูลได้"
+            );
+
+        }
+
+        const permissionStatus =
+            getStatusValue(permission);
+
+        if (
+            permissionStatus !== "active"
+        ) {
+
+            throw new Error(
+                "ไม่สามารถยืนยันสถานะสิทธิ์ของบัญชีได้"
+            );
+
+        }
 
         const data =
             await getInvestmentHistory();
 
+        if (
+            isUpdating(data)
+        ) {
+
+            showUpdatingNotice();
+
+            return;
+
+        }
 
         if (!data) {
 
             throw new Error(
                 "ไม่พบข้อมูลจากระบบ"
             );
+
         }
 
+        if (
+            data.authorized === false
+        ) {
+
+            throw new Error(
+                data.error ||
+                "ไม่สามารถเข้าถึงข้อมูลได้"
+            );
+
+        }
 
         console.log(
             "Investment data:",
             data
         );
 
-
         const customer =
             data.customer || {};
-
 
         renderCustomer(
             customer
         );
-
 
         portfolio15 =
             Array.isArray(
@@ -3298,7 +3401,6 @@ async function loadPage() {
                 ? data.portfolio15
                 : [];
 
-
         portfolio30 =
             Array.isArray(
                 data.portfolio30
@@ -3306,32 +3408,27 @@ async function loadPage() {
                 ? data.portfolio30
                 : [];
 
-
         historyCard
             .classList
             .remove("hidden");
 
-
         renderTable();
-
 
         loadingBox
             .classList
             .add("hidden");
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         showError(error);
-    }
-}
 
+    }
+
+}
 
 loadPage();
 
 </script>
 
 </body>
-
 </html>
