@@ -1,9 +1,11 @@
-// js/firebase-config.js
-
 import { initializeApp } from
     "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 
-import { getAuth } from
+import {
+    initializeAuth,
+    browserLocalPersistence,
+    browserPopupRedirectResolver
+} from
     "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 
@@ -29,13 +31,20 @@ const firebaseConfig = {
 
 };
 
-
 const app =
     initializeApp(firebaseConfig);
 
 
 const auth =
-    getAuth(app);
+    initializeAuth(app, {
+
+        persistence:
+            browserLocalPersistence,
+
+        popupRedirectResolver:
+            browserPopupRedirectResolver
+
+    });
 
 
 export {
