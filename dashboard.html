@@ -7,6 +7,19 @@
 
     <title>Dashboard | Personal Finance</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.5.0/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial@0.2.1"></script>
+
     <style>
         * {
             box-sizing: border-box;
@@ -15,18 +28,16 @@
         :root {
             --bg: #111827;
             --card: rgba(27, 35, 55, .90);
-            --card-soft: rgba(27, 35, 55, .76);
-            --border: rgba(255, 255, 255, .10);
+            --card-soft: rgba(27, 35, 55, .72);
+            --border: rgba(255, 255, 255, .09);
             --text: #eef2f7;
             --muted: #a5afbf;
             --blue: #72aaf0;
+            --purple: #9b7bea;
             --green: #4ade80;
             --red: #f87171;
             --yellow: #fbbf24;
-            --purple: #9b7bea;
-
-            --shadow:
-                0 20px 50px rgba(0, 0, 0, .25);
+            --shadow: 0 20px 50px rgba(0, 0, 0, .25);
         }
 
         html {
@@ -37,6 +48,8 @@
             margin: 0;
             min-height: 100vh;
             font-family:
+                "Inter",
+                "Noto Sans Thai",
                 system-ui,
                 -apple-system,
                 "Segoe UI",
@@ -44,7 +57,6 @@
                 Arial,
                 sans-serif;
             color: var(--text);
-
             background:
                 radial-gradient(
                     circle at 10% 10%,
@@ -65,26 +77,22 @@
         }
 
         button,
-        a {
+        input,
+        select {
             font-family: inherit;
         }
 
-
-        /* =========================================================
-           TOPBAR
-        ========================================================= */
+        button {
+            cursor: pointer;
+        }
 
         .topbar {
             position: sticky;
             top: 0;
             z-index: 100;
             width: 100%;
-
             background: rgba(17, 24, 39, .78);
-
-            border-bottom:
-                1px solid rgba(255, 255, 255, .08);
-
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
         }
@@ -93,22 +101,16 @@
             width: min(1180px, calc(100% - 28px));
             min-height: 72px;
             margin: auto;
-
             display: flex;
             align-items: center;
             justify-content: space-between;
-
             gap: 18px;
         }
-
-        /* BRAND */
 
         .brand {
             display: flex;
             align-items: center;
-
             gap: 12px;
-
             flex: 1 1 auto;
             min-width: 0;
         }
@@ -116,21 +118,14 @@
         .brand-icon {
             width: 42px;
             height: 42px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
             flex: 0 0 42px;
         }
 
         .brand-icon img {
             width: 42px;
             height: 42px;
-
             object-fit: cover;
             border-radius: 50%;
-
             display: block;
         }
 
@@ -142,8 +137,6 @@
         .brand-title {
             font-size: 15px;
             font-weight: 800;
-            letter-spacing: .2px;
-
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -151,25 +144,18 @@
 
         .brand-subtitle {
             margin-top: 2px;
-
             color: var(--muted);
             font-size: 11px;
-
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-
-        /* NAVIGATION */
-
         .nav {
             display: flex;
             align-items: center;
             justify-content: flex-end;
-
             gap: 8px;
-
             flex: 0 1 auto;
             min-width: 0;
         }
@@ -178,237 +164,158 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-
             min-height: 40px;
-
             padding: 0 15px;
-
             border-radius: 11px;
-            border:
-                1px solid rgba(255, 255, 255, .08);
-
-            background:
-                rgba(255, 255, 255, .045);
-
+            border: 1px solid rgba(255, 255, 255, .08);
+            background: rgba(255, 255, 255, .045);
             color: #dfe7f3;
-
             text-decoration: none;
-
             font-size: 13px;
             font-weight: 700;
-
-            cursor: pointer;
-
-            transition: .2s ease;
-
             white-space: nowrap;
-
-            min-width: 0;
+            transition: .2s ease;
         }
 
         .nav-btn:hover {
-            background:
-                rgba(255, 255, 255, .09);
-
+            background: rgba(255, 255, 255, .09);
             transform: translateY(-1px);
         }
 
         .nav-btn.active {
             border-color: transparent;
-
             color: white;
-
             background:
                 linear-gradient(
                     135deg,
                     #3975c9,
                     #7050b5
                 );
-
             box-shadow:
-                0 8px 22px rgba(73, 102, 184, .22);
+                0 8px 22px
+                rgba(73, 102, 184, .22);
         }
 
+        .logout-btn {
+            color: #ffb4b4;
+            border-color: rgba(248, 113, 113, .18);
+        }
 
-        /* GOOGLE USER */
+        .logout-btn:hover {
+            background: rgba(248, 113, 113, .10);
+        }
 
         .user-profile {
             display: flex;
             align-items: center;
-
             gap: 9px;
-
             margin-left: 4px;
-
             padding: 4px 8px 4px 5px;
-
-            border:
-                1px solid rgba(255, 255, 255, .08);
-
+            border: 1px solid rgba(255, 255, 255, .08);
             border-radius: 12px;
-
-            background:
-                rgba(255, 255, 255, .045);
-
+            background: rgba(255, 255, 255, .045);
             min-width: 0;
-
             max-width: 250px;
-
             flex: 0 1 250px;
-
             overflow: hidden;
         }
 
         .user-profile img {
             width: 32px;
             height: 32px;
-
-            border-radius: 50%;
-
-            object-fit: cover;
-
-            display: block;
-
-            border:
-                1px solid rgba(255, 255, 255, .15);
-
             flex: 0 0 32px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, .15);
         }
 
         .user-profile-name {
+            min-width: 0;
             color: #eef2f7;
-
             font-size: 12px;
             font-weight: 700;
-
-            min-width: 0;
-
+            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
-
-            display: block;
         }
-
-
-        /* LOGOUT */
-
-        .logout-btn {
-            color: #ffb4b4;
-
-            border-color:
-                rgba(248, 113, 113, .18);
-        }
-
-        .logout-btn:hover {
-            background:
-                rgba(248, 113, 113, .10);
-        }
-
-
-        /* =========================================================
-           MAIN
-        ========================================================= */
 
         .page {
             width: min(1180px, calc(100% - 28px));
-
             margin: auto;
-
-            padding:
-                34px 0 60px;
+            padding: 34px 0 60px;
         }
 
-
-        /* HERO */
-
         .hero {
-            margin-bottom: 26px;
+            margin-bottom: 22px;
         }
 
         .hero h1 {
             margin: 0;
-
-            font-size:
-                clamp(27px, 4vw, 40px);
-
+            font-size: clamp(27px, 4vw, 40px);
             line-height: 1.15;
-
             letter-spacing: -.8px;
-
             background:
                 linear-gradient(
                     90deg,
                     #72aaf0,
                     #9b7bea
                 );
-
             -webkit-background-clip: text;
             background-clip: text;
-
             color: transparent;
         }
 
         .hero p {
-            margin:
-                10px 0 0;
-
+            margin: 10px 0 0;
             color: var(--muted);
-
             font-size: 14px;
-
             line-height: 1.7;
         }
-
-
-        /* MARKET STATUS */
 
         .market-status {
             display: flex;
             align-items: center;
             justify-content: space-between;
-
             gap: 15px;
-
             margin-top: 18px;
-
-            padding:
-                13px 16px;
-
-            border:
-                1px solid var(--border);
-
+            padding: 12px 15px;
+            border: 1px solid var(--border);
             border-radius: 14px;
-
-            background:
-                rgba(27, 35, 55, .55);
+            background: rgba(27, 35, 55, .55);
         }
 
         .status-left {
             display: flex;
             align-items: center;
-
             gap: 9px;
-
             min-width: 0;
-
             color: var(--muted);
-
             font-size: 12px;
         }
 
         .status-dot {
             width: 8px;
             height: 8px;
-
             flex: 0 0 8px;
-
             border-radius: 50%;
-
             background: var(--green);
-
             box-shadow:
-                0 0 12px rgba(74, 222, 128, .55);
+                0 0 12px
+                rgba(74, 222, 128, .55);
+        }
+
+        .status-dot.loading-dot {
+            background: var(--yellow);
+            box-shadow:
+                0 0 12px
+                rgba(251, 191, 36, .55);
+        }
+
+        .status-dot.error-dot {
+            background: var(--red);
+            box-shadow:
+                0 0 12px
+                rgba(248, 113, 113, .55);
         }
 
         #updatedAt {
@@ -418,36 +325,19 @@
         }
 
         .refresh-btn {
-            border: 0;
-
             min-height: 35px;
-
-            padding:
-                0 13px;
-
+            padding: 0 13px;
+            border: 0;
             border-radius: 9px;
-
-            background:
-                rgba(114, 170, 240, .12);
-
+            background: rgba(114, 170, 240, .12);
             color: #bcd6fa;
-
             font-size: 12px;
             font-weight: 700;
-
-            cursor: pointer;
-
             transition: .2s ease;
-
-            white-space: nowrap;
-
-            flex: 0 0 auto;
         }
 
         .refresh-btn:hover {
-            background:
-                rgba(114, 170, 240, .20);
-
+            background: rgba(114, 170, 240, .20);
             transform: translateY(-1px);
         }
 
@@ -456,434 +346,346 @@
             cursor: wait;
         }
 
-
-        /* =========================================================
-           MARKET GRID
-        ========================================================= */
-
         .market-grid {
             display: grid;
-
-            grid-template-columns:
-                repeat(3, minmax(0, 1fr));
-
-            gap: 18px;
-
-            margin-top: 22px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 18px;
         }
 
-        .market-card {
+        .asset-card {
             position: relative;
-
             overflow: hidden;
-
-            min-height: 330px;
-
-            padding: 22px;
-
-            border:
-                1px solid var(--border);
-
-            border-radius: 17px;
-
+            min-width: 0;
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
             background:
                 linear-gradient(
                     145deg,
-                    rgba(30, 39, 60, .91),
-                    rgba(23, 30, 48, .91)
+                    rgba(30, 39, 60, .92),
+                    rgba(23, 30, 48, .92)
                 );
-
             box-shadow: var(--shadow);
+            transition:
+                border-color .2s ease,
+                transform .2s ease;
         }
 
-        .market-card::before {
+        .asset-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(114, 170, 240, .22);
+        }
+
+        .asset-card::after {
             content: "";
-
             position: absolute;
-
-            width: 150px;
-            height: 150px;
-
-            right: -60px;
+            width: 130px;
+            height: 130px;
+            right: -55px;
             top: -65px;
-
             border-radius: 50%;
-
-            background:
-                rgba(114, 170, 240, .08);
-
+            background: rgba(114, 170, 240, .07);
             pointer-events: none;
         }
 
-        .market-card.gold::before {
-            background:
-                rgba(251, 191, 36, .07);
+        .asset-card.gold::after {
+            background: rgba(251, 191, 36, .08);
         }
 
-        .market-card.thai-gold::before {
-            background:
-                rgba(155, 123, 234, .08);
+        .asset-card.silver::after {
+            background: rgba(210, 220, 235, .07);
         }
 
+        .asset-card.set::after {
+            background: rgba(155, 123, 234, .08);
+        }
 
-        /* CARD HEADER */
-
-        .card-head {
-            position: relative;
-
+        .asset-head {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-
             gap: 10px;
-
-            margin-bottom: 18px;
-        }
-
-        .asset {
-            display: flex;
-            align-items: center;
-
-            gap: 11px;
-
-            min-width: 0;
-        }
-
-        .asset > div:last-child {
-            min-width: 0;
+            position: relative;
+            z-index: 1;
         }
 
         .asset-icon {
-            width: 43px;
-            height: 43px;
-
+            width: 40px;
+            height: 40px;
+            flex: 0 0 40px;
             display: grid;
             place-items: center;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .07);
+            border: 1px solid rgba(255, 255, 255, .07);
+            font-size: 19px;
+        }
 
-            flex: 0 0 43px;
-
-            border-radius: 13px;
-
-            background:
-                rgba(255, 255, 255, .07);
-
-            border:
-                1px solid rgba(255, 255, 255, .07);
-
-            font-size: 21px;
+        .asset-title {
+            min-width: 0;
         }
 
         .asset-name {
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 800;
-
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .asset-code {
-            margin-top: 3px;
-
+        .asset-symbol {
+            margin-top: 2px;
             color: var(--muted);
-
-            font-size: 11px;
-
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .source-badge {
-            padding:
-                5px 8px;
-
-            border-radius: 8px;
-
-            background:
-                rgba(255, 255, 255, .055);
-
-            color: var(--muted);
-
             font-size: 10px;
-
-            white-space: nowrap;
-
-            flex: 0 0 auto;
         }
 
-
-        /* PRICE */
-
-        .price-label {
+        .asset-price-label {
+            margin-top: 18px;
             color: var(--muted);
-            font-size: 11px;
+            font-size: 10px;
         }
 
-        .price {
-            margin-top: 4px;
-
-            font-size:
-                clamp(27px, 3vw, 36px);
-
+        .asset-price {
+            margin-top: 3px;
+            font-size: clamp(22px, 2.5vw, 29px);
             font-weight: 800;
-
-            letter-spacing: -.7px;
-
-            word-break: break-word;
+            letter-spacing: -.5px;
+            overflow-wrap: anywhere;
         }
 
-        .price-unit {
-            margin-left: 5px;
-
+        .asset-currency {
+            margin-left: 3px;
             color: var(--muted);
-
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 500;
         }
 
-
-        /* CHANGE */
-
-        .main-change {
+        .asset-change {
             display: inline-flex;
             align-items: center;
-
-            gap: 6px;
-
-            margin-top: 8px;
-
-            padding:
-                6px 9px;
-
+            margin-top: 7px;
+            padding: 5px 8px;
             border-radius: 8px;
-
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
         }
 
-        .change-positive {
+        .positive {
             color: var(--green);
-
-            background:
-                rgba(74, 222, 128, .09);
+            background: rgba(74, 222, 128, .09);
         }
 
-        .change-negative {
+        .negative {
             color: var(--red);
-
-            background:
-                rgba(248, 113, 113, .09);
+            background: rgba(248, 113, 113, .09);
         }
 
-        .change-neutral {
+        .neutral {
             color: var(--muted);
-
-            background:
-                rgba(255, 255, 255, .06);
+            background: rgba(255, 255, 255, .06);
         }
 
-
-        /* PERIOD */
-
-        .period-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 9px;
-
-            margin-top: 24px;
-        }
-
-        .period {
-            padding:
-                11px 8px;
-
-            min-width: 0;
-
-            border:
-                1px solid rgba(255, 255, 255, .07);
-
-            border-radius: 11px;
-
-            background:
-                rgba(255, 255, 255, .035);
-        }
-
-        .period-title {
+        .asset-time {
+            margin-top: 12px;
             color: var(--muted);
-
-            font-size: 10px;
-
-            margin-bottom: 5px;
-        }
-
-        .period-value {
-            font-size: 13px;
-            font-weight: 800;
-
-            overflow-wrap: anywhere;
-        }
-
-
-        /* CARD FOOTER */
-
-        .card-footer {
-            position: absolute;
-            left: 20px;
-            right: 20px;
-            bottom: 16px;
-            color: var(--muted);
-            font-size: 11px;
+            font-size: 9px;
             line-height: 1.5;
-            white-space: normal;
-            overflow-wrap: anywhere;
-            word-break: break-word;
         }
 
-
-        /* =========================================================
-           THAI GOLD
-        ========================================================= */
-
-        .thai-details {
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap: 9px;
-
-            margin-top: 17px;
-        }
-
-        .thai-price-box {
-            padding:
-                10px;
-
-            min-width: 0;
-
-            border:
-                1px solid rgba(255, 255, 255, .07);
-
-            border-radius: 10px;
-
-            background:
-                rgba(255, 255, 255, .035);
-        }
-
-        .thai-price-label {
-            color: var(--muted);
-
-            font-size: 10px;
-
-            margin-bottom: 4px;
-        }
-
-        .thai-price-value {
-            font-size: 13px;
-            font-weight: 800;
-
-            overflow-wrap: anywhere;
-        }
-
-        .thai-update {
-            margin-top: 13px;
-
-            color: var(--muted);
-
-            font-size: 10px;
-
-            line-height: 1.6;
-        }
-
-
-        /* =========================================================
-           INFO
-        ========================================================= */
-
-        .info-section {
+        .analysis-panel,
+        .history-section,
+        .indicator-section {
             margin-top: 20px;
-
-            padding: 18px;
-
-            border:
-                1px solid var(--border);
-
-            border-radius: 15px;
-
-            background:
-                rgba(27, 35, 55, .62);
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            background: rgba(27, 35, 55, .70);
+            box-shadow: var(--shadow);
         }
 
-        .info-title {
-            font-size: 13px;
+        .panel-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 18px;
+        }
+
+        .panel-title {
+            font-size: 17px;
             font-weight: 800;
-
-            margin-bottom: 7px;
         }
 
-        .info-text {
+        .panel-subtitle,
+        .history-subtitle {
+            margin-top: 4px;
             color: var(--muted);
-
             font-size: 11px;
-
-            line-height: 1.7;
         }
 
+        .panel-controls {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
 
-        /* ERROR */
+        .view-switch,
+        .chart-type-switch {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px;
+            border: 1px solid rgba(255, 255, 255, .07);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, .035);
+        }
 
-        .error-box {
-            display: none;
+        .view-btn,
+        .chart-type-btn {
+            min-height: 32px;
+            padding: 0 11px;
+            border: 0;
+            border-radius: 7px;
+            background: transparent;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+        }
 
-            margin-top: 18px;
+        .view-btn.active {
+            background: rgba(114, 170, 240, .16);
+            color: #d8e7fb;
+        }
 
-            padding:
-                12px 15px;
+        .chart-type-btn.active {
+            background: rgba(155, 123, 234, .18);
+            color: #eee7ff;
+        }
 
-            border:
-                1px solid rgba(248, 113, 113, .22);
+        .asset-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-bottom: 12px;
+        }
 
-            border-radius: 12px;
+        .asset-selector-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 34px;
+            padding: 0 11px;
+            border: 1px solid rgba(255, 255, 255, .07);
+            border-radius: 9px;
+            background: rgba(255, 255, 255, .035);
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+        }
 
+        .asset-selector-btn:hover {
+            background: rgba(255, 255, 255, .07);
+        }
+
+        .asset-selector-btn.active {
+            color: white;
+            border-color: rgba(114, 170, 240, .35);
+            background: rgba(114, 170, 240, .13);
+        }
+
+        .period-row {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .period-btn {
+            min-width: 48px;
+            min-height: 31px;
+            padding: 0 10px;
+            border: 1px solid rgba(255, 255, 255, .07);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .035);
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .period-btn:hover {
+            background: rgba(255, 255, 255, .07);
+        }
+
+        .period-btn.active {
+            color: white;
             background:
-                rgba(248, 113, 113, .07);
-
-            color: #fca5a5;
-
-            font-size: 12px;
-
-            line-height: 1.6;
-
-            white-space: pre-line;
+                linear-gradient(
+                    135deg,
+                    rgba(57, 117, 201, .70),
+                    rgba(112, 80, 181, .70)
+                );
+            border-color: transparent;
         }
 
+        .custom-date {
+            display: none;
+            align-items: center;
+            gap: 7px;
+            margin-left: auto;
+        }
 
-        /* =========================================================
-           LOADING
-        ========================================================= */
+        .custom-date.show {
+            display: flex;
+        }
 
-        .loading {
-            display: inline-block;
+        .date-input {
+            height: 31px;
+            padding: 0 8px;
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .045);
+            color: var(--text);
+            font-size: 10px;
+        }
 
-            width: 20px;
-            height: 20px;
+        .date-input::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: .65;
+        }
 
-            border:
-                2px solid rgba(255, 255, 255, .15);
+        .chart-wrap {
+            position: relative;
+            width: 100%;
+            height: 390px;
+            padding-top: 5px;
+        }
 
-            border-top-color:
-                rgba(255, 255, 255, .85);
+        .chart-loading {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+            border-radius: 10px;
+            background: rgba(17, 24, 39, .45);
+            backdrop-filter: blur(3px);
+        }
 
+        .chart-loading.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255, 255, 255, .12);
+            border-top-color: #72aaf0;
             border-radius: 50%;
-
-            animation:
-                spin .8s linear infinite;
-
-            vertical-align: middle;
+            animation: spin .8s linear infinite;
         }
 
         @keyframes spin {
@@ -892,19 +694,186 @@
             }
         }
 
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 9px;
+            margin-top: 16px;
+        }
 
-        /* =========================================================
-           RESPONSIVE - TABLET
-        ========================================================= */
+        .summary-item {
+            min-width: 0;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, .07);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, .035);
+        }
+
+        .summary-label {
+            color: var(--muted);
+            font-size: 9px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .summary-value {
+            margin-top: 5px;
+            font-size: 12px;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+
+        .history-title {
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .table-wrap {
+            margin-top: 15px;
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 680px;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 11px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, .06);
+            text-align: left;
+            font-size: 11px;
+        }
+
+        th {
+            color: var(--muted);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        td {
+            color: #dfe7f3;
+        }
+
+        td:first-child,
+        th:first-child {
+            font-weight: 700;
+        }
+
+        .return-cell {
+            font-weight: 800;
+        }
+
+        .info-section {
+            margin-top: 20px;
+            padding: 17px 18px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(27, 35, 55, .58);
+        }
+
+        .info-title {
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .info-text {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 10px;
+            line-height: 1.7;
+        }
+
+        .error-box {
+            display: none;
+            margin-top: 15px;
+            padding: 12px 14px;
+            border: 1px solid rgba(248, 113, 113, .22);
+            border-radius: 11px;
+            background: rgba(248, 113, 113, .07);
+            color: #fca5a5;
+            font-size: 11px;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        .indicator-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .indicator-card {
+            min-width: 0;
+            padding: 14px;
+            border: 1px solid rgba(255, 255, 255, .07);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .035);
+        }
+
+        .indicator-name {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .indicator-value {
+            margin-top: 6px;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .indicator-change {
+            margin-top: 5px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .indicator-time {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .positive-text {
+            color: var(--green);
+        }
+
+        .negative-text {
+            color: var(--red);
+        }
+
+        .neutral-text {
+            color: var(--muted);
+        }
+
+        .market-note {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 10px;
+            line-height: 1.6;
+        }
 
         @media (max-width: 1100px) {
-
-            .topbar-inner {
+            .topbar-inner,
+            .page {
                 width: calc(100% - 24px);
             }
 
-            .page {
-                width: calc(100% - 24px);
+            .market-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .indicator-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
             .user-profile {
@@ -918,43 +887,13 @@
             }
         }
 
-
-        /* =========================================================
-           RESPONSIVE - MARKET
-        ========================================================= */
-
-        @media (max-width: 900px) {
-
-            .market-grid {
-                grid-template-columns:
-                    1fr;
-            }
-
-            .market-card {
-                min-height: 300px;
-            }
-        }
-
-
-        /* =========================================================
-           RESPONSIVE - HEADER MOBILE
-        ========================================================= */
-
-        @media (max-width: 700px) {
-
+        @media (max-width: 760px) {
             .topbar-inner {
                 width: calc(100% - 20px);
-
                 min-height: auto;
-
-                padding:
-                    10px 0;
-
+                padding: 10px 0;
                 display: grid;
-
-                grid-template-columns:
-                    1fr;
-
+                grid-template-columns: 1fr;
                 gap: 9px;
             }
 
@@ -968,2153 +907,3086 @@
 
             .nav {
                 width: 100%;
-
                 display: grid;
-
-                grid-template-columns:
-                    minmax(0, 1.45fr)
-                    repeat(3, minmax(0, 1fr));
-
+                grid-template-columns: repeat(3, minmax(0, 1fr));
                 gap: 6px;
+            }
 
-                align-items: stretch;
+            .nav-btn {
+                width: 100%;
+                padding: 0 7px;
+                font-size: 11px;
             }
 
             .user-profile {
                 width: 100%;
                 max-width: none;
-
                 flex: none;
-
                 margin-left: 0;
-
-                min-width: 0;
-
                 height: 36px;
-
-                padding:
-                    3px 7px 3px 5px;
-
-                overflow: hidden;
-            }
-
-            .user-profile img {
-                width: 28px;
-                height: 28px;
-
-                flex: 0 0 28px;
-            }
-
-            .user-profile-name {
-                min-width: 0;
-                max-width: none;
-
-                font-size: 11px;
-
-                overflow: hidden;
-
-                text-overflow: ellipsis;
-
-                white-space: nowrap;
-            }
-
-            .nav-btn {
-                width: 100%;
-
-                min-width: 0;
-
-                min-height: 36px;
-                height: 36px;
-
-                padding:
-                    0 8px;
-
-                font-size: 11px;
-
-                overflow: hidden;
-
-                text-overflow: ellipsis;
-
-                white-space: nowrap;
-            }
-
-
-            /* Market status */
-
-            .market-status {
-                align-items: stretch;
-
-                flex-direction: column;
-
-                gap: 10px;
-            }
-
-            .status-left {
-                width: 100%;
-            }
-
-            .refresh-btn {
-                width: 100%;
-            }
-        }
-
-
-        /* =========================================================
-           RESPONSIVE - SMALL MOBILE
-        ========================================================= */
-
-        @media (max-width: 560px) {
-
-            .topbar-inner {
-                width: calc(100% - 16px);
-            }
-
-            .brand {
-                gap: 9px;
-            }
-
-            .brand-icon {
-                width: 38px;
-                height: 38px;
-
-                flex-basis: 38px;
-            }
-
-            .brand-icon img {
-                width: 38px;
-                height: 38px;
-            }
-
-            .brand-title {
-                font-size: 14px;
-            }
-
-            .nav {
-                grid-template-columns:
-                    minmax(0, 1.35fr)
-                    repeat(3, minmax(0, 1fr));
-
-                gap: 5px;
-            }
-
-            .nav-btn {
-                padding:
-                    0 5px;
-
-                font-size: 10px;
-
-                border-radius: 9px;
-            }
-
-            .user-profile {
-                padding:
-                    3px 5px 3px 4px;
-
-                border-radius: 9px;
-            }
-
-            .user-profile img {
-                width: 27px;
-                height: 27px;
-
-                flex-basis: 27px;
-            }
-
-            .user-profile-name {
-                font-size: 10px;
             }
 
             .page {
                 width: calc(100% - 20px);
-
-                padding:
-                    25px 0 40px;
+                padding-top: 25px;
             }
 
+            .market-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .panel-header {
+                flex-direction: column;
+            }
+
+            .panel-controls {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .view-switch,
+            .chart-type-switch {
+                width: 100%;
+            }
+
+            .view-btn,
+            .chart-type-btn {
+                flex: 1;
+            }
+
+            .custom-date {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .date-input {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .chart-wrap {
+                height: 320px;
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .indicator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
             .hero h1 {
                 font-size: 28px;
             }
 
             .hero p {
-                font-size: 13px;
-            }
-
-            .market-card {
-                padding: 17px;
-
-                border-radius: 15px;
-
-                min-height: 300px;
-            }
-
-            .card-head {
-                gap: 7px;
-            }
-
-            .asset {
-                gap: 8px;
-            }
-
-            .asset-icon {
-                width: 38px;
-                height: 38px;
-
-                flex-basis: 38px;
-
-                font-size: 18px;
-
-                border-radius: 11px;
-            }
-
-            .asset-name {
-                font-size: 14px;
-            }
-
-            .source-badge {
-                font-size: 9px;
-
-                padding:
-                    4px 6px;
-            }
-
-            .price {
-                font-size: 29px;
-            }
-
-            .period-grid {
-                gap: 7px;
-            }
-
-            .period {
-                padding:
-                    10px 7px;
-            }
-
-            .period-title {
-                font-size: 9px;
-            }
-
-            .period-value {
                 font-size: 12px;
             }
 
-             .card-footer {
-                left: 17px;
-                right: 17px;
-                bottom: 15px;
-                font-size: 10px;
+            .market-status {
+                align-items: flex-start;
+            }
+
+            .status-left {
                 line-height: 1.5;
             }
 
-            .info-section {
-                padding: 15px;
-            }
-        }
-
-
-        /* =========================================================
-           RESPONSIVE - VERY SMALL MOBILE
-        ========================================================= */
-
-        @media (max-width: 380px) {
-
-            .nav {
-                grid-template-columns:
-                    minmax(0, 1.2fr)
-                    repeat(3, minmax(0, 1fr));
-
-                gap: 4px;
+            .refresh-btn {
+                padding: 0 10px;
             }
 
-            .nav-btn {
-                padding:
-                    0 3px;
-
-                font-size: 9px;
+            .asset-card {
+                padding: 16px;
             }
 
-            .user-profile-name {
-                font-size: 9px;
-            }
-
-            .brand-title {
-                font-size: 13px;
-            }
-
-            .page {
-                width: calc(100% - 16px);
-            }
-
-            .hero h1 {
-                font-size: 25px;
-            }
-
-            .market-card {
+            .analysis-panel,
+            .history-section,
+            .indicator-section {
                 padding: 15px;
             }
 
-            .price {
-                font-size: 27px;
+            .asset-selector {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
-            .period-grid {
-                grid-template-columns:
-                    1fr;
+            .asset-selector-btn {
+                justify-content: center;
             }
 
-            .period {
-                display: flex;
-
-                justify-content:
-                    space-between;
-
-                align-items: center;
-
-                gap: 10px;
+            .period-row {
+                gap: 5px;
             }
 
-            .period-title {
-                margin-bottom: 0;
+            .period-btn {
+                min-width: 43px;
+                padding: 0 7px;
             }
 
-            .thai-details {
-                grid-template-columns:
-                    1fr;
+            .chart-wrap {
+                height: 280px;
             }
 
-            .thai-price-box {
-                display: flex;
-
-                justify-content:
-                    space-between;
-
-                align-items: center;
-
-                gap: 10px;
-            }
-
-            .thai-price-label {
-                margin-bottom: 0;
+            .summary-grid {
+                grid-template-columns: 1fr 1fr;
             }
         }
     </style>
 </head>
 
-
 <body>
 
-    <!-- =========================================================
-         TOPBAR
-    ========================================================= -->
+<header class="topbar">
 
-    <header class="topbar">
+    <div class="topbar-inner">
 
-        <div class="topbar-inner">
+        <div class="brand">
 
-            <!-- BRAND -->
+            <div class="brand-icon">
+                <img
+                    src="assets/images/messageImage_1790424403882.jpg"
+                    alt="Personal Finance"
+                >
+            </div>
 
-            <div class="brand">
+            <div class="brand-text">
 
-                <div class="brand-icon">
-
-                    <img
-                        src="assets/images/messageImage_1790424403882.jpg"
-                        alt="Personal Finance"
-                    >
-
+                <div class="brand-title">
+                    Personal Finance
                 </div>
 
-                <div class="brand-text">
-
-                    <div class="brand-title">
-                        Personal Finance
-                    </div>
-
-                    <div class="brand-subtitle">
-                        Private Financial Dashboard
-                    </div>
-
+                <div class="brand-subtitle">
+                    ระบบรายงานผลประกอบการส่วนตัว
                 </div>
 
             </div>
-
-
-            <!-- NAVIGATION -->
-
-            <nav class="nav">
-
-                <!-- GOOGLE USER -->
-
-                <div class="user-profile">
-
-                    <img
-                        id="userPhoto"
-                        src=""
-                        alt="Profile"
-                    >
-
-                    <span
-                        id="userName"
-                        class="user-profile-name"
-                    >
-                        กำลังโหลด...
-                    </span>
-
-                </div>
-
-
-                <!-- DASHBOARD -->
-
-                <a
-                    href="dashboard.html"
-                    class="nav-btn active"
-                >
-                    Dashboard
-                </a>
-
-
-                <!-- INVESTMENT HISTORY -->
-
-                <a
-                    href="investment-history.html"
-                    class="nav-btn"
-                >
-                    ประวัติการลงทุน
-                </a>
-
-
-                <!-- LOGOUT -->
-
-                <button
-                    type="button"
-                    id="logoutBtn"
-                    class="nav-btn logout-btn"
-                >
-                    ออกจากระบบ
-                </button>
-
-            </nav>
 
         </div>
 
-    </header>
+        <nav class="nav">
 
+            <a
+                href="dashboard.html"
+                class="nav-btn active"
+            >
+                Dashboard
+            </a>
 
-    <!-- =========================================================
-         MAIN
-    ========================================================= -->
+            <a
+                href="investment-history.html"
+                class="nav-btn"
+            >
+                ประวัติการลงทุน
+            </a>
 
-    <main class="page">
+            <button
+                id="logoutBtn"
+                class="nav-btn logout-btn"
+                type="button"
+            >
+                ออกจากระบบ
+            </button>
 
-        <section class="hero">
+            <div class="user-profile">
 
-            <h1>
-                ภาพรวมตลาด
-            </h1>
+                <img
+                    id="userPhoto"
+                    src=""
+                    alt="Profile"
+                >
 
-            <p>
-                ติดตาม Bitcoin ราคาทองคำโลก และราคาทองคำไทย
-                จากข้อมูลตลาดภายนอกแบบเรียลไทม์
-            </p>
+                <span
+                    id="userName"
+                    class="user-profile-name"
+                >
+                    ผู้ใช้งาน
+                </span>
 
+            </div>
 
-            <!-- MARKET STATUS -->
+        </nav>
 
-            <div class="market-status">
+    </div>
 
-                <div class="status-left">
+</header>
 
-                    <span
-                        class="status-dot"
-                        id="statusDot"
-                    ></span>
+<main class="page">
 
-                    <span id="updatedAt">
-                        กำลังตรวจสอบข้อมูลตลาด...
-                    </span>
+    <section class="hero">
+
+        <h1>
+            Market Dashboard
+        </h1>
+
+        <p>
+            ภาพรวมตลาดและผลตอบแทนย้อนหลัง
+            สำหรับ Bitcoin, SET Index, Gold และ Silver
+        </p>
+
+        <div class="market-status">
+
+            <div class="status-left">
+
+                <span
+                    id="statusDot"
+                    class="status-dot"
+                ></span>
+
+                <span id="updatedAt">
+                    กำลังเตรียมข้อมูลตลาด...
+                </span>
+
+            </div>
+
+            <button
+                id="refreshBtn"
+                class="refresh-btn"
+                type="button"
+            >
+                ↻ รีเฟรช
+            </button>
+
+        </div>
+
+    </section>
+
+    <section
+        id="marketGrid"
+        class="market-grid"
+    >
+
+        <article class="asset-card">
+
+            <div class="asset-head">
+
+                <div class="asset-icon">
+                    ₿
+                </div>
+
+                <div class="asset-title">
+
+                    <div class="asset-name">
+                        Bitcoin
+                    </div>
+
+                    <div class="asset-symbol">
+                        BTC / USD
+                    </div>
 
                 </div>
 
+            </div>
+
+            <div class="asset-price-label">
+                ราคาปัจจุบัน
+            </div>
+
+            <div
+                id="btcPrice"
+                class="asset-price"
+            >
+                —
+            </div>
+
+            <div
+                id="btcChange"
+                class="asset-change neutral"
+            >
+                —
+            </div>
+
+            <div
+                id="btcTime"
+                class="asset-time"
+            >
+                Binance
+            </div>
+
+        </article>
+
+        <article class="asset-card set">
+
+            <div class="asset-head">
+
+                <div class="asset-icon">
+                    🇹🇭
+                </div>
+
+                <div class="asset-title">
+
+                    <div class="asset-name">
+                        SET Index
+                    </div>
+
+                    <div class="asset-symbol">
+                        Thailand Stock Exchange
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="asset-price-label">
+                ค่าดัชนีล่าสุด
+            </div>
+
+            <div
+                id="setPrice"
+                class="asset-price"
+            >
+                —
+            </div>
+
+            <div
+                id="setChange"
+                class="asset-change neutral"
+            >
+                —
+            </div>
+
+            <div
+                id="setTime"
+                class="asset-time"
+            >
+                Yahoo Finance
+            </div>
+
+        </article>
+
+        <article class="asset-card gold">
+
+            <div class="asset-head">
+
+                <div class="asset-icon">
+                    🟡
+                </div>
+
+                <div class="asset-title">
+
+                    <div class="asset-name">
+                        Gold
+                    </div>
+
+                    <div class="asset-symbol">
+                        Gold Futures / USD
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="asset-price-label">
+                ราคาปัจจุบัน
+            </div>
+
+            <div
+                id="goldPrice"
+                class="asset-price"
+            >
+                —
+            </div>
+
+            <div
+                id="goldChange"
+                class="asset-change neutral"
+            >
+                —
+            </div>
+
+            <div
+                id="goldTime"
+                class="asset-time"
+            >
+                Yahoo Finance
+            </div>
+
+        </article>
+
+        <article class="asset-card silver">
+
+            <div class="asset-head">
+
+                <div class="asset-icon">
+                    ◇
+                </div>
+
+                <div class="asset-title">
+
+                    <div class="asset-name">
+                        Silver
+                    </div>
+
+                    <div class="asset-symbol">
+                        Silver Futures / USD
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="asset-price-label">
+                ราคาปัจจุบัน
+            </div>
+
+            <div
+                id="silverPrice"
+                class="asset-price"
+            >
+                —
+            </div>
+
+            <div
+                id="silverChange"
+                class="asset-change neutral"
+            >
+                —
+            </div>
+
+            <div
+                id="silverTime"
+                class="asset-time"
+            >
+                Yahoo Finance
+            </div>
+
+        </article>
+
+    </section>
+
+    <div
+        id="errorBox"
+        class="error-box"
+    ></div>
+
+    <section class="analysis-panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <div class="panel-title">
+                    วิเคราะห์ตลาดย้อนหลัง
+                </div>
+
+                <div
+                    id="chartSubtitle"
+                    class="panel-subtitle"
+                >
+                    Bitcoin · 1 เดือน · ราคา · Line
+                </div>
+
+            </div>
+
+            <div class="panel-controls">
+
+                <div class="view-switch">
+
+                    <button
+                        id="priceModeBtn"
+                        class="view-btn active"
+                        type="button"
+                    >
+                        ราคา
+                    </button>
+
+                    <button
+                        id="returnModeBtn"
+                        class="view-btn"
+                        type="button"
+                    >
+                        % ผลตอบแทน
+                    </button>
+
+                </div>
+
+                <div class="chart-type-switch">
+
+                    <button
+                        class="chart-type-btn active"
+                        data-chart-type="line"
+                        type="button"
+                    >
+                        Line
+                    </button>
+
+                    <button
+                        class="chart-type-btn"
+                        data-chart-type="bar"
+                        type="button"
+                    >
+                        Bar
+                    </button>
+
+                    <button
+                        class="chart-type-btn"
+                        data-chart-type="candlestick"
+                        type="button"
+                    >
+                        Candlestick
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="asset-selector">
+
+            <button
+                class="asset-selector-btn active"
+                data-asset="btc"
+                type="button"
+            >
+                ₿ Bitcoin
+            </button>
+
+            <button
+                class="asset-selector-btn"
+                data-asset="set"
+                type="button"
+            >
+                🇹🇭 SET
+            </button>
+
+            <button
+                class="asset-selector-btn"
+                data-asset="gold"
+                type="button"
+            >
+                🟡 Gold
+            </button>
+
+            <button
+                class="asset-selector-btn"
+                data-asset="silver"
+                type="button"
+            >
+                ◇ Silver
+            </button>
+
+        </div>
+
+        <div class="period-row">
+
+            <button
+                class="period-btn"
+                data-period="1d"
+                type="button"
+            >
+                1D
+            </button>
+
+            <button
+                class="period-btn active"
+                data-period="1m"
+                type="button"
+            >
+                1M
+            </button>
+
+            <button
+                class="period-btn"
+                data-period="3m"
+                type="button"
+            >
+                3M
+            </button>
+
+            <button
+                class="period-btn"
+                data-period="6m"
+                type="button"
+            >
+                6M
+            </button>
+
+            <button
+                class="period-btn"
+                data-period="1y"
+                type="button"
+            >
+                1Y
+            </button>
+
+            <button
+                class="period-btn"
+                data-period="3y"
+                type="button"
+            >
+                3Y
+            </button>
+
+            <button
+                class="period-btn"
+                data-period="5y"
+                type="button"
+            >
+                5Y
+            </button>
+
+            <button
+                class="period-btn"
+                data-period="ytd"
+                type="button"
+            >
+                YTD
+            </button>
+
+            <button
+                id="customPeriodBtn"
+                class="period-btn"
+                data-period="custom"
+                type="button"
+            >
+                กำหนดเอง
+            </button>
+
+            <div
+                id="customDate"
+                class="custom-date"
+            >
+
+                <input
+                    id="startDate"
+                    class="date-input"
+                    type="date"
+                >
+
+                <span>
+                    -
+                </span>
+
+                <input
+                    id="endDate"
+                    class="date-input"
+                    type="date"
+                >
 
                 <button
+                    id="applyDateBtn"
+                    class="period-btn"
                     type="button"
-                    id="refreshBtn"
-                    class="refresh-btn"
                 >
-                    ↻ รีเฟรชข้อมูล
+                    ใช้
                 </button>
 
             </div>
 
-        </section>
-
-
-        <!-- ERROR -->
-
-        <div
-            id="errorBox"
-            class="error-box"
-        ></div>
-
-
-        <!-- =====================================================
-             MARKET CARDS
-        ====================================================== -->
-
-        <section class="market-grid">
-
-
-            <!-- =================================================
-                 BITCOIN
-            ================================================== -->
-
-            <article class="market-card">
-
-                <div class="card-head">
-
-                    <div class="asset">
-
-                        <div class="asset-icon">
-                            ₿
-                        </div>
-
-                        <div>
-
-                            <div class="asset-name">
-                                Bitcoin
-                            </div>
-
-                            <div class="asset-code">
-                                BTC / USD
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="source-badge">
-                        CoinGecko
-                    </div>
-
-                </div>
-
-
-                <div class="price-label">
-                    ราคาปัจจุบัน
-                </div>
-
-
-                <div
-                    class="price"
-                    id="btcPrice"
-                >
-                    <span class="loading"></span>
-                </div>
-
-
-                <div
-                    id="btcToday"
-                    class="main-change change-neutral"
-                >
-                    กำลังโหลด...
-                </div>
-
-
-                <div class="period-grid">
-
-                    <div class="period">
-
-                        <div class="period-title">
-                            วันนี้
-                        </div>
-
-                        <div
-                            id="btcDay"
-                            class="period-value"
-                        >
-                            —
-                        </div>
-
-                    </div>
-
-
-                    <div class="period">
-
-                        <div class="period-title">
-                            1 เดือน
-                        </div>
-
-                        <div
-                            id="btcMonth"
-                            class="period-value"
-                        >
-                            —
-                        </div>
-
-                    </div>
-
-
-                    <div class="period">
-
-                        <div class="period-title">
-                            1 ปี
-                        </div>
-
-                        <div
-                            id="btcYear"
-                            class="period-value"
-                        >
-                            —
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="card-footer">
-                    ราคาหน่วย USD / BTC
-                </div>
-
-            </article>
-
-
-            <!-- =================================================
-                 WORLD GOLD
-            ================================================== -->
-
-            <article class="market-card gold">
-
-                <div class="card-head">
-
-                    <div class="asset">
-
-                        <div class="asset-icon">
-                            🥇
-                        </div>
-
-                        <div>
-
-                            <div class="asset-name">
-                                ทองคำโลก
-                            </div>
-
-                            <div class="asset-code">
-                                XAU / USD
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="source-badge">
-                        Gold API
-                    </div>
-
-                </div>
-
-
-                <div class="price-label">
-                    ราคาปัจจุบัน
-                </div>
-
-
-                <div
-                    class="price"
-                    id="goldPrice"
-                >
-                    <span class="loading"></span>
-                </div>
-
-
-                <div
-                    id="goldToday"
-                    class="main-change change-neutral"
-                >
-                    กำลังโหลด...
-                </div>
-
-
-                <div class="period-grid">
-
-                    <div class="period">
-
-                        <div class="period-title">
-                            วันนี้
-                        </div>
-
-                        <div
-                            id="goldDay"
-                            class="period-value"
-                        >
-                            —
-                        </div>
-
-                    </div>
-
-
-                    <div class="period">
-
-                        <div class="period-title">
-                            1 เดือน
-                        </div>
-
-                        <div
-                            id="goldMonth"
-                            class="period-value"
-                        >
-                            —
-                        </div>
-
-                    </div>
-
-
-                    <div class="period">
-
-                        <div class="period-title">
-                            1 ปี
-                        </div>
-
-                        <div
-                            id="goldYear"
-                            class="period-value"
-                        >
-                            —
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="card-footer">
-                    ราคาทองคำโลก หน่วย USD / Troy Ounce
-                </div>
-
-            </article>
-
-
-            <!-- =================================================
-                 THAI GOLD
-            ================================================== -->
-
-            <article class="market-card thai-gold">
-
-                <div class="card-head">
-
-                    <div class="asset">
-
-                        <div class="asset-icon">
-                            🇹🇭
-                        </div>
-
-                        <div>
-
-                            <div class="asset-name">
-                                ทองคำไทย
-                            </div>
-
-                            <div class="asset-code">
-                                ทองคำแท่ง 96.5%
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="source-badge">
-                        Thai Gold API
-                    </div>
-
-                </div>
-
-
-                <div class="price-label">
-                    ราคาขายออก
-                </div>
-
-
-                <div
-                    class="price"
-                    id="thaiGoldPrice"
-                >
-                    <span class="loading"></span>
-                </div>
-
-
-                <div
-                    id="thaiGoldToday"
-                    class="main-change change-neutral"
-                >
-                    กำลังโหลด...
-                </div>
-
-
-                <div class="thai-details">
-
-                    <div class="thai-price-box">
-
-                        <div class="thai-price-label">
-                            รับซื้อ
-                        </div>
-
-                        <div
-                            id="thaiGoldBuy"
-                            class="thai-price-value"
-                        >
-                            —
-                        </div>
-
-                    </div>
-
-
-                    <div class="thai-price-box">
-
-                        <div class="thai-price-label">
-                            ขายออก
-                        </div>
-
-                        <div
-                            id="thaiGoldSell"
-                            class="thai-price-value"
-                        >
-                            —
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="thai-update">
-
-                    อัปเดตล่าสุด:
-
-                    <span id="thaiGoldUpdate">
-                        —
-                    </span>
-
-                </div>
-
-
-                <div class="card-footer">
-                   
-                </div>
-
-            </article>
-
-        </section>
-
-
-        <!-- =====================================================
-             INFO
-        ====================================================== -->
-
-        <section class="info-section">
-
-            <div class="info-title">
-                ℹ️ หมายเหตุข้อมูลตลาด
+        </div>
+
+        <div class="chart-wrap">
+
+            <div
+                id="chartLoading"
+                class="chart-loading"
+            >
+                <div class="spinner"></div>
             </div>
 
-            <div class="info-text">
+            <canvas id="marketChart"></canvas>
 
-                ราคาตลาดเป็นข้อมูลจาก API ภายนอก
-                ใช้สำหรับติดตามภาพรวมเท่านั้น
-                ข้อมูลย้อนหลังจะแสดงเมื่อ API
-                สามารถให้ข้อมูลย้อนหลังได้
+        </div>
 
-                <br>
+        <div class="summary-grid">
 
-                ราคาทองคำไทยอ้างอิงทองคำแท่ง 96.5%
-                และแสดงราคาตามรอบการประกาศล่าสุดของแหล่งข้อมูล
-
+            <div class="summary-item">
+                <div class="summary-label">ราคาเริ่มต้น</div>
+                <div id="summaryStart" class="summary-value">—</div>
             </div>
 
-        </section>
+            <div class="summary-item">
+                <div class="summary-label">ราคาปัจจุบัน</div>
+                <div id="summaryCurrent" class="summary-value">—</div>
+            </div>
 
-    </main>
+            <div class="summary-item">
+                <div class="summary-label">เปลี่ยนแปลง</div>
+                <div id="summaryChange" class="summary-value">—</div>
+            </div>
 
+            <div class="summary-item">
+                <div class="summary-label">ผลตอบแทน</div>
+                <div id="summaryReturn" class="summary-value">—</div>
+            </div>
 
-    <!-- =========================================================
-         JAVASCRIPT
-    ========================================================= -->
+            <div class="summary-item">
+                <div class="summary-label">จุดสูงสุด</div>
+                <div id="summaryHigh" class="summary-value">—</div>
+            </div>
 
-    <script type="module">
+            <div class="summary-item">
+                <div class="summary-label">จุดต่ำสุด</div>
+                <div id="summaryLow" class="summary-value">—</div>
+            </div>
 
-        import {
-            watchAuth,
-            logout
-        } from "./js/auth.js";
+        </div>
 
+    </section>
 
-        /* =========================================================
-           DOM HELPERS
-        ========================================================= */
+    <section class="indicator-section">
 
-        const $ = (id) =>
-            document.getElementById(id);
+        <div class="history-title">
+            ตัวชี้วัดตลาดที่เกี่ยวข้อง
+        </div>
 
+        <div class="history-subtitle">
+            ข้อมูลเสริมสำหรับดูทิศทางตลาดโดยรวม โหลดแยกจากกราฟหลักเพื่อให้หน้าแรกตอบสนองเร็วขึ้น
+        </div>
 
-        /* =========================================================
-           NUMBER HELPERS
-        ========================================================= */
+        <div class="indicator-grid">
 
-        function parseNumber(value) {
+            <article class="indicator-card">
+                <div class="indicator-name">S&P 500</div>
+                <div id="sp500Value" class="indicator-value">—</div>
+                <div id="sp500Change" class="indicator-change neutral-text">—</div>
+                <div id="sp500Time" class="indicator-time">กำลังโหลด...</div>
+            </article>
 
-            if (
-                value === null ||
-                value === undefined ||
-                value === ""
-            ) {
-                return NaN;
+            <article class="indicator-card">
+                <div class="indicator-name">NASDAQ Composite</div>
+                <div id="nasdaqValue" class="indicator-value">—</div>
+                <div id="nasdaqChange" class="indicator-change neutral-text">—</div>
+                <div id="nasdaqTime" class="indicator-time">กำลังโหลด...</div>
+            </article>
+
+            <article class="indicator-card">
+                <div class="indicator-name">US Dollar Index</div>
+                <div id="dxyValue" class="indicator-value">—</div>
+                <div id="dxyChange" class="indicator-change neutral-text">—</div>
+                <div id="dxyTime" class="indicator-time">กำลังโหลด...</div>
+            </article>
+
+            <article class="indicator-card">
+                <div class="indicator-name">Crude Oil WTI</div>
+                <div id="oilValue" class="indicator-value">—</div>
+                <div id="oilChange" class="indicator-change neutral-text">—</div>
+                <div id="oilTime" class="indicator-time">กำลังโหลด...</div>
+            </article>
+
+        </div>
+
+        <div class="market-note">
+            ตัวชี้วัดเป็นข้อมูลตลาดภายนอก ใช้เพื่อประกอบการวิเคราะห์ ไม่ใช่คำแนะนำในการลงทุน
+        </div>
+
+    </section>
+
+    <section class="history-section">
+
+        <div class="history-title">
+            สรุปผลตอบแทนย้อนหลัง
+        </div>
+
+        <div class="history-subtitle">
+            เปรียบเทียบการเปลี่ยนแปลงของตลาดในช่วงเวลาที่เลือก
+        </div>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ตลาด</th>
+                        <th>ราคาเริ่มต้น</th>
+                        <th>ราคาล่าสุด</th>
+                        <th>เปลี่ยนแปลง</th>
+                        <th>ผลตอบแทน</th>
+                        <th>สูงสุด</th>
+                        <th>ต่ำสุด</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="historyTable">
+
+                    <tr>
+                        <td colspan="7">
+                            กำลังโหลดข้อมูล...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <section class="info-section">
+
+        <div class="info-title">
+            หมายเหตุข้อมูล
+        </div>
+
+        <div class="info-text">
+            ข้อมูลใน Dashboard นี้เป็นข้อมูลตลาดจาก API ภายนอก
+            ใช้สำหรับติดตามภาพรวมและวิเคราะห์แนวโน้ม
+            ไม่ใช่ข้อมูลพอร์ตการลงทุนส่วนบุคคล
+            และราคาบางตลาดอาจมีความล่าช้าหรือแตกต่างจากตลาดจริง
+        </div>
+
+    </section>
+
+</main>
+
+<script type="module">
+
+    import {
+        watchAuth,
+        logout
+    } from "./js/auth.js";
+
+    const PROXIES = [
+        {
+            name: "AllOrigins",
+            build: targetUrl =>
+                `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`
+        }
+    ];
+
+    const ASSETS = {
+        btc: {
+            name: "Bitcoin",
+            symbol: "BTC / USD",
+            source: "Binance",
+            currency: "USD",
+            decimals: 2,
+            binance: "BTCUSDT"
+        },
+        set: {
+            name: "SET Index",
+            symbol: "SET",
+            source: "Yahoo Finance",
+            currency: "POINT",
+            decimals: 2,
+            yahoo: "^SET.BK"
+        },
+        gold: {
+            name: "Gold",
+            symbol: "XAU / USD",
+            source: "Yahoo Finance",
+            currency: "USD",
+            decimals: 2,
+            yahoo: "GC=F"
+        },
+        silver: {
+            name: "Silver",
+            symbol: "XAG / USD",
+            source: "Yahoo Finance",
+            currency: "USD",
+            decimals: 3,
+            yahoo: "SI=F"
+        }
+    };
+
+    const RELATED = {
+        sp500: {
+            name: "S&P 500",
+            yahoo: "^GSPC",
+            decimals: 2
+        },
+        nasdaq: {
+            name: "NASDAQ Composite",
+            yahoo: "^IXIC",
+            decimals: 2
+        },
+        dxy: {
+            name: "US Dollar Index",
+            yahoo: "DX-Y.NYB",
+            decimals: 3
+        },
+        oil: {
+            name: "Crude Oil WTI",
+            yahoo: "CL=F",
+            decimals: 2
+        }
+    };
+
+    let chart = null;
+    let selectedAsset = "btc";
+    let selectedPeriod = "1m";
+    let selectedMode = "price";
+    let selectedChartType = "line";
+    let customStart = null;
+    let customEnd = null;
+
+    let marketData = {};
+
+    const dataCache = new Map();
+    const inFlightCache = new Map();
+    const relatedCache = new Map();
+
+    const CACHE_TTL = 60000;
+    const REQUEST_TIMEOUT = 15000;
+    const MAX_RETRIES = 2;
+
+    const $ = id =>
+        document.getElementById(id);
+
+    function number(value, decimals = 2) {
+
+        if (
+            value === null ||
+            value === undefined ||
+            !Number.isFinite(Number(value))
+        ) {
+            return "—";
+        }
+
+        return Number(value).toLocaleString(
+            "en-US",
+            {
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals
+            }
+        );
+    }
+
+    function percent(value) {
+
+        if (
+            value === null ||
+            value === undefined ||
+            !Number.isFinite(Number(value))
+        ) {
+            return "—";
+        }
+
+        const n =
+            Number(value);
+
+        return `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
+    }
+
+    function signed(value, decimals = 2) {
+
+        if (
+            value === null ||
+            value === undefined ||
+            !Number.isFinite(Number(value))
+        ) {
+            return "—";
+        }
+
+        const n =
+            Number(value);
+
+        return `${n >= 0 ? "+" : ""}${number(n, decimals)}`;
+    }
+
+    function formatDateTime(timestamp) {
+
+        if (!timestamp) {
+            return "—";
+        }
+
+        const date =
+            new Date(timestamp);
+
+        return date.toLocaleString(
+            "th-TH",
+            {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+    }
+
+    function getReturn(start, end) {
+
+        if (
+            !Number.isFinite(start) ||
+            !Number.isFinite(end) ||
+            start === 0
+        ) {
+            return null;
+        }
+
+        return ((end - start) / start) * 100;
+    }
+
+    function getDateRange(period) {
+
+        const now =
+            new Date();
+
+        const end =
+            new Date(now);
+
+        const start =
+            new Date(now);
+
+        switch (period) {
+
+            case "1d":
+                start.setDate(
+                    start.getDate() - 1
+                );
+                break;
+
+            case "1m":
+                start.setMonth(
+                    start.getMonth() - 1
+                );
+                break;
+
+            case "3m":
+                start.setMonth(
+                    start.getMonth() - 3
+                );
+                break;
+
+            case "6m":
+                start.setMonth(
+                    start.getMonth() - 6
+                );
+                break;
+
+            case "1y":
+                start.setFullYear(
+                    start.getFullYear() - 1
+                );
+                break;
+
+            case "3y":
+                start.setFullYear(
+                    start.getFullYear() - 3
+                );
+                break;
+
+            case "5y":
+                start.setFullYear(
+                    start.getFullYear() - 5
+                );
+                break;
+
+            case "ytd":
+                start.setMonth(0);
+                start.setDate(1);
+                break;
+
+            case "custom":
+                return {
+                    start:
+                        customStart
+                            ? new Date(
+                                `${customStart}T00:00:00`
+                            )
+                            : new Date(
+                                now.getFullYear(),
+                                now.getMonth(),
+                                now.getDate() - 30
+                            ),
+                    end:
+                        customEnd
+                            ? new Date(
+                                `${customEnd}T23:59:59`
+                            )
+                            : end
+                };
+        }
+
+        return {
+            start,
+            end
+        };
+    }
+
+    function cacheKey(
+        asset,
+        start,
+        end,
+        interval
+    ) {
+
+        return [
+            asset,
+            start.getTime(),
+            end.getTime(),
+            interval
+        ].join("|");
+    }
+
+    function yahooCacheKey(
+        symbol,
+        start,
+        end,
+        interval
+    ) {
+
+        return [
+            "yahoo",
+            symbol,
+            start.getTime(),
+            end.getTime(),
+            interval
+        ].join("|");
+    }
+
+    async function fetchJson(
+        url,
+        timeout = REQUEST_TIMEOUT
+    ) {
+
+        const controller =
+            new AbortController();
+
+        let timer = null;
+
+        try {
+
+            timer =
+                setTimeout(
+                    () => {
+                        controller.abort();
+                    },
+                    timeout
+                );
+
+            const response =
+                await fetch(
+                    url,
+                    {
+                        method: "GET",
+                        cache: "no-store",
+                        signal: controller.signal
+                    }
+                );
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
+
             }
 
-            return Number(
-                String(value)
-                    .replace(/,/g, "")
-                    .replace(/[^\d.-]/g, "")
+            return await response.json();
+
+        } catch (error) {
+
+            if (
+                error?.name === "AbortError"
+            ) {
+
+                throw new Error(
+                    "หมดเวลารอข้อมูลจาก Proxy"
+                );
+
+            }
+
+            throw error;
+
+        } finally {
+
+            if (timer) {
+                clearTimeout(timer);
+            }
+
+        }
+    }
+
+    function buildYahooUrl(
+        symbol,
+        start,
+        end,
+        interval = "1d"
+    ) {
+
+        const period1 =
+            Math.floor(
+                start.getTime() / 1000
+            );
+
+        const period2 =
+            Math.floor(
+                end.getTime() / 1000
+            );
+
+        const url =
+            new URL(
+                `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}`
+            );
+
+        url.searchParams.set(
+            "period1",
+            period1
+        );
+
+        url.searchParams.set(
+            "period2",
+            period2
+        );
+
+        url.searchParams.set(
+            "interval",
+            interval
+        );
+
+        url.searchParams.set(
+            "events",
+            "history"
+        );
+
+        return url.toString();
+    }
+
+    function parseYahooResult(
+        json,
+        symbol
+    ) {
+
+        const result =
+            json?.chart?.result?.[0];
+
+        if (!result) {
+
+            const message =
+                json?.chart?.error?.description ||
+                `ไม่พบข้อมูล ${symbol} จาก Yahoo Finance`;
+
+            throw new Error(
+                message
             );
         }
 
+        const timestamps =
+            result.timestamp || [];
 
-        function formatUSD(value) {
+        const quote =
+            result?.indicators?.quote?.[0] || {};
 
-            if (!Number.isFinite(value)) {
-                return "—";
-            }
+        const opens =
+            quote.open || [];
 
-            return new Intl.NumberFormat(
-                "en-US",
-                {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }
-            ).format(value);
-        }
+        const highs =
+            quote.high || [];
 
+        const lows =
+            quote.low || [];
 
-        function formatTHB(value) {
+        const closes =
+            quote.close || [];
 
-            if (!Number.isFinite(value)) {
-                return "—";
-            }
+        const volumes =
+            quote.volume || [];
 
-            return new Intl.NumberFormat(
-                "th-TH",
-                {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }
-            ).format(value);
-        }
+        const data = [];
 
-
-        function formatPercent(value) {
-
-            if (!Number.isFinite(value)) {
-                return "—";
-            }
-
-            const sign =
-                value > 0
-                    ? "+"
-                    : "";
-
-            return (
-                sign +
-                value.toFixed(2) +
-                "%"
-            );
-        }
-
-
-        /* =========================================================
-           CHANGE DISPLAY
-        ========================================================= */
-
-        function setChange(
-            elementId,
-            value,
-            prefix = ""
+        for (
+            let i = 0;
+            i < timestamps.length;
+            i++
         ) {
 
-            const element =
-                $(elementId);
+            const timestamp =
+                Number(
+                    timestamps[i]
+                );
 
-            if (!element) {
-                return;
-            }
+            const open =
+                Number(
+                    opens[i]
+                );
 
-            if (!Number.isFinite(value)) {
+            const high =
+                Number(
+                    highs[i]
+                );
 
-                element.textContent =
-                    prefix
-                        ? prefix
-                        : "—";
+            const low =
+                Number(
+                    lows[i]
+                );
 
-                element.className =
-                    "main-change change-neutral";
+            const close =
+                Number(
+                    closes[i]
+                );
 
-                return;
-            }
-
-
-            const sign =
-                value > 0
-                    ? "▲ "
-                    : value < 0
-                        ? "▼ "
-                        : "• ";
-
-
-            element.textContent =
-                sign +
-                formatPercent(value);
-
-
-            if (value > 0) {
-
-                element.className =
-                    "main-change change-positive";
-
-            } else if (value < 0) {
-
-                element.className =
-                    "main-change change-negative";
-
-            } else {
-
-                element.className =
-                    "main-change change-neutral";
-            }
-        }
-
-
-        function setPeriod(
-            elementId,
-            value
-        ) {
-
-            const element =
-                $(elementId);
-
-            if (!element) {
-                return;
-            }
-
-            if (!Number.isFinite(value)) {
-
-                element.textContent =
-                    "—";
-
-                element.className =
-                    "period-value";
-
-                return;
-            }
-
-
-            element.textContent =
-                formatPercent(value);
-
-
-            if (value > 0) {
-
-                element.className =
-                    "period-value change-positive";
-
-            } else if (value < 0) {
-
-                element.className =
-                    "period-value change-negative";
-
-            } else {
-
-                element.className =
-                    "period-value change-neutral";
-            }
-        }
-
-
-        /* =========================================================
-           HISTORICAL CHANGE
-        ========================================================= */
-
-        function calculateHistoricalChange(
-            prices,
-            daysAgo
-        ) {
+            const volume =
+                Number(
+                    volumes[i]
+                );
 
             if (
-                !Array.isArray(prices) ||
-                prices.length < 2
+                Number.isFinite(timestamp) &&
+                Number.isFinite(close)
             ) {
-                return null;
+
+                data.push({
+                    time:
+                        timestamp * 1000,
+                    value:
+                        close,
+                    open:
+                        Number.isFinite(open)
+                            ? open
+                            : close,
+                    high:
+                        Number.isFinite(high)
+                            ? high
+                            : close,
+                    low:
+                        Number.isFinite(low)
+                            ? low
+                            : close,
+                    close,
+                    volume:
+                        Number.isFinite(volume)
+                            ? volume
+                            : 0
+                });
+
             }
+        }
 
+        if (!data.length) {
 
-            const normalized =
-                prices
-                    .map(point => {
+            throw new Error(
+                `Yahoo Finance ไม่มีข้อมูล ${symbol} ในช่วงเวลาที่เลือก`
+            );
 
-                        if (
-                            Array.isArray(point) &&
-                            point.length >= 2
-                        ) {
+        }
 
-                            return [
-                                Number(point[0]),
-                                Number(point[1])
-                            ];
-                        }
+        return data;
+    }
 
+    async function fetchYahoo(
+        symbol,
+        start,
+        end,
+        interval = "1d"
+    ) {
 
-                        if (
-                            point &&
-                            typeof point === "object"
-                        ) {
+        const key =
+            yahooCacheKey(
+                symbol,
+                start,
+                end,
+                interval
+            );
 
-                            const timestamp =
-                                Number(
-                                    point.timestamp ??
-                                    point.time ??
-                                    point.date
+        const cached =
+            dataCache.get(key);
+
+        if (
+            cached &&
+            Date.now() - cached.time < CACHE_TTL
+        ) {
+
+            return cached.data;
+
+        }
+
+        if (
+            inFlightCache.has(key)
+        ) {
+
+            return inFlightCache.get(key);
+
+        }
+
+        const request =
+            (async () => {
+
+                let lastError =
+                    null;
+
+                for (
+                    let attempt = 0;
+                    attempt <= MAX_RETRIES;
+                    attempt++
+                ) {
+
+                    for (
+                        const proxy of PROXIES
+                    ) {
+
+                        const targetUrl =
+                            buildYahooUrl(
+                                symbol,
+                                start,
+                                end,
+                                interval
+                            );
+
+                        const proxyUrl =
+                            proxy.build(
+                                targetUrl
+                            );
+
+                        try {
+
+                            const json =
+                                await fetchJson(
+                                    proxyUrl,
+                                    REQUEST_TIMEOUT
                                 );
 
-                            const price =
-                                Number(
-                                    point.price ??
-                                    point.close ??
-                                    point.value
+                            const data =
+                                parseYahooResult(
+                                    json,
+                                    symbol
                                 );
 
-                            return [
-                                timestamp,
-                                price
-                            ];
-                        }
-
-
-                        return null;
-                    })
-                    .filter(point =>
-                        point &&
-                        Number.isFinite(point[0]) &&
-                        Number.isFinite(point[1])
-                    );
-
-
-            if (normalized.length < 2) {
-                return null;
-            }
-
-
-            normalized.sort(
-                (a, b) =>
-                    a[0] - b[0]
-            );
-
-
-            const current =
-                normalized[
-                    normalized.length - 1
-                ];
-
-
-            /*
-             * บาง API ส่ง timestamp เป็นวินาที
-             * บาง API ส่งเป็น milliseconds
-             */
-
-            const currentTimestamp =
-                current[0] < 10000000000
-                    ? current[0] * 1000
-                    : current[0];
-
-
-            const targetTime =
-                currentTimestamp -
-                (
-                    daysAgo *
-                    24 *
-                    60 *
-                    60 *
-                    1000
-                );
-
-
-            let closest = null;
-
-            let smallestDifference =
-                Infinity;
-
-
-            for (
-                const point of normalized
-            ) {
-
-                const timestamp =
-                    point[0] < 10000000000
-                        ? point[0] * 1000
-                        : point[0];
-
-
-                const difference =
-                    Math.abs(
-                        timestamp -
-                        targetTime
-                    );
-
-
-                if (
-                    difference <
-                    smallestDifference
-                ) {
-
-                    smallestDifference =
-                        difference;
-
-                    closest =
-                        point;
-                }
-            }
-
-
-            if (
-                !closest ||
-                !Number.isFinite(current[1]) ||
-                !Number.isFinite(closest[1]) ||
-                closest[1] === 0
-            ) {
-                return null;
-            }
-
-
-            return (
-                (
-                    (
-                        current[1] -
-                        closest[1]
-                    ) /
-                    closest[1]
-                ) *
-                100
-            );
-        }
-
-
-        /* =========================================================
-           HISTORY EXTRACTION
-        ========================================================= */
-
-        function extractHistory(data) {
-
-            if (!data) {
-                return [];
-            }
-
-
-            if (
-                Array.isArray(data)
-            ) {
-                return data;
-            }
-
-
-            if (
-                Array.isArray(data.prices)
-            ) {
-                return data.prices;
-            }
-
-
-            if (
-                Array.isArray(data.data)
-            ) {
-                return data.data;
-            }
-
-
-            if (
-                Array.isArray(data.history)
-            ) {
-                return data.history;
-            }
-
-
-            if (
-                Array.isArray(data.results)
-            ) {
-                return data.results;
-            }
-
-
-            if (
-                data.data &&
-                Array.isArray(data.data.prices)
-            ) {
-                return data.data.prices;
-            }
-
-
-            if (
-                data.history &&
-                Array.isArray(data.history.prices)
-            ) {
-                return data.history.prices;
-            }
-
-
-            return [];
-        }
-
-
-        /* =========================================================
-           ERROR
-        ========================================================= */
-
-        function clearError() {
-
-            const box =
-                $("errorBox");
-
-            box.style.display =
-                "none";
-
-            box.textContent =
-                "";
-        }
-
-
-        function addError(message) {
-
-            const box =
-                $("errorBox");
-
-            box.style.display =
-                "block";
-
-
-            if (box.textContent) {
-
-                box.textContent +=
-                    "\n" +
-                    message;
-
-            } else {
-
-                box.textContent =
-                    message;
-            }
-        }
-
-
-        /* =========================================================
-           BITCOIN
-        ========================================================= */
-
-        async function loadBitcoin() {
-
-            /*
-             * ขั้นที่ 1
-             * ราคาปัจจุบัน
-             */
-
-            try {
-
-                const currentUrl =
-                    "https://api.coingecko.com/api/v3/simple/price" +
-                    "?ids=bitcoin" +
-                    "&vs_currencies=usd" +
-                    "&include_24hr_change=true";
-
-
-                const response =
-                    await fetch(
-                        currentUrl,
-                        {
-                            cache:
-                                "no-store"
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "Bitcoin current API error"
-                    );
-                }
-
-
-                const data =
-                    await response.json();
-
-
-                const bitcoin =
-                    data.bitcoin;
-
-
-                const price =
-                    Number(
-                        bitcoin?.usd
-                    );
-
-
-                const today =
-                    Number(
-                        bitcoin?.usd_24h_change
-                    );
-
-
-                if (
-                    !Number.isFinite(price)
-                ) {
-
-                    throw new Error(
-                        "Bitcoin price unavailable"
-                    );
-                }
-
-
-                $("btcPrice")
-                    .innerHTML =
-                    formatUSD(price) +
-                    '<span class="price-unit">USD</span>';
-
-
-                setChange(
-                    "btcToday",
-                    today
-                );
-
-
-                setPeriod(
-                    "btcDay",
-                    today
-                );
-
-            } catch (error) {
-
-                console.error(
-                    "Bitcoin current:",
-                    error
-                );
-
-
-                $("btcPrice")
-                    .textContent =
-                    "ไม่สามารถโหลดราคา";
-
-
-                setChange(
-                    "btcToday",
-                    null
-                );
-
-
-                setPeriod(
-                    "btcDay",
-                    null
-                );
-
-
-                addError(
-                    "ไม่สามารถโหลดราคาปัจจุบันของ Bitcoin"
-                );
-            }
-
-
-            /*
-             * ขั้นที่ 2
-             * ประวัติ 365 วัน
-             */
-
-            try {
-
-                const historyUrl =
-                    "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart" +
-                    "?vs_currency=usd" +
-                    "&days=365";
-
-
-                const response =
-                    await fetch(
-                        historyUrl,
-                        {
-                            cache:
-                                "no-store"
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "Bitcoin history API error"
-                    );
-                }
-
-
-                const data =
-                    await response.json();
-
-
-                const prices =
-                    data?.prices;
-
-
-                const month =
-                    calculateHistoricalChange(
-                        prices,
-                        30
-                    );
-
-
-                const year =
-                    calculateHistoricalChange(
-                        prices,
-                        365
-                    );
-
-
-                setPeriod(
-                    "btcMonth",
-                    month
-                );
-
-
-                setPeriod(
-                    "btcYear",
-                    year
-                );
-
-            } catch (error) {
-
-                console.warn(
-                    "Bitcoin history unavailable:",
-                    error
-                );
-
-
-                setPeriod(
-                    "btcMonth",
-                    null
-                );
-
-
-                setPeriod(
-                    "btcYear",
-                    null
-                );
-            }
-        }
-
-
-        /* =========================================================
-           WORLD GOLD
-        ========================================================= */
-
-        async function loadWorldGold() {
-
-            /*
-             * ขั้นที่ 1
-             * ราคาปัจจุบัน
-             */
-
-            try {
-
-                const response =
-                    await fetch(
-                        "https://api.gold-api.com/price/XAU",
-                        {
-                            cache:
-                                "no-store"
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "World Gold current API error"
-                    );
-                }
-
-
-                const data =
-                    await response.json();
-
-
-                const price =
-                    Number(
-                        data?.price
-                    );
-
-
-                if (
-                    !Number.isFinite(price)
-                ) {
-
-                    throw new Error(
-                        "World Gold price unavailable"
-                    );
-                }
-
-
-                $("goldPrice")
-                    .innerHTML =
-                    formatUSD(price) +
-                    '<span class="price-unit">USD</span>';
-
-            } catch (error) {
-
-                console.error(
-                    "World Gold current:",
-                    error
-                );
-
-
-                $("goldPrice")
-                    .textContent =
-                    "ไม่สามารถโหลดราคา";
-
-
-                addError(
-                    "ไม่สามารถโหลดราคาทองคำโลก"
-                );
-            }
-
-
-            /*
-             * ขั้นที่ 2
-             * ประวัติ
-             */
-
-            try {
-
-                const historyUrl =
-                    "https://api.gold-api.com/history/XAU";
-
-
-                const response =
-                    await fetch(
-                        historyUrl,
-                        {
-                            cache:
-                                "no-store"
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "World Gold history unavailable"
-                    );
-                }
-
-
-                const data =
-                    await response.json();
-
-
-                const prices =
-                    extractHistory(data);
-
-
-                if (
-                    prices.length < 2
-                ) {
-
-                    throw new Error(
-                        "World Gold history has insufficient data"
-                    );
-                }
-
-
-                const day =
-                    calculateHistoricalChange(
-                        prices,
-                        1
-                    );
-
-
-                const month =
-                    calculateHistoricalChange(
-                        prices,
-                        30
-                    );
-
-
-                const year =
-                    calculateHistoricalChange(
-                        prices,
-                        365
-                    );
-
-
-                setChange(
-                    "goldToday",
-                    day
-                );
-
-
-                setPeriod(
-                    "goldDay",
-                    day
-                );
-
-
-                setPeriod(
-                    "goldMonth",
-                    month
-                );
-
-
-                setPeriod(
-                    "goldYear",
-                    year
-                );
-
-            } catch (error) {
-
-                console.warn(
-                    "World Gold history unavailable:",
-                    error
-                );
-
-
-                setChange(
-                    "goldToday",
-                    null
-                );
-
-
-                setPeriod(
-                    "goldDay",
-                    null
-                );
-
-
-                setPeriod(
-                    "goldMonth",
-                    null
-                );
-
-
-                setPeriod(
-                    "goldYear",
-                    null
-                );
-            }
-        }
-
-
-        /* =========================================================
-           THAI GOLD
-        ========================================================= */
-
-        async function loadThaiGold() {
-
-            try {
-
-                const response =
-                    await fetch(
-                        "https://api.chnwt.dev/thai-gold-api/latest",
-                        {
-                            cache:
-                                "no-store"
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "Thai Gold API error"
-                    );
-                }
-
-
-                const data =
-                    await response.json();
-
-
-                if (
-                    data?.status !==
-                    "success" ||
-                    !data?.response
-                ) {
-
-                    throw new Error(
-                        "Thai Gold invalid response"
-                    );
-                }
-
-
-                const result =
-                    data.response;
-
-
-                const goldBar =
-                    result?.price?.gold_bar;
-
-
-                const buy =
-                    parseNumber(
-                        goldBar?.buy
-                    );
-
-
-                const sell =
-                    parseNumber(
-                        goldBar?.sell
-                    );
-
-
-                if (
-                    !Number.isFinite(sell)
-                ) {
-
-                    throw new Error(
-                        "Thai Gold sell price unavailable"
-                    );
-                }
-
-
-                /*
-                 * ราคาหลัก
-                 */
-
-                $("thaiGoldPrice")
-                    .innerHTML =
-                    formatTHB(sell) +
-                    '<span class="price-unit">บาท</span>';
-
-
-                /*
-                 * ราคาซื้อ / ขาย
-                 */
-
-                $("thaiGoldBuy")
-                    .textContent =
-                    Number.isFinite(buy)
-                        ? formatTHB(buy) +
-                          " บาท"
-                        : "—";
-
-
-                $("thaiGoldSell")
-                    .textContent =
-                    formatTHB(sell) +
-                    " บาท";
-
-
-                /*
-                 * API ไม่มี % การเปลี่ยนแปลง
-                 */
-
-                const today =
-                    $("thaiGoldToday");
-
-
-                today.textContent =
-                    Number.isFinite(buy)
-                        ? "รับซื้อ " +
-                          formatTHB(buy) +
-                          " บาท"
-                        : "ข้อมูลล่าสุด";
-
-
-                today.className =
-                    "main-change change-neutral";
-
-
-                /*
-                 * ไม่มีข้อมูลย้อนหลัง
-                 */
-
-                $("thaiGoldUpdate")
-                    .textContent =
-                    (
-                        result.update_date ||
-                        "—"
-                    ) +
-                    (
-                        result.update_time
-                            ? " • " +
-                              result.update_time
-                            : ""
-                    );
-
-            } catch (error) {
-
-                console.error(
-                    "Thai Gold:",
-                    error
-                );
-
-
-                $("thaiGoldPrice")
-                    .textContent =
-                    "ไม่สามารถโหลดราคา";
-
-
-                $("thaiGoldBuy")
-                    .textContent =
-                    "—";
-
-
-                $("thaiGoldSell")
-                    .textContent =
-                    "—";
-
-
-                $("thaiGoldUpdate")
-                    .textContent =
-                    "ไม่สามารถโหลดข้อมูล";
-
-
-                $("thaiGoldToday")
-                    .textContent =
-                    "ข้อมูลไม่พร้อมใช้งาน";
-
-
-                $("thaiGoldToday")
-                    .className =
-                    "main-change change-neutral";
-
-
-                addError(
-                    "ไม่สามารถโหลดราคาทองคำไทย"
-                );
-            }
-        }
-
-
-        /* =========================================================
-           LOAD ALL
-        ========================================================= */
-
-        async function loadMarkets() {
-
-            clearError();
-
-
-            const refresh =
-                $("refreshBtn");
-
-
-            refresh.disabled =
-                true;
-
-
-            refresh.textContent =
-                "กำลังโหลด...";
-
-
-            $("statusDot")
-                .style.background =
-                "var(--yellow)";
-
-
-            $("updatedAt")
-                .textContent =
-                "กำลังอัปเดตข้อมูลตลาด...";
-
-
-            try {
-
-                /*
-                 * โหลดพร้อมกัน
-                 */
-
-                await Promise.allSettled([
-                    loadBitcoin(),
-                    loadWorldGold(),
-                    loadThaiGold()
-                ]);
-
-
-                $("statusDot")
-                    .style.background =
-                    "var(--green)";
-
-
-                $("updatedAt")
-                    .textContent =
-                    "อัปเดตหน้าเว็บล่าสุด: " +
-                    new Date()
-                        .toLocaleString(
-                            "th-TH",
-                            {
-                                dateStyle:
-                                    "medium",
-                                timeStyle:
-                                    "medium"
+                            dataCache.set(
+                                key,
+                                {
+                                    time:
+                                        Date.now(),
+                                    data
+                                }
+                            );
+
+                            return data;
+
+                        } catch (error) {
+
+                            lastError =
+                                error;
+
+                            if (
+                                error?.message?.includes(
+                                    "Yahoo Finance"
+                                ) &&
+                                !error?.message?.includes(
+                                    "หมดเวลารอ"
+                                )
+                            ) {
+                                break;
                             }
+
+                        }
+
+                    }
+
+                    if (
+                        attempt < MAX_RETRIES
+                    ) {
+
+                        await new Promise(
+                            resolve =>
+                                setTimeout(
+                                    resolve,
+                                    700 * (
+                                        attempt + 1
+                                    )
+                                )
                         );
 
-            } catch (error) {
+                    }
 
-                console.error(
-                    "Market loading:",
-                    error
+                }
+
+                throw new Error(
+                    `ไม่สามารถโหลดข้อมูล ${symbol} ผ่าน Proxy ได้` +
+                    (
+                        lastError?.message
+                            ? ` (${lastError.message})`
+                            : ""
+                    )
                 );
 
+            })();
 
-                $("statusDot")
-                    .style.background =
-                    "var(--red)";
+        inFlightCache.set(
+            key,
+            request
+        );
 
+        try {
 
-                $("updatedAt")
-                    .textContent =
-                    "มีบางข้อมูลไม่สามารถโหลดได้";
+            return await request;
+
+        } finally {
+
+            inFlightCache.delete(key);
+
+        }
+    }
+
+    async function fetchBinance(
+        symbol,
+        start,
+        end
+    ) {
+
+        const key =
+            cacheKey(
+                `binance-${symbol}`,
+                start,
+                end,
+                selectedPeriod === "1d"
+                    ? "1h"
+                    : "1d"
+            );
+
+        const cached =
+            dataCache.get(key);
+
+        if (
+            cached &&
+            Date.now() - cached.time < CACHE_TTL
+        ) {
+
+            return cached.data;
+
+        }
+
+        if (
+            inFlightCache.has(key)
+        ) {
+
+            return inFlightCache.get(key);
+
+        }
+
+        const request =
+            (async () => {
+
+                const days =
+                    Math.max(
+                        1,
+                        Math.ceil(
+                            (end - start) /
+                            86400000
+                        )
+                    );
+
+                const interval =
+                    days <= 1
+                        ? "1h"
+                        : "1d";
+
+                const limit = 1000;
+                const result = [];
+
+                let cursor =
+                    start.getTime();
+
+                while (
+                    cursor < end.getTime()
+                ) {
+
+                    const url =
+                        `https://data-api.binance.vision/api/v3/klines` +
+                        `?symbol=${encodeURIComponent(symbol)}` +
+                        `&interval=${interval}` +
+                        `&startTime=${cursor}` +
+                        `&endTime=${end.getTime()}` +
+                        `&limit=${limit}`;
+
+                    const json =
+                        await fetchJson(
+                            url,
+                            10000
+                        );
+
+                    if (
+                        !Array.isArray(json) ||
+                        !json.length
+                    ) {
+                        break;
+                    }
+
+                    for (
+                        const row of json
+                    ) {
+
+                        const time =
+                            Number(row[0]);
+
+                        const open =
+                            Number(row[1]);
+
+                        const high =
+                            Number(row[2]);
+
+                        const low =
+                            Number(row[3]);
+
+                        const close =
+                            Number(row[4]);
+
+                        const volume =
+                            Number(row[5]);
+
+                        if (
+                            Number.isFinite(time) &&
+                            Number.isFinite(open) &&
+                            Number.isFinite(high) &&
+                            Number.isFinite(low) &&
+                            Number.isFinite(close)
+                        ) {
+
+                            result.push({
+                                time,
+                                value: close,
+                                open,
+                                high,
+                                low,
+                                close,
+                                volume:
+                                    Number.isFinite(volume)
+                                        ? volume
+                                        : 0
+                            });
+
+                        }
+                    }
+
+                    const lastTime =
+                        Number(
+                            json[
+                                json.length - 1
+                            ][0]
+                        );
+
+                    if (
+                        !Number.isFinite(lastTime) ||
+                        lastTime <= cursor
+                    ) {
+                        break;
+                    }
+
+                    cursor =
+                        lastTime +
+                        (
+                            interval === "1h"
+                                ? 3600000
+                                : 86400000
+                        );
+
+                    if (
+                        json.length < limit
+                    ) {
+                        break;
+                    }
+                }
+
+                const filtered =
+                    result.filter(
+                        item =>
+                            item.time >= start.getTime() &&
+                            item.time <= end.getTime()
+                    );
+
+                dataCache.set(
+                    key,
+                    {
+                        time:
+                            Date.now(),
+                        data:
+                            filtered
+                    }
+                );
+
+                return filtered;
+
+            })();
+
+        inFlightCache.set(
+            key,
+            request
+        );
+
+        try {
+
+            return await request;
+
+        } finally {
+
+            inFlightCache.delete(key);
+
+        }
+    }
+
+    async function loadAsset(
+        asset,
+        start,
+        end
+    ) {
+
+        const interval =
+            selectedPeriod === "1d"
+                ? "1h"
+                : "1d";
+
+        const key =
+            cacheKey(
+                asset,
+                start,
+                end,
+                interval
+            );
+
+        const cached =
+            dataCache.get(key);
+
+        if (
+            cached &&
+            Date.now() - cached.time < CACHE_TTL
+        ) {
+
+            return cached.data;
+
+        }
+
+        if (
+            inFlightCache.has(key)
+        ) {
+
+            return inFlightCache.get(key);
+
+        }
+
+        const request =
+            asset === "btc"
+                ? fetchBinance(
+                    ASSETS[asset].binance,
+                    start,
+                    end
+                )
+                : fetchYahoo(
+                    ASSETS[asset].yahoo,
+                    start,
+                    end,
+                    interval
+                );
+
+        inFlightCache.set(
+            key,
+            request
+        );
+
+        try {
+
+            const data =
+                await request;
+
+            if (
+                !data ||
+                !Array.isArray(data)
+            ) {
+
+                throw new Error(
+                    `ไม่พบข้อมูล ${ASSETS[asset].name}`
+                );
+
             }
 
+            dataCache.set(
+                key,
+                {
+                    time:
+                        Date.now(),
+                    data
+                }
+            );
+
+            return data;
+
+        } finally {
+
+            inFlightCache.delete(key);
+
+        }
+    }
+
+    function summarize(data) {
+
+        if (
+            !data ||
+            !data.length
+        ) {
+            return null;
+        }
+
+        const values =
+            data
+                .map(item => Number(item.value))
+                .filter(Number.isFinite);
+
+        if (!values.length) {
+            return null;
+        }
+
+        const start =
+            values[0];
+
+        const current =
+            values[values.length - 1];
+
+        const high =
+            Math.max(...values);
+
+        const low =
+            Math.min(...values);
+
+        const change =
+            current - start;
+
+        const returnValue =
+            getReturn(
+                start,
+                current
+            );
+
+        return {
+            start,
+            current,
+            change,
+            returnValue,
+            high,
+            low
+        };
+    }
+
+    function updateCurrentCard(
+        asset,
+        data
+    ) {
+
+        const summary =
+            summarize(data);
+
+        if (!summary) {
+            return;
+        }
+
+        const config =
+            ASSETS[asset];
+
+        const priceElement =
+            $(`${asset}Price`);
+
+        const changeElement =
+            $(`${asset}Change`);
+
+        if (priceElement) {
+
+            priceElement.innerHTML =
+                `${number(
+                    summary.current,
+                    config.decimals
+                )}<span class="asset-currency">${config.currency}</span>`;
+
+        }
+
+        if (changeElement) {
+
+            changeElement.textContent =
+                percent(
+                    summary.returnValue
+                );
+
+            changeElement.className =
+                "asset-change " +
+                (
+                    summary.returnValue > 0
+                        ? "positive"
+                        : summary.returnValue < 0
+                            ? "negative"
+                            : "neutral"
+                );
+
+        }
+
+        const timeElement =
+            $(`${asset}Time`);
+
+        if (timeElement) {
+
+            timeElement.textContent =
+                `${config.source} · ${formatDateTime(
+                    data[data.length - 1].time
+                )}`;
+
+        }
+    }
+
+    async function loadCurrentMarkets() {
+
+        const now =
+            new Date();
+
+        const start =
+            new Date(now);
+
+        start.setDate(
+            start.getDate() - 3
+        );
+
+        const assets = [
+            "btc",
+            "set",
+            "gold",
+            "silver"
+        ];
+
+        const results =
+            await Promise.allSettled(
+                assets.map(
+                    asset =>
+                        loadAsset(
+                            asset,
+                            start,
+                            now
+                        )
+                )
+            );
+
+        results.forEach(
+            (result, index) => {
+
+                const asset =
+                    assets[index];
+
+                if (
+                    result.status === "fulfilled" &&
+                    result.value?.length
+                ) {
+
+                    marketData[asset] =
+                        result.value;
+
+                    updateCurrentCard(
+                        asset,
+                        result.value
+                    );
+
+                }
+
+            }
+        );
+
+        return results;
+    }
+
+    async function loadChartData() {
+
+        const range =
+            getDateRange(
+                selectedPeriod
+            );
+
+        $("chartLoading")
+            .classList
+            .add("show");
+
+        try {
+
+            const data =
+                await loadAsset(
+                    selectedAsset,
+                    range.start,
+                    range.end
+                );
+
+            if (
+                !data ||
+                !data.length
+            ) {
+
+                throw new Error(
+                    "ไม่พบข้อมูลในช่วงเวลาที่เลือก"
+                );
+
+            }
+
+            marketData[selectedAsset] =
+                data;
+
+            renderChart(data);
+            updateSummary(data);
+            updateChartSubtitle();
+
+            await updateHistoryTable(
+                range
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Chart data error:",
+                error
+            );
+
+            showError(
+                `ไม่สามารถโหลดข้อมูล ${ASSETS[selectedAsset].name} ได้\n${error.message}`
+            );
+
+        } finally {
+
+            $("chartLoading")
+                .classList
+                .remove("show");
+
+        }
+    }
+
+    function renderChart(data) {
+
+        const config =
+            ASSETS[selectedAsset];
+
+        const canvas =
+            $("marketChart");
+
+        const ctx =
+            canvas.getContext("2d");
+
+        if (chart) {
+
+            chart.destroy();
+            chart = null;
+
+        }
+
+        let effectiveCandle =
+            selectedChartType === "candlestick";
+
+        if (
+            effectiveCandle &&
+            !data.some(
+                item =>
+                    Number.isFinite(item.open) &&
+                    Number.isFinite(item.high) &&
+                    Number.isFinite(item.low) &&
+                    Number.isFinite(item.close)
+            )
+        ) {
+
+            selectedChartType =
+                "line";
+
+            effectiveCandle = false;
+
+            document
+                .querySelectorAll(
+                    ".chart-type-btn"
+                )
+                .forEach(
+                    button =>
+                        button.classList.toggle(
+                            "active",
+                            button.dataset.chartType === "line"
+                        )
+                );
+        }
+
+        let dataset;
+
+        if (effectiveCandle) {
+
+            dataset = {
+                label: config.name,
+                data:
+                    data.map(
+                        item => ({
+                            x: item.time,
+                            o: item.open,
+                            h: item.high,
+                            l: item.low,
+                            c: item.close
+                        })
+                    )
+            };
+
+        } else {
+
+            const values =
+                selectedMode === "return"
+                    ? data.map(
+                        item => ({
+                            x: item.time,
+                            y: getReturn(
+                                data[0].value,
+                                item.value
+                            )
+                        })
+                    )
+                    : data.map(
+                        item => ({
+                            x: item.time,
+                            y: item.value
+                        })
+                    );
+
+            const gradient =
+                ctx.createLinearGradient(
+                    0,
+                    0,
+                    0,
+                    390
+                );
+
+            gradient.addColorStop(
+                0,
+                "rgba(114,170,240,.30)"
+            );
+
+            gradient.addColorStop(
+                1,
+                "rgba(114,170,240,0)"
+            );
+
+            dataset = {
+                label: config.name,
+                data: values,
+                borderColor: "#72aaf0",
+                backgroundColor:
+                    selectedChartType === "line"
+                        ? gradient
+                        : "rgba(114,170,240,.35)",
+                borderWidth: 2,
+                fill:
+                    selectedChartType === "line",
+                tension: .25,
+                pointRadius:
+                    selectedChartType === "line"
+                        ? 0
+                        : 2,
+                pointHoverRadius: 4,
+                barPercentage: .75,
+                categoryPercentage: .9
+            };
+        }
+
+        chart =
+            new Chart(
+                ctx,
+                {
+                    type:
+                        effectiveCandle
+                            ? "candlestick"
+                            : selectedChartType,
+
+                    data: {
+                        datasets: [dataset]
+                    },
+
+                    options: {
+
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: false,
+                        normalized: true,
+                        parsing: false,
+
+                        interaction: {
+                            intersect: false,
+                            mode: "index"
+                        },
+
+                        plugins: {
+
+                            legend: {
+                                display: false
+                            },
+
+                            tooltip: {
+
+                                displayColors: false,
+
+                                callbacks: {
+
+                                    title: items => {
+
+                                        if (!items.length) {
+                                            return "";
+                                        }
+
+                                        return formatDateTime(
+                                            items[0].parsed.x
+                                        );
+                                    },
+
+                                    label: context => {
+
+                                        if (
+                                            effectiveCandle
+                                        ) {
+
+                                            const raw =
+                                                context.raw;
+
+                                            return [
+                                                ` O ${number(raw.o, config.decimals)} ${config.currency}`,
+                                                ` H ${number(raw.h, config.decimals)} ${config.currency}`,
+                                                ` L ${number(raw.l, config.decimals)} ${config.currency}`,
+                                                ` C ${number(raw.c, config.decimals)} ${config.currency}`
+                                            ];
+
+                                        }
+
+                                        const value =
+                                            context.parsed.y;
+
+                                        if (
+                                            selectedMode === "return"
+                                        ) {
+                                            return ` ${percent(value)}`;
+                                        }
+
+                                        return ` ${number(
+                                            value,
+                                            config.decimals
+                                        )} ${config.currency}`;
+                                    }
+                                }
+                            }
+                        },
+
+                        scales: {
+
+                            x: {
+
+                                type: "time",
+
+                                time: {
+
+                                    tooltipFormat:
+                                        "dd/MM/yyyy HH:mm",
+
+                                    displayFormats: {
+                                        hour: "dd/MM HH:mm",
+                                        day: "dd/MM/yy",
+                                        month: "MM/yyyy",
+                                        year: "yyyy"
+                                    }
+
+                                },
+
+                                grid: {
+                                    color:
+                                        "rgba(255,255,255,.05)"
+                                },
+
+                                ticks: {
+                                    color: "#8f9bad",
+                                    maxTicksLimit: 8
+                                }
+
+                            },
+
+                            y: {
+
+                                grid: {
+                                    color:
+                                        "rgba(255,255,255,.05)"
+                                },
+
+                                ticks: {
+
+                                    color: "#8f9bad",
+
+                                    callback: value => {
+
+                                        if (
+                                            selectedMode === "return" &&
+                                            !effectiveCandle
+                                        ) {
+                                            return `${value}%`;
+                                        }
+
+                                        return number(
+                                            value,
+                                            config.decimals
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            );
+
+        updateChartSubtitle();
+    }
+
+    function updateSummary(data) {
+
+        const summary =
+            summarize(data);
+
+        if (!summary) {
+            return;
+        }
+
+        const config =
+            ASSETS[selectedAsset];
+
+        $("summaryStart").textContent =
+            `${number(
+                summary.start,
+                config.decimals
+            )} ${config.currency}`;
+
+        $("summaryCurrent").textContent =
+            `${number(
+                summary.current,
+                config.decimals
+            )} ${config.currency}`;
+
+        $("summaryChange").textContent =
+            `${signed(
+                summary.change,
+                config.decimals
+            )} ${config.currency}`;
+
+        $("summaryReturn").textContent =
+            percent(
+                summary.returnValue
+            );
+
+        $("summaryHigh").textContent =
+            `${number(
+                summary.high,
+                config.decimals
+            )} ${config.currency}`;
+
+        $("summaryLow").textContent =
+            `${number(
+                summary.low,
+                config.decimals
+            )} ${config.currency}`;
+
+        const returnColor =
+            summary.returnValue >= 0
+                ? "var(--green)"
+                : "var(--red)";
+
+        $("summaryReturn").style.color =
+            returnColor;
+
+        $("summaryChange").style.color =
+            returnColor;
+    }
+
+    function updateChartSubtitle() {
+
+        const assetName =
+            ASSETS[selectedAsset].name;
+
+        const periodText = {
+            "1d": "1 วัน",
+            "1m": "1 เดือน",
+            "3m": "3 เดือน",
+            "6m": "6 เดือน",
+            "1y": "1 ปี",
+            "3y": "3 ปี",
+            "5y": "5 ปี",
+            "ytd": "ตั้งแต่ต้นปี",
+            "custom": "ช่วงเวลาที่กำหนด"
+        }[selectedPeriod];
+
+        const modeText =
+            selectedChartType === "candlestick"
+                ? "แท่งเทียน"
+                : selectedMode === "price"
+                    ? "ราคา"
+                    : "% ผลตอบแทน";
+
+        $("chartSubtitle").textContent =
+            `${assetName} · ${periodText} · ${modeText}`;
+    }
+
+    async function updateHistoryTable(range) {
+
+        const assets = [
+            "btc",
+            "set",
+            "gold",
+            "silver"
+        ];
+
+        const rows =
+            await Promise.allSettled(
+                assets.map(
+                    async asset => {
+
+                        const data =
+                            await loadAsset(
+                                asset,
+                                range.start,
+                                range.end
+                            );
+
+                        marketData[asset] =
+                            data;
+
+                        return {
+                            asset,
+                            data
+                        };
+                    }
+                )
+            );
+
+        let html = "";
+
+        rows.forEach(
+            result => {
+
+                if (
+                    result.status !== "fulfilled" ||
+                    !result.value.data.length
+                ) {
+                    return;
+                }
+
+                const {
+                    asset,
+                    data
+                } = result.value;
+
+                const summary =
+                    summarize(data);
+
+                if (!summary) {
+                    return;
+                }
+
+                const config =
+                    ASSETS[asset];
+
+                const color =
+                    summary.returnValue >= 0
+                        ? "var(--green)"
+                        : "var(--red)";
+
+                html += `
+                    <tr>
+                        <td>${config.name}</td>
+                        <td>${number(summary.start, config.decimals)} ${config.currency}</td>
+                        <td>${number(summary.current, config.decimals)} ${config.currency}</td>
+                        <td class="return-cell" style="color:${color}">
+                            ${signed(summary.change, config.decimals)}
+                        </td>
+                        <td class="return-cell" style="color:${color}">
+                            ${percent(summary.returnValue)}
+                        </td>
+                        <td>${number(summary.high, config.decimals)}</td>
+                        <td>${number(summary.low, config.decimals)}</td>
+                    </tr>
+                `;
+            }
+        );
+
+        if (!html) {
+
+            html = `
+                <tr>
+                    <td colspan="7">
+                        ไม่พบข้อมูล
+                    </td>
+                </tr>
+            `;
+
+        }
+
+        $("historyTable")
+            .innerHTML = html;
+    }
+
+    function setStatus(
+        type,
+        text
+    ) {
+
+        const dot =
+            $("statusDot");
+
+        dot.className =
+            "status-dot";
+
+        if (
+            type === "loading"
+        ) {
+            dot.classList.add(
+                "loading-dot"
+            );
+        }
+
+        if (
+            type === "error"
+        ) {
+            dot.classList.add(
+                "error-dot"
+            );
+        }
+
+        $("updatedAt")
+            .textContent = text;
+    }
+
+    function showError(message) {
+
+        const box =
+            $("errorBox");
+
+        box.textContent =
+            message;
+
+        box.style.display =
+            "block";
+    }
+
+    function clearError() {
+
+        $("errorBox")
+            .style
+            .display = "none";
+    }
+
+    async function loadRelatedMarkets() {
+
+        const now =
+            new Date();
+
+        const start =
+            new Date(now);
+
+        start.setDate(
+            start.getDate() - 3
+        );
+
+        const results =
+            await Promise.allSettled(
+                Object.entries(
+                    RELATED
+                ).map(
+                    async ([key, config]) => {
+
+                        const cacheKeyValue =
+                            `${key}|${start.toISOString().slice(0, 10)}|${now.toISOString().slice(0, 10)}`;
+
+                        const cached =
+                            relatedCache.get(
+                                cacheKeyValue
+                            );
+
+                        if (cached) {
+
+                            return {
+                                key,
+                                data:
+                                    cached
+                            };
+
+                        }
+
+                        const data =
+                            await fetchYahoo(
+                                config.yahoo,
+                                start,
+                                now,
+                                "1d"
+                            );
+
+                        relatedCache.set(
+                            cacheKeyValue,
+                            data
+                        );
+
+                        return {
+                            key,
+                            data
+                        };
+                    }
+                )
+            );
+
+        results.forEach(
+            result => {
+
+                if (
+                    result.status !== "fulfilled"
+                ) {
+                    return;
+                }
+
+                const {
+                    key,
+                    data
+                } = result.value;
+
+                const config =
+                    RELATED[key];
+
+                const summary =
+                    summarize(data);
+
+                if (!summary) {
+                    return;
+                }
+
+                const value =
+                    $(`${key}Value`);
+
+                const change =
+                    $(`${key}Change`);
+
+                const time =
+                    $(`${key}Time`);
+
+                if (value) {
+
+                    value.textContent =
+                        number(
+                            summary.current,
+                            config.decimals
+                        );
+
+                }
+
+                if (change) {
+
+                    change.textContent =
+                        percent(
+                            summary.returnValue
+                        );
+
+                    change.className =
+                        "indicator-change " +
+                        (
+                            summary.returnValue > 0
+                                ? "positive-text"
+                                : summary.returnValue < 0
+                                    ? "negative-text"
+                                    : "neutral-text"
+                        );
+
+                }
+
+                if (time) {
+
+                    time.textContent =
+                        formatDateTime(
+                            data[
+                                data.length - 1
+                            ].time
+                        );
+
+                }
+            }
+        );
+
+        return results;
+    }
+
+    async function loadMarkets() {
+
+        const refresh =
+            $("refreshBtn");
+
+        refresh.disabled =
+            true;
+
+        clearError();
+
+        setStatus(
+            "loading",
+            "กำลังโหลดข้อมูลตลาด..."
+        );
+
+        try {
+
+            await loadCurrentMarkets();
+
+            await loadChartData();
+
+            setStatus(
+                "success",
+                `อัปเดตล่าสุด ${formatDateTime(Date.now())}`
+            );
+
+            loadRelatedMarkets()
+                .catch(
+                    error => {
+
+                        console.warn(
+                            "Related markets unavailable:",
+                            error
+                        );
+
+                    }
+                );
+
+        } catch (error) {
+
+            console.error(
+                "Market loading error:",
+                error
+            );
+
+            setStatus(
+                "error",
+                "เกิดปัญหาในการโหลดข้อมูลบางส่วน"
+            );
+
+            showError(
+                error.message ||
+                "ไม่สามารถโหลดข้อมูลตลาดได้"
+            );
+
+        } finally {
 
             refresh.disabled =
                 false;
 
-
-            refresh.textContent =
-                "↻ รีเฟรชข้อมูล";
         }
+    }
 
+    document
+        .querySelectorAll(
+            ".asset-selector-btn"
+        )
+        .forEach(
+            button => {
 
-        /* =========================================================
-           LOGOUT
-        ========================================================= */
+                button.addEventListener(
+                    "click",
+                    async () => {
 
-        $("logoutBtn")
-            .addEventListener(
-                "click",
-                async () => {
+                        document
+                            .querySelectorAll(
+                                ".asset-selector-btn"
+                            )
+                            .forEach(
+                                item =>
+                                    item.classList.remove(
+                                        "active"
+                                    )
+                            );
 
-                    const confirmed =
-                        confirm(
-                            "ต้องการออกจากระบบหรือไม่?"
+                        button.classList.add(
+                            "active"
                         );
 
+                        selectedAsset =
+                            button.dataset.asset;
 
-                    if (!confirmed) {
-                        return;
+                        await loadChartData();
                     }
+                );
+            }
+        );
 
+    $("priceModeBtn")
+        .addEventListener(
+            "click",
+            () => {
 
-                    try {
+                selectedMode =
+                    "price";
 
-                        await logout();
+                $("priceModeBtn")
+                    .classList
+                    .add("active");
 
-                    } catch (error) {
+                $("returnModeBtn")
+                    .classList
+                    .remove("active");
 
-                        console.error(
-                            "Logout error:",
-                            error
-                        );
+                const data =
+                    marketData[selectedAsset];
 
-
-                        alert(
-                            "ไม่สามารถออกจากระบบได้"
-                        );
-                    }
+                if (data) {
+                    renderChart(data);
                 }
-            );
+            }
+        );
 
+    $("returnModeBtn")
+        .addEventListener(
+            "click",
+            () => {
 
-        /* =========================================================
-           REFRESH BUTTON
-        ========================================================= */
+                if (
+                    selectedChartType ===
+                    "candlestick"
+                ) {
 
-        $("refreshBtn")
-            .addEventListener(
-                "click",
-                loadMarkets
-            );
+                    selectedChartType =
+                        "line";
 
+                    document
+                        .querySelectorAll(
+                            ".chart-type-btn"
+                        )
+                        .forEach(
+                            button =>
+                                button.classList.toggle(
+                                    "active",
+                                    button.dataset.chartType === "line"
+                                )
+                        );
+                }
 
-        /* =========================================================
-           AUTH CHECK
-        ========================================================= */
+                selectedMode =
+                    "return";
 
-        watchAuth(
-            async (user) => {
+                $("returnModeBtn")
+                    .classList
+                    .add("active");
 
-                /*
-                 * ไม่มี Login
-                 * ห้ามดู Dashboard
-                 */
+                $("priceModeBtn")
+                    .classList
+                    .remove("active");
 
-                if (!user) {
+                const data =
+                    marketData[selectedAsset];
 
-                    window.location.replace(
-                        "index.html"
+                if (data) {
+                    renderChart(data);
+                }
+            }
+        );
+
+    document
+        .querySelectorAll(
+            ".chart-type-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        selectedChartType =
+                            button.dataset.chartType;
+
+                        document
+                            .querySelectorAll(
+                                ".chart-type-btn"
+                            )
+                            .forEach(
+                                item =>
+                                    item.classList.toggle(
+                                        "active",
+                                        item === button
+                                    )
+                            );
+
+                        if (
+                            selectedChartType ===
+                            "candlestick"
+                        ) {
+
+                            selectedMode =
+                                "price";
+
+                            $("priceModeBtn")
+                                .classList
+                                .add("active");
+
+                            $("returnModeBtn")
+                                .classList
+                                .remove("active");
+                        }
+
+                        const data =
+                            marketData[selectedAsset];
+
+                        if (data) {
+                            renderChart(data);
+                        }
+                    }
+                );
+            }
+        );
+
+    document
+        .querySelectorAll(
+            ".period-btn[data-period]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    async () => {
+
+                        selectedPeriod =
+                            button.dataset.period;
+
+                        document
+                            .querySelectorAll(
+                                ".period-btn[data-period]"
+                            )
+                            .forEach(
+                                item =>
+                                    item.classList.remove(
+                                        "active"
+                                    )
+                            );
+
+                        button.classList.add(
+                            "active"
+                        );
+
+                        if (
+                            selectedPeriod ===
+                            "custom"
+                        ) {
+
+                            $("customDate")
+                                .classList
+                                .add("show");
+
+                            return;
+                        }
+
+                        $("customDate")
+                            .classList
+                            .remove("show");
+
+                        await loadChartData();
+                    }
+                );
+            }
+        );
+
+    $("applyDateBtn")
+        .addEventListener(
+            "click",
+            async () => {
+
+                const start =
+                    $("startDate").value;
+
+                const end =
+                    $("endDate").value;
+
+                if (
+                    !start ||
+                    !end
+                ) {
+
+                    alert(
+                        "กรุณาเลือกวันที่เริ่มต้นและวันที่สิ้นสุด"
                     );
 
                     return;
                 }
 
+                if (
+                    start > end
+                ) {
 
-                /*
-                 * แสดงข้อมูล Google User
-                 */
-
-                const userName =
-                    document.getElementById(
-                        "userName"
+                    alert(
+                        "วันที่เริ่มต้นต้องไม่มากกว่าวันที่สิ้นสุด"
                     );
 
-
-                const userPhoto =
-                    document.getElementById(
-                        "userPhoto"
-                    );
-
-
-                userName.textContent =
-                    user.displayName ||
-                    user.email ||
-                    "ผู้ใช้งาน";
-
-
-                if (user.photoURL) {
-
-                    userPhoto.src =
-                        user.photoURL;
-
-                    userPhoto.style.display =
-                        "block";
-
-                } else {
-
-                    userPhoto.style.display =
-                        "none";
+                    return;
                 }
 
+                customStart =
+                    start;
 
-             
+                customEnd =
+                    end;
 
-                console.log(
-                    "Dashboard Login:",
-                    user.email
-                );
-
-
-                /*
-                 * เริ่มโหลดตลาด
-                 */
-
-                await loadMarkets();
+                await loadChartData();
             }
         );
 
-    </script>
+    $("refreshBtn")
+        .addEventListener(
+            "click",
+            loadMarkets
+        );
+
+    $("logoutBtn")
+        .addEventListener(
+            "click",
+            async () => {
+
+                const confirmed =
+                    confirm(
+                        "ต้องการออกจากระบบหรือไม่?"
+                    );
+
+                if (!confirmed) {
+                    return;
+                }
+
+                try {
+
+                    await logout();
+
+                } catch (error) {
+
+                    console.error(
+                        "Logout error:",
+                        error
+                    );
+
+                    alert(
+                        "ไม่สามารถออกจากระบบได้"
+                    );
+                }
+            }
+        );
+
+    watchAuth(
+        async user => {
+
+            if (!user) {
+
+                window.location.replace(
+                    "index.html"
+                );
+
+                return;
+            }
+
+            const userName =
+                $("userName");
+
+            const userPhoto =
+                $("userPhoto");
+
+            userName.textContent =
+                user.displayName ||
+                user.email ||
+                "ผู้ใช้งาน";
+
+            if (
+                user.photoURL
+            ) {
+
+                userPhoto.src =
+                    user.photoURL;
+
+                userPhoto.style.display =
+                    "block";
+
+            } else {
+
+                userPhoto.style.display =
+                    "none";
+            }
+
+            await loadMarkets();
+        }
+    );
+
+</script>
 
 </body>
-
 </html>
